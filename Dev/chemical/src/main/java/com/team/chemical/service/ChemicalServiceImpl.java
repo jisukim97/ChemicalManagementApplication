@@ -28,8 +28,10 @@ public class ChemicalServiceImpl implements ChemicalService{
 		chemicalEntity.setPlace("구역1");
 		chemicalEntity.setPutDate(LocalDateTime.now());
 		
+		ChemicalEntity savedChemicalEntity = chemicalRepository.save(chemicalEntity);
+		
 		UserEntity userEntity = userRepository.findById(userID);
-		userEntity.getChemicals().add(chemicalEntity);
+		userEntity.getChemicals().add(savedChemicalEntity);
 		
 		userRepository.save(userEntity);
 		
