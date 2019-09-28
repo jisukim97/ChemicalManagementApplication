@@ -1,4 +1,4 @@
-package com.chemical.entity;
+package com.team.chemical.entity;
 
 import java.time.LocalDateTime;
 

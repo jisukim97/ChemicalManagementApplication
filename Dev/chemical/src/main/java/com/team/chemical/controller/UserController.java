@@ -1,4 +1,4 @@
-package com.chemical.controller;
+package com.team.chemical.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chemical.entity.UserEntity;
-import com.chemical.service.UserService;
+import com.team.chemical.entity.UserEntity;
+import com.team.chemical.service.UserService;
 
 @RestController
 public class UserController {

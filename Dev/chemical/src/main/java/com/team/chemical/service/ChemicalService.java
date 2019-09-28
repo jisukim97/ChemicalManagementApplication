@@ -1,4 +1,4 @@
-package com.chemical.service;
+package com.team.chemical.service;
 
 public interface ChemicalService {
 	
