@@ -1,4 +1,4 @@
-package com.chemical.service;
+package com.team.chemical.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.chemical.entity.ChemicalEntity;
-import com.chemical.entity.UserEntity;
-import com.chemical.repository.ChemicalRepository;
-import com.chemical.repository.UserRepository;
+import com.team.chemical.entity.ChemicalEntity;
+import com.team.chemical.entity.UserEntity;
+import com.team.chemical.repository.ChemicalRepository;
+import com.team.chemical.repository.UserRepository;
 
 @Service
 public class ChemicalServiceImpl implements ChemicalService{

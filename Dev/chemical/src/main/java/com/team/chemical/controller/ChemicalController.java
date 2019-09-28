@@ -1,4 +1,4 @@
-package com.chemical.controller;
+package com.team.chemical.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chemical.service.ChemicalService;
+import com.team.chemical.service.ChemicalService;
 
 @RestController
 public class ChemicalController {

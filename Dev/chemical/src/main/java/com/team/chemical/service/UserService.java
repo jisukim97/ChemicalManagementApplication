@@ -1,6 +1,6 @@
-package com.chemical.service;
+package com.team.chemical.service;
 
-import com.chemical.entity.UserEntity;
+import com.team.chemical.entity.UserEntity;
 
 public interface UserService {
 	

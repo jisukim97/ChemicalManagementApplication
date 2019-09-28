@@ -1,4 +1,4 @@
-package com.chemical;
+package com.team.chemical;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
