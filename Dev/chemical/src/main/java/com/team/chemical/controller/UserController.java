@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.UserEntity;
 import com.team.chemical.service.UserService;
 
-
 @RestController
 public class UserController {
 
@@ -44,14 +43,18 @@ public class UserController {
 		try {
 			UserEntity findedUser = userService.login(userEntity);
 			if (findedUser!=null) {
-				result.put("success", true);
-				result.put("userID", findedUser.getId());
+				findedUser.setPassword(null);
+				findedUser.setChemicals(null);
+				result.put("user", findedUser);
 				return new ObjectMapper().writeValueAsString(result);
 			} else {
-				result.put("success", false);
-				return new ObjectMapper().writeValueAsString(result);
+				System.out.println("로그인 실패");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return null;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
 	}
