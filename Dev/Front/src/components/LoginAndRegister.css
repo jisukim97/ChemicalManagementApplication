@@ -1,0 +1,26 @@
+.login {
+    max-width: 480px;
+    padding: 50px 85px;
+    margin: 0 auto;
+    border-radius: 20px;
+    box-shadow: 2px 2px white;
+    background: white;
+}
+
+#loginHeadline{
+    color: #2DB400;
+    margin: 0;
+    font-size: 50pt;
+    font-weight: 100;
+    text-align: center;
+}
+
+.form {
+    max-width: 300px;
+}
+.login-form-forgot {
+    float: right;
+}
+.button {
+    width: 100%;
+}

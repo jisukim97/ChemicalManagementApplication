@@ -1,9 +1,13 @@
 package com.team.chemical.service;
 
+import java.util.List;
+
+import com.team.chemical.entity.ChemicalEntity;
+
 public interface ChemicalService {
 	
-	void addChemical(int userID, String chemicalName);
+	void addChemical(int userID, ChemicalEntity chemicalEntity);
 	
-	String[] getChemicalList(int userID);
+	List<ChemicalEntity> getChemicalList(int userID);
 
 }

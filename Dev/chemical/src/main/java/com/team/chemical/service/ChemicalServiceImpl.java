@@ -21,11 +21,8 @@ public class ChemicalServiceImpl implements ChemicalService{
 	UserRepository userRepository;
 	
 	@Override
-	public void addChemical(int userID, String chemicalName) {
+	public void addChemical(int userID, ChemicalEntity chemicalEntity) {
 		// TODO Auto-generated method stub
-		ChemicalEntity chemicalEntity = new ChemicalEntity();
-		chemicalEntity.setName(chemicalName);
-		chemicalEntity.setPlace("구역1");
 		chemicalEntity.setPutDate(LocalDateTime.now());
 		
 		ChemicalEntity savedChemicalEntity = chemicalRepository.save(chemicalEntity);
@@ -38,15 +35,10 @@ public class ChemicalServiceImpl implements ChemicalService{
 	}
 
 	@Override
-	public String[] getChemicalList(int userID) {
+	public List<ChemicalEntity> getChemicalList(int userID) {
 		UserEntity userEntity = userRepository.findById(userID);
 		List<ChemicalEntity> chemicals = userEntity.getChemicals();
-		String[] chemicalNameArray = new String[chemicals.size()];
-		for (int i=0; i<chemicalNameArray.length; i++) {
-			chemicalNameArray[i] = chemicals.get(i).getName();
-		}
-		
-		return chemicalNameArray;
+		return chemicals;
 	}
 
 }
