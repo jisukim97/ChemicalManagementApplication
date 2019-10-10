@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.UserEntity;
 import com.team.chemical.service.UserService;
 
-
 @RestController
 public class UserController {
 
@@ -25,6 +24,8 @@ public class UserController {
 	@RequestMapping(value="/regist", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String regist(@RequestBody UserEntity userEntity, HttpServletResponse response) {
 		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("회원가입 옴");
+		System.out.println(userEntity.toString());
 		try {
 			userService.regist(userEntity);
 			result.put("success", true);
@@ -37,17 +38,23 @@ public class UserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String login(@RequestBody UserEntity userEntity, HttpServletResponse response){
 		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("로그인 옴");
+		System.out.println(userEntity.toString());
 		try {
 			UserEntity findedUser = userService.login(userEntity);
 			if (findedUser!=null) {
-				result.put("success", true);
-				result.put("userID", findedUser.getId());
+				findedUser.setPassword(null);
+				findedUser.setChemicals(null);
+				result.put("user", findedUser);
 				return new ObjectMapper().writeValueAsString(result);
 			} else {
-				result.put("success", false);
-				return new ObjectMapper().writeValueAsString(result);
+				System.out.println("로그인 실패");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return null;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
 	}
