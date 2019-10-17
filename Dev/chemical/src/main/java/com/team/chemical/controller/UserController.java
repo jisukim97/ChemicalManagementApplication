@@ -23,13 +23,9 @@ public class UserController {
 
 	@RequestMapping(value="/regist", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String regist(@RequestBody UserEntity userEntity, HttpServletResponse response) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("회원가입 옴");
-		System.out.println(userEntity.toString());
 		try {
 			userService.regist(userEntity);
-			result.put("success", true);
-			return new ObjectMapper().writeValueAsString(result);
+			return null;
 		} catch (Exception e) {
 			return null;
 		}
@@ -38,8 +34,6 @@ public class UserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String login(@RequestBody UserEntity userEntity, HttpServletResponse response){
 		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("로그인 옴");
-		System.out.println(userEntity.toString());
 		try {
 			UserEntity findedUser = userService.login(userEntity);
 			if (findedUser!=null) {
@@ -48,7 +42,6 @@ public class UserController {
 				result.put("user", findedUser);
 				return new ObjectMapper().writeValueAsString(result);
 			} else {
-				System.out.println("로그인 실패");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return null;
 			}
