@@ -2,9 +2,7 @@ package com.team.chemical.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,11 +25,9 @@ public class ChemicalController {
 
 	@RequestMapping(value="/chemical/add/{userID}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String addChemical(@PathVariable int userID, @RequestBody ChemicalEntity chemicalEntity, HttpServletResponse response) {
-		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			chemicalService.addChemical(userID, chemicalEntity);
-			result.put("success", true);
-			return new ObjectMapper().writeValueAsString(result);
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

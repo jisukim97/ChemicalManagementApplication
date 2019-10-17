@@ -22,16 +22,13 @@ public class ChemicalServiceImpl implements ChemicalService{
 	
 	@Override
 	public void addChemical(int userID, ChemicalEntity chemicalEntity) {
-		// TODO Auto-generated method stub
 		chemicalEntity.setPutDate(LocalDateTime.now());
-		
 		ChemicalEntity savedChemicalEntity = chemicalRepository.save(chemicalEntity);
 		
 		UserEntity userEntity = userRepository.findById(userID);
 		userEntity.getChemicals().add(savedChemicalEntity);
 		
 		userRepository.save(userEntity);
-		
 	}
 
 	@Override
