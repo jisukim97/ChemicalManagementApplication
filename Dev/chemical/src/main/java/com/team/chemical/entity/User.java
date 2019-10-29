@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name="user")
 @NoArgsConstructor
 @Data
-public class UserEntity {
+public class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -39,6 +39,6 @@ public class UserEntity {
 	@JoinTable(name="user_chemical",
 				joinColumns = @JoinColumn(name = "user_id"),
 				inverseJoinColumns = @JoinColumn(name = "chemical_id"))
-	private List<ChemicalEntity> chemicals = new ArrayList<ChemicalEntity>();
+	private List<Chemical> chemicals = new ArrayList<Chemical>();
 	
 }

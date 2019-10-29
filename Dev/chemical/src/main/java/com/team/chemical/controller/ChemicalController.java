@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team.chemical.entity.ChemicalEntity;
+import com.team.chemical.entity.Chemical;
 import com.team.chemical.service.ChemicalService;
 
 @RestController
@@ -24,9 +24,9 @@ public class ChemicalController {
 	ChemicalService chemicalService;
 
 	@RequestMapping(value="/chemical/add/{userID}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String addChemical(@PathVariable int userID, @RequestBody ChemicalEntity chemicalEntity, HttpServletResponse response) {
+	String addChemical(@PathVariable int userID, @RequestBody Chemical chemical, HttpServletResponse response) {
 		try {
-			chemicalService.addChemical(userID, chemicalEntity);
+			chemicalService.addChemical(userID, chemical);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,7 +37,7 @@ public class ChemicalController {
 	@RequestMapping(value="/chemical/list/{userID}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
 	String getChemicalList(@PathVariable int userID, HttpServletResponse response) {
 		try {
-			List<ChemicalEntity> chemicalNameList = chemicalService.getChemicalList(userID);
+			List<Chemical> chemicalNameList = chemicalService.getChemicalList(userID);
 			return new ObjectMapper().writeValueAsString(chemicalNameList);
 		} catch (Exception e) {
 			return null;

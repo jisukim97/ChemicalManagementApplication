@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.team.chemical.entity.ChemicalEntity;
-import com.team.chemical.entity.UserEntity;
+import com.team.chemical.entity.Chemical;
+import com.team.chemical.entity.User;
 import com.team.chemical.repository.ChemicalRepository;
 import com.team.chemical.repository.UserRepository;
 
@@ -21,20 +21,20 @@ public class ChemicalServiceImpl implements ChemicalService{
 	UserRepository userRepository;
 	
 	@Override
-	public void addChemical(int userID, ChemicalEntity chemicalEntity) {
-		chemicalEntity.setPutDate(LocalDateTime.now());
-		ChemicalEntity savedChemicalEntity = chemicalRepository.save(chemicalEntity);
+	public void addChemical(int userID, Chemical chemical) {
+		chemical.setPutDate(LocalDateTime.now());
+		Chemical savedChemical = chemicalRepository.save(chemical);
 		
-		UserEntity userEntity = userRepository.findById(userID);
-		userEntity.getChemicals().add(savedChemicalEntity);
+		User user = userRepository.findById(userID);
+		user.getChemicals().add(savedChemical);
 		
-		userRepository.save(userEntity);
+		userRepository.save(user);
 	}
 
 	@Override
-	public List<ChemicalEntity> getChemicalList(int userID) {
-		UserEntity userEntity = userRepository.findById(userID);
-		List<ChemicalEntity> chemicals = userEntity.getChemicals();
+	public List<Chemical> getChemicalList(int userID) {
+		User user = userRepository.findById(userID);
+		List<Chemical> chemicals = user.getChemicals();
 		return chemicals;
 	}
 
