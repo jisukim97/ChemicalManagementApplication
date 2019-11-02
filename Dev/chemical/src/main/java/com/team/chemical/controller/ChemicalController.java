@@ -15,18 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Chemical;
-import com.team.chemical.service.ChemicalService;
+import com.team.chemical.entity.User;
+import com.team.chemical.repository.ChemicalRepository;
+import com.team.chemical.repository.UserRepository;
 
 @RestController
 public class ChemicalController {
 
 	@Autowired
-	ChemicalService chemicalService;
+	ChemicalRepository chemicalRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@RequestMapping(value="/chemical/add/{userID}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String addChemical(@PathVariable int userID, @RequestBody Chemical chemical, HttpServletResponse response) {
 		try {
-			chemicalService.addChemical(userID, chemical);
+			chemical.setPresentTime();
+			Chemical savedChemical = chemicalRepository.save(chemical);
+			
+			User user = userRepository.findById(userID);
+			user.addChemical(savedChemical);
+			
+			userRepository.save(user);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -37,8 +48,9 @@ public class ChemicalController {
 	@RequestMapping(value="/chemical/list/{userID}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
 	String getChemicalList(@PathVariable int userID, HttpServletResponse response) {
 		try {
-			List<Chemical> chemicalNameList = chemicalService.getChemicalList(userID);
-			return new ObjectMapper().writeValueAsString(chemicalNameList);
+			User user = userRepository.findById(userID);
+			List<Chemical> chemicals = user.getChemicals();
+			return new ObjectMapper().writeValueAsString(chemicals);
 		} catch (Exception e) {
 			return null;
 		}
