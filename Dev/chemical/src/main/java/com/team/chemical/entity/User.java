@@ -41,4 +41,8 @@ public class User {
 				inverseJoinColumns = @JoinColumn(name = "chemical_id"))
 	private List<Chemical> chemicals = new ArrayList<Chemical>();
 	
+	public void addChemical(Chemical chemical) {
+		this.chemicals.add(chemical);
+	}
+	
 }

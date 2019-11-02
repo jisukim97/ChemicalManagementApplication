@@ -31,4 +31,8 @@ public class Chemical {
 	@Column
 	private LocalDateTime putDate;
 	
+	public void setPresentTime() {
+		this.putDate = LocalDateTime.now();
+	}
+	
 }
