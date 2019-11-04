@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team.chemical.entity.UserEntity;
+import com.team.chemical.entity.User;
 import com.team.chemical.service.UserService;
 
 @RestController
@@ -22,33 +22,26 @@ public class UserController {
 	UserService userService;
 
 	@RequestMapping(value="/regist", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String regist(@RequestBody UserEntity userEntity, HttpServletResponse response) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("회원가입 옴");
-		System.out.println(userEntity.toString());
+	String regist(@RequestBody User user, HttpServletResponse response) {
 		try {
-			userService.regist(userEntity);
-			result.put("success", true);
-			return new ObjectMapper().writeValueAsString(result);
+			userService.regist(user);
+			return null;
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String login(@RequestBody UserEntity userEntity, HttpServletResponse response){
+	String login(@RequestBody User user, HttpServletResponse response){
 		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("로그인 옴");
-		System.out.println(userEntity.toString());
 		try {
-			UserEntity findedUser = userService.login(userEntity);
+			User findedUser = userService.login(user);
 			if (findedUser!=null) {
 				findedUser.setPassword(null);
 				findedUser.setChemicals(null);
 				result.put("user", findedUser);
 				return new ObjectMapper().writeValueAsString(result);
 			} else {
-				System.out.println("로그인 실패");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return null;
 			}
