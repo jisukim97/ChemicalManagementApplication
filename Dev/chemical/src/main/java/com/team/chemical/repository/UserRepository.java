@@ -2,11 +2,11 @@ package com.team.chemical.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.team.chemical.entity.UserEntity;
+import com.team.chemical.entity.User;
 
-public interface UserRepository extends CrudRepository<UserEntity, Integer>{
+public interface UserRepository extends CrudRepository<User, Integer>{
 	
-	UserEntity findByEmail(String email);
+	User findByEmail(String email);
 	
-	UserEntity findById(int id);
+	User findById(int id);
 }
