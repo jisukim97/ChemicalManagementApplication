@@ -181,6 +181,49 @@ class Sample extends Component {
 }
 ```
 
+# 페이지 이동(단순 이동)
+```JSX
+import React, { Component } from 'react';
+import { Link } from "react-router-dom";
+
+class Sample extends Component {
+
+    render() {
+        return (
+            <div>
+                <Link to='/new/url'>Click!</Link>
+            </div>
+        );
+    }
+}
+
+```
+
+# 페이지 이동(행동 후 이동)
+```JSX
+import React, { Component } from 'react';
+import { history } from '../History';
+import { Router } from "react-router-dom";
+import { Button } from 'antd';
+
+class Sample extends Component {
+
+    onClick = () => {
+        history.push('new/url');
+    }
+
+    render() {
+        return (
+            <div>
+                <Router history={history}>
+                    <Button onClick={this.onClick}/>
+                </Router>
+            </div>
+        );
+    }
+}
+```
+
 # 우리가 할 일
 * 실습
 * GUI 보면서 각각 페이지마다 컴포넌트 정하기 (재사용 될것 고려 해서)
