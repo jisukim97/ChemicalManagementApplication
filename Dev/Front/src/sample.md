@@ -24,7 +24,9 @@ export default Sample;
 
 # 주석
 ```JSX
-{/* */}
+주석 남발 환영
+//html처럼 생긴거 밖에서는 이렇게 사용
+{/* html처럼 생긴거 안에서는 이렇게 사용*/}
 ```
 
 # 다른 컴포넌트 삽입
@@ -224,7 +226,25 @@ class Sample extends Component {
 }
 ```
 
+# 컴포넌트 여러개 반복시키기 
+```JSX
+state = {
+    array : [1, 2, 3]
+}
+
+render() {
+    return (
+        <div>
+            {this.state.array.map(
+                element => (<span>element = {element}</span>)
+            )}
+        <div>
+    )
+}
+
+```
+
 # 우리가 할 일
 * 실습
 * GUI 보면서 각각 페이지마다 컴포넌트 정하기 (재사용 될것 고려 해서)
-* 담당 정하기
+* 각 컴포넌트 담당 정하기
