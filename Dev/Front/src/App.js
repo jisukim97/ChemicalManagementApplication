@@ -7,7 +7,7 @@ import Main from './components/Main';
 
 import './App.css';
 
-import 
+import Test from 'component/Test.js';
 
 class App extends Component {
   
