@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Button } from 'antd';
 import { Link } from "react-router-dom";
 
-import { Second } from './Second.js';
-import { Thrid } from './Thrid.js';
-import { Fourth } from './Fourth.js';
+import Second from './Second.js';
+import Third from './Third.js';
+import Fourth from './Fourth.js';
 
 class Test extends Component {
 
     render() {
-        if (match.params.name===1) {
+        console.log(this.props.match.params)
+        if (this.props.match.params.id==="1") {
             return (
                 <div>
                     <Link to='/test/2'><Button type="primary">2</Button></Link>
@@ -18,16 +19,16 @@ class Test extends Component {
                     <Link to='/test/5'><Button type="primary">5</Button></Link>
                 </div>
             )
-        } else if (match.params.name===2) {
+        } else if (this.props.match.params.id==="2") {
             return (
                 <div>
                     <Second/>
                 </div>
             )
-        } else if (match.params.name===3) {
+        } else if (this.props.match.params.id==="3") {
             return (
                 <div>
-                    <Thrid/>
+                    <Third/>
                 </div>
             )
         } else {
