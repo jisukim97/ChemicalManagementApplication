@@ -7,6 +7,8 @@ import Main from './components/Main';
 
 import './App.css';
 
+import 
+
 class App extends Component {
   
   render() {
@@ -19,6 +21,7 @@ class App extends Component {
             <Route path='/main' exact component={Main}/>
             <Route path='/add' exact component={Main}/>
             <Route path='/list' exact component={Main}/>
+            <Route path='/test/:id' component={Test} />
           </Switch>
         </Router>
       </div>
