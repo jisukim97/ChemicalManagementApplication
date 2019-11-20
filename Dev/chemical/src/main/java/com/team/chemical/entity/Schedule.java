@@ -56,7 +56,4 @@ public class Schedule {
     /**
      * 
      */
-    @ManyToOne
-    @JoinColumn(name = "user")
-    private User reservation;
 }
