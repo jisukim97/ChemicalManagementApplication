@@ -7,27 +7,42 @@ const { Title } = Typography;
 class Alarm extends Component {
 
     state = {
-        information: [
-            {
-              id: 0,
-              name: 'Hexane',
-              date: '15'
-            },
-            {
-              id: 1,
-              name: 'Benzene',
-              date: '7'
-            }
-          ]
     }
     
   
     constructor(props){
         super(props);
         this.state = {
-            type : 1
+            type : 1,
+            information: [
+                {
+                  id: 0,
+                  name: 'Hexane',
+                  date: '15'
+                },
+                {
+                  id: 1,
+                  name: 'Benzene',
+                  date: '7'
+                },
+                {
+                  id: 2,
+                  name: 'Benzeqwene',
+                  date: '10'
+                }
+            ]
         }
     }
+
+    handleRemove = (id) => {
+        const { information } = this.state.information;
+        const new_information = information.filter(info => info.id !==id )
+        this.setState({
+            information: new_information
+        })
+    }
+
+
 
     makeTypeOne = () => {
         this.setState({type : 1})
@@ -43,7 +58,7 @@ class Alarm extends Component {
     
     getContent = () => {
         if (this.state.type===1){
-            return (<div><AlarmInfoList data={this.state.information}/></div>)
+            return (<div><AlarmInfoList data={this.state.information} onRemove={this.handleRemove}/></div>)
         } else if (this.state.type===2) {
             return (<div>재고소진 알림들</div>)
         } else {
@@ -62,9 +77,7 @@ class Alarm extends Component {
                 <Row style={{marginBottom : 30}}>
                     <Col span={8}><center>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large"/><br/>
-                       
                         유효기간
-
                     </center></Col>
 
                     <Col span={8}><center>
