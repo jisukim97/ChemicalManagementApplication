@@ -1,6 +1,9 @@
 package com.team.chemical.entity;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -16,4 +19,6 @@ public class Apparatus {
 
     private String name;
 
+	@OneToMany(mappedBy = "schedule")
+    private Set<Schedule> schedules;
 }
