@@ -57,7 +57,6 @@ public class User {
     /**
      * 
      */
-	@Column
     @ManyToOne
     @JoinColumn(name = "lab_id")
     private Lab myLab;
@@ -71,9 +70,5 @@ public class User {
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
     private Set<Stock> alarms;
 
-    /**
-     * 
-     */
-	@OneToMany(mappedBy = "schedule")
-    private Set<Schedule> scheduleList;
+
 }
