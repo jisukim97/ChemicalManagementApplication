@@ -1,5 +1,5 @@
 package com.team.chemical.controller;
-
+/*
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,3 +76,5 @@ public class ChemicalController {
 	}
 
 }
+
+*/
