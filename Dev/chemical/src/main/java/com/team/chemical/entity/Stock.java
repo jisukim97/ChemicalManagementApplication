@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,7 +24,8 @@ public class Stock {
     /**
      * 재고 아이디
      */
-	@Column
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
     /**

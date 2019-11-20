@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +23,7 @@ public class Inventory {
     /**
      * 보관함 아이디 : 의미있는 조합의 이름으로 바꿀 것
      */
-	@Column
+	@Id
     private String id;
 
     /**
