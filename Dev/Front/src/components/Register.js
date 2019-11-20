@@ -36,7 +36,7 @@ class Register extends Component {
                     }
                 })
             } else {
-                //비밀번호 틀렸을 경우 
+                //비밀번호 틀렸을 경우
                 message.error('두 비밀번호가 같은지 확인 해 주세요!');
             }
         });

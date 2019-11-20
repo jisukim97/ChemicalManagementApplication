@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Card } from 'antd'
 
-const { Title } = Typography;
+import MyGroupGenerate from './MyGroupGenerate';
 
+const { Title } = Typography;
 
 class MyGroup extends Component {
 
@@ -43,15 +44,19 @@ class MyGroup extends Component {
 
     getContent = () => {
         if (this.state.menu === 1){
-            return (<b>my Lab 생성 내용</b>)
+            return (
+              <div>
+                <MyGroupGenerate />
+              </div>
+            )
         } else if (this.state.menu === 2){
-            return (<b>멤버 초대 내용</b>)
+            return (<b>My Lab Invitation</b>)
         } else if (this.state.menu === 3){
-            return (<b>Lab 가입 신청 내용</b>)
+            return (<b>My Lab Register</b>)
         } else if (this.state.menu === 4){
-            return (<b>my Lab 탈퇴 내용</b>)
+            return (<b>My Lab Withdrawal</b>)
         } else {
-            return (<b>member 리스트</b>)
+            return (<b>My Lab Members</b>)
         }
     }
 
