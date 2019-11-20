@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Card } from 'antd'
 
 import MyGroupGenerate from './MyGroupGenerate';
+import MyGroupInvite from './MyGroupInvite';
+import MyGroupRegister from './MyGroupRegister';
+import MyGroupWithdraw from './MyGroupWithdraw';
+import MyGroupMember from './MyGroupMember';
 
 const { Title } = Typography;
 
@@ -50,13 +54,29 @@ class MyGroup extends Component {
               </div>
             )
         } else if (this.state.menu === 2){
-            return (<b>My Lab Invitation</b>)
+            return (
+              <div>
+                <MyGroupInvite />
+              </div>
+            )
         } else if (this.state.menu === 3){
-            return (<b>My Lab Register</b>)
+            return (
+              <div>
+                <MyGroupRegister />
+              </div>
+            )
         } else if (this.state.menu === 4){
-            return (<b>My Lab Withdrawal</b>)
+            return (
+              <div>
+                <MyGroupWithdraw />
+              </div>
+            )
         } else {
-            return (<b>My Lab Members</b>)
+            return (
+              <div>
+                <MyGroupMember />
+              </div>
+            )
         }
     }
 
