@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Card, List } from 'antd'
+import AlarmInfoList from './AlarmInfoList';
 
 const { Title } = Typography;
-
 
 class Alarm extends Component {
 
     state = {
-
+        information: [
+            {
+              id: 0,
+              name: 'Hexane',
+              date: '15'
+            },
+            {
+              id: 1,
+              name: 'Benzene',
+              date: '7'
+            }
+          ]
     }
-
+    
+  
     constructor(props){
         super(props);
         this.state = {
@@ -31,7 +43,7 @@ class Alarm extends Component {
     
     getContent = () => {
         if (this.state.type===1){
-            return (<div>유효기간 알림들</div>)
+            return (<div><AlarmInfoList data={this.state.information}/></div>)
         } else if (this.state.type===2) {
             return (<div>재고소진 알림들</div>)
         } else {
@@ -41,6 +53,7 @@ class Alarm extends Component {
 
 
     render() {
+       
         return (
             <div>
                 <br />
@@ -49,7 +62,9 @@ class Alarm extends Component {
                 <Row style={{marginBottom : 30}}>
                     <Col span={8}><center>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large"/><br/>
+                       
                         유효기간
+
                     </center></Col>
 
                     <Col span={8}><center>
