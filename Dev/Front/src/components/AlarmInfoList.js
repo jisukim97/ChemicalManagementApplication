@@ -16,22 +16,12 @@ class AlarmInfoList extends Component {
                 <List
                     itemLayout="horizontal"
                     dataSource={this.props.data}
-                    renderItem={item => (
+                    renderItem={info => (
                         <List.Item>
-                            <List.Item.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title={<a href="https://ant.design">{item.title}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                            />
-                            <AlarmInfo key={item.id} info={item} onRemove={onRemove} />
+                            <AlarmInfo key={info.id} info={info} onRemove={onRemove} />
                         </List.Item>
                     )}
                 />
-
-
-                {this.props.data.map(info => {
-                    return <AlarmInfo key={info.id} info={info} onRemove={onRemove} />
-                })}
             </div>
         );
     }

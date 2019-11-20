@@ -12,16 +12,9 @@ class AlarmInfo extends Component {
         
     
   render() {
-    const style = {
-        border: '1px solid black',
-        padding: '8px',
-        margin: '8px',
-        fontSize: '20px'
-      };
-  
   
       return (
-        <div style={style}>
+        <div >
             <div>
                 <b>{this.props.info.name}</b>의 유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
                 <button onClick={this.handleRemove}> X </button>
