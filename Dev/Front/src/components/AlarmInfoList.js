@@ -6,15 +6,18 @@ class AlarmInfoList extends Component {
     data: []
   }
 
+  list = (data) => {
+    return (data.map(
+      (<AlarmInfo key={info.id} info={info}/>)
+    ))
+  }
+
   render() {
     const { data } = this.props;
-    const list = data.map(
-      info => (<AlarmInfo key={info.id} info={info}/>)
-    );
 
     return (
       <div>
-        {list}    
+        {this.list(data)}    
       </div>
     );
   }
