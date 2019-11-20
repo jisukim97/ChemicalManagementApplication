@@ -6,6 +6,7 @@ class AlarmInfo extends Component {
     handleRemove = () => {
         // 삭제 버튼이 클릭되면 onRemove 에 id 넣어서 호출
         const { info, onRemove } = this.props;
+        
         onRemove(info.id);
       }
         
