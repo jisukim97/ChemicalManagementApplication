@@ -35,7 +35,7 @@ class Alarm extends Component {
     }
 
     handleRemove = (id) => {
-        const { information } = this.state.information;
+        const { information } = this.state;
         const new_information = information.filter(info => info.id !==id )
         this.setState({
             information: new_information
