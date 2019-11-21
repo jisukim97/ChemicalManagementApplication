@@ -40,7 +40,7 @@ class ChemicalAdd extends Component {
             <span>
                 <center>
                     {/* 버튼 */}
-                    <Button Button shape="circle" icon="fire" onClick={this.showModal} style={{ fontSize: '25px' }} size="large"/>
+                    <Button Button shape="circle" icon="plus" onClick={this.showModal} style={{ fontSize: '25px' }} size="large"/>
                     {/* 뜨는 창 */}
                     <Modal
                         title="약품 추가"
@@ -48,13 +48,20 @@ class ChemicalAdd extends Component {
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
                     >
-                        {/* 정보 출력  */}
+                        {/* 약품 검색  */}
                         여기에 약품이름 검색창 <br/>
+                        <Button Button shape="circle" icon="search" onClick={this.showModal} /> <br/>
                         검색된거 정보 <br/>
                         <ChemicalInfo chemical={{ chemicalName : "added chemical"}} />
-                        별칭 설정 <br/>
-                        장소 선택 <br/>
-                        등등 버튼 추가하기
+                        
+                        {/*별칭 설정*/}
+                        <Button icon="search">Search</Button>
+                        <Button>중복확인</Button> <br/>
+
+                        {/*장소 선택*/}
+                        <Button icon="search">Search</Button>
+                        <Button>선택</Button> <br/>
+
                     </Modal>
                 </center>
                 <center>
