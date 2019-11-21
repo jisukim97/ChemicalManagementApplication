@@ -30,7 +30,7 @@ public class MyLabMemberController {
 
 	@Autowired
 	LabRepository labRepository;
-	
+
 	/**
 	 * email에 해당하는 유저 찾아 보내주기
 	 * @param email
@@ -56,7 +56,7 @@ public class MyLabMemberController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * labId에 userId 추가 (가입)
 	 * @param labId
@@ -82,7 +82,7 @@ public class MyLabMemberController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * labId에서 userId 탈퇴
 	 * @param labId
@@ -108,7 +108,7 @@ public class MyLabMemberController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * userId가 lab 새로 만드는데, name, password 전해준대로 만들어줌
 	 * @param lab
@@ -128,7 +128,7 @@ public class MyLabMemberController {
 			savedLab.getMembers().add(user);
 			//연관관계 저장
 			labRepository.save(savedLab);
-			
+
 			//정보 가린 후 반환
 			savedLab.setPassword(null);
 			savedLab.setMembers(null);
@@ -139,5 +139,34 @@ public class MyLabMemberController {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * 유저가 랩에 직접 들어가는 경우
+	 * @param lab password가 들어가 있어야 함
+	 * @param labId
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/lab/{labId}/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	String joinLab(@RequestBody Lab lab, @PathVariable int labId, @PathVariable int userId, HttpServletResponse response) {
+		try {
+			//랩 찾아오기
+			Lab findedLab = labRepository.findById(labId).get();
+			//비밀번호 판별
+			if (!findedLab.getPassword().equals(lab.getPassword())) {
+				throw new Exception("랩 비밀번호 틀림");
+			}
+			//유저 찾아오기
+			User user = userRepository.findById(userId).get();
+			findedLab.getMembers().add(user);
+			//연관관계 저장
+			labRepository.save(findedLab);
+			return null;
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+
+	}
 }

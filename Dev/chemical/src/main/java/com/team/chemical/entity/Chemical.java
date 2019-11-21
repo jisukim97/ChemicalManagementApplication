@@ -107,7 +107,13 @@ public class Chemical {
      */
     @Column
     private Integer classification;
-
+    
+    /**
+     * 밀도
+     */
+    @Column
+    private Float density;
+    
     /**
      * 질병
      */
