@@ -50,10 +50,11 @@ public class Schedule {
      * 
      */
     @ManyToOne
-    @JoinColumn(name = "lab_id")
-    private Lab myLab;
+    @JoinColumn(name = "apparatus_id")
+    private Apparatus apparatus;
     
-    /**
-     * 
-     */
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User reservation;
 }
+    

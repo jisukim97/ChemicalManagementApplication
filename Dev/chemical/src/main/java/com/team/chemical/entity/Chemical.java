@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -114,6 +115,7 @@ public class Chemical {
     @JoinTable(name="chemical_illness",
     		joinColumns=@JoinColumn(name="chemical_id"),
     		inverseJoinColumns=@JoinColumn(name="illness_id"))
+    @OrderColumn(name = "list_idx")
     private List<Illness> illness;
 
 }

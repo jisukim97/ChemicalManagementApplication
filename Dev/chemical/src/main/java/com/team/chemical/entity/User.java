@@ -1,6 +1,7 @@
 package com.team.chemical.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -65,10 +67,13 @@ public class User {
      * 
      */
     @OneToMany
-    @JoinTable(name="lab_stock",
-    		joinColumns=@JoinColumn(name="lab_id"),
+    @JoinTable(name="user_stock",
+    		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
-    private Set<Stock> alarms;
+    @OrderColumn(name = "list_idx")
+    private List<Stock> alarms;
 
+    @OneToMany(mappedBy = "reservation")
+    private Set<Schedule> schedules;
 
 }
