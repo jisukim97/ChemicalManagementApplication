@@ -54,7 +54,6 @@ class MyGroupRegister extends Component {
       return (
         <div>
           <center><Title style={{marginBottom : 50}}>Lab 가입 신청</Title></center>
-          <Form onSubmit={this.handleSubmit} className="form">
               {/* 이메일 폼*/}
               <Form.Item>
                   {getFieldDecorator('LabName', {
@@ -88,7 +87,6 @@ class MyGroupRegister extends Component {
                   </Button>
               </Form.Item>
 
-          </Form>
         </div>
       );
   }
