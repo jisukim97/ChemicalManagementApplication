@@ -67,7 +67,6 @@ class MyGroupGenerate extends Component {
         return (
           <div style={{ margin: '10px 0' }}>
             <center><Title style={{marginBottom : 50}}>my Lab 생성</Title></center>
-            <Form onSubmit={this.handleSubmit} className="form">
 
                 {/* 그룹 이름 */}
                 <Form.Item>
@@ -122,7 +121,7 @@ class MyGroupGenerate extends Component {
                         그룹 생성하기
                     </Button>
                 </Form.Item>
-            </Form>
+
             </div>
         );
     }

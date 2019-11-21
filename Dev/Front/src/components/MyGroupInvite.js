@@ -15,7 +15,7 @@ class MyGroupInvite extends Component {
         return (
           <div style={{ margin: '10px 0' }}>
             <center><Title style={{marginBottom : 50}}>my Lab 멤버 초대</Title></center>
-            <Form onSubmit={this.handleSubmit} className="form">
+
 
                 {/* 그룹 이름 */}
                 <Form.Item>
@@ -35,7 +35,7 @@ class MyGroupInvite extends Component {
                         초대하기
                     </Button>
                 </Form.Item>
-            </Form>
+
             </div>
         );
     }

@@ -6,6 +6,7 @@ import MyGroupInvite from './MyGroupInvite';
 import MyGroupRegister from './MyGroupRegister';
 import MyGroupWithdraw from './MyGroupWithdraw';
 import MyGroupMember from './MyGroupMember';
+import NoGroup from './NoGroup';
 
 const { Title } = Typography;
 
@@ -13,12 +14,15 @@ class MyGroup extends Component {
 
     state = {
 
+
+
     }
 
     constructor(props){
         super(props);
         this.state = {
-            menu : 0
+            menu : 0,
+            labexists : false
         }
     }
 
@@ -47,36 +51,45 @@ class MyGroup extends Component {
     }
 
     getContent = () => {
-        if (this.state.menu === 1){
+        if (!this.state.labexists && this.state.menu === 1){
             return (
               <div>
                 <MyGroupGenerate />
               </div>
             )
-        } else if (this.state.menu === 2){
+        } else if (this.state.labexists && this.state.menu === 2){
             return (
               <div>
                 <MyGroupInvite />
               </div>
             )
-        } else if (this.state.menu === 3){
+        } else if (!this.state.labexists && this.state.menu === 3){
             return (
               <div>
                 <MyGroupRegister />
               </div>
             )
-        } else if (this.state.menu === 4){
+        } else if (this.state.labexists && this.state.menu === 4){
             return (
               <div>
                 <MyGroupWithdraw />
               </div>
             )
         } else {
-            return (
-              <div>
-                <MyGroupMember />
-              </div>
-            )
+            if (this.state.labexists) {
+              return (
+                <div>
+                  <MyGroupMember />
+                  </div>
+                )
+              }
+            else {
+              return(
+                <div>
+                  <NoGroup />
+                </div>
+              )
+            }
         }
     }
 
