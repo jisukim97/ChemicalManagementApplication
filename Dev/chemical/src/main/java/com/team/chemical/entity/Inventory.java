@@ -65,7 +65,7 @@ public class Inventory {
     /**
      * 보관함에 저장 되어 있는 약품들(재고들)
      */
-	@OneToMany(mappedBy = "stock")
-    private Set<Stock> stockList;
+	@OneToMany(mappedBy = "inventory")
+    private Set<Stock> stocks;
 
 }

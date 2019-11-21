@@ -1,6 +1,7 @@
 package com.team.chemical.entity;
 
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -44,7 +46,7 @@ public class Lab {
     /**
      * 
      */
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "myLab")
     private Set<User> members;
 
     /**
@@ -54,7 +56,8 @@ public class Lab {
     @JoinTable(name="lab_inventory",
     		joinColumns=@JoinColumn(name="lab_id"),
     		inverseJoinColumns=@JoinColumn(name="inventory_id"))
-    private Set<Inventory> inventories;
+    @OrderColumn(name = "list_idx")
+    private List<Inventory> inventories;
 
     /**
      * 
@@ -63,6 +66,7 @@ public class Lab {
     @JoinTable(name="lab_apparatus",
     		joinColumns=@JoinColumn(name="lab_id"),
     		inverseJoinColumns=@JoinColumn(name="apparatus_id"))
-    private Set<Apparatus> apparatus;
+    @OrderColumn(name = "list_idx")
+    private List<Apparatus> apparatus;
 
 }

@@ -2164,7 +2164,7 @@
 									"hostEdge": {
 										"$ref": "AAAAAAFuQSZmq0+cWX8="
 									},
-									"text": "-stockList"
+									"text": "-stocks"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -18978,7 +18978,7 @@
 								"_parent": {
 									"$ref": "AAAAAAFuQSZmq0+YKMk="
 								},
-								"name": "stockList",
+								"name": "stocks",
 								"reference": {
 									"$ref": "AAAAAAFuQOIgt0zQA7Q="
 								},

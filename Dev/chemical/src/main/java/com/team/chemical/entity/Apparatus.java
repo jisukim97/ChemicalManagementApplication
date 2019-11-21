@@ -26,6 +26,6 @@ public class Apparatus {
 	@Column
     private String name;
 
-	@OneToMany(mappedBy = "schedule")
+	@OneToMany(mappedBy = "apparatus")
     private Set<Schedule> schedules;
 }
