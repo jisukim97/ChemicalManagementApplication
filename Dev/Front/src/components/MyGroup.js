@@ -22,7 +22,8 @@ class MyGroup extends Component {
         super(props);
         this.state = {
             menu : 0,
-            labexists : false
+            labexists : true
+            // false 도 테스트해보기
         }
     }
 

@@ -15,7 +15,7 @@ class MyGroupWithdraw extends Component {
         return (
           <div style={{ margin: '10px 0' }}>
 
-                <br /><Text type="secondary">현재 속한 my Lab이 없습니다! : </Text>
+                <br /><Text type="secondary">현재 속한 my Lab이 없습니다!</Text>
 
             </div>
         );
