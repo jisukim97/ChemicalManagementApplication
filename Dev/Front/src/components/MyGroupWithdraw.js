@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
-import { Link } from "react-router-dom";
+import { Form, Button } from 'antd';
 import { Typography } from 'antd';
-
-import { history } from '../History';
-import { serverUrl } from '../setting';
 
 const { Title } = Typography;
 const { Text } = Typography;
