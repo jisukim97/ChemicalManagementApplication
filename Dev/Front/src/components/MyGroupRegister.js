@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
+import { Form, Icon, Input, Button, message, Modal } from 'antd';
 import { Link } from "react-router-dom";
 import { Typography } from 'antd';
 
@@ -10,6 +10,29 @@ import { login } from '../authentication';
 const { Title } = Typography;
 
 class MyGroupRegister extends Component {
+
+  state = { visible: false };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
 
   //로그인 정보 입력 하고 로그인 버튼 눌렀을 때
   handleSubmit = e => {
@@ -79,13 +102,17 @@ class MyGroupRegister extends Component {
                   )}
               </Form.Item>
 
-              {/* 비밀번호 잃어버림, 로그인, 가입 버튼*/}
-              <Form.Item>
-                  {/*<Link to='/login/forgot' className="login-form-forgot">Forgot password</Link>*/}
-                  <Button type="primary" htmlType="submit" className="button">
-                      가입 신청
-                  </Button>
-              </Form.Item>
+              <Button type="primary" onClick={this.showModal}>
+              가입 신청
+              </Button>
+              <Modal
+              title="가입 신청"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              >
+              <p>에 가입하시겠습니까?</p>
+              </Modal>
 
         </div>
       );

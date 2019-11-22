@@ -14,8 +14,6 @@ class MyGroup extends Component {
 
     state = {
 
-
-
     }
 
     constructor(props){
