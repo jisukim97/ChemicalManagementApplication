@@ -1,5 +1,5 @@
 package com.team.chemical.controller;
-/*
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Chemical;
+import com.team.chemical.entity.ChemicalRepository;
+import com.team.chemical.entity.Inventory;
+import com.team.chemical.entity.Lab;
+import com.team.chemical.entity.Msds;
 import com.team.chemical.entity.User;
-import com.team.chemical.repository.ChemicalRepository;
-import com.team.chemical.repository.UserRepository;
+import com.team.chemical.entity.UserRepository;
 
 @RestController
 public class ChemicalController {
@@ -27,54 +30,74 @@ public class ChemicalController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired 
+	Msds msds;
 
-	@RequestMapping(value="/chemical/add/{userID}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String addChemical(@PathVariable int userID, @RequestBody Chemical chemical, HttpServletResponse response) {
+	/**
+	 * 화학약품의 정보를 불러오는거
+	 * @param userId 사용자의 아이디
+	 * @param chemical - name (화학약품 이름)
+	 * @return 화학약품 정보
+	 */
+	@RequestMapping(value="/chemical/info/{userId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String addChemical(@PathVariable int userId, @RequestBody Chemical chemical, HttpServletResponse response) {
 		try {
-			chemical.setPresentTime();
-			Chemical savedChemical = chemicalRepository.save(chemical);
-			
-			User user = userRepository.findById(userID);
-			user.addChemical(savedChemical);
-			
-			userRepository.save(user);
-			return null;
+			//화학약품 정보 받아오기
+			Chemical msdsInfo = msds.searchChemical(chemical.getName());
+			//약품이 없을 경우
+			if (msdsInfo==null) {
+				throw new Exception("cannot find chemical by name");
+			}
+			//저장 후 리턴
+			msdsInfo = chemicalRepository.save(msdsInfo);
+			return new ObjectMapper().writeValueAsString(msdsInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@RequestMapping(value="/chemical/list/{userID}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
-	String getChemicalList(@PathVariable int userID, HttpServletResponse response) {
-		try {
-			User user = userRepository.findById(userID);
-			List<Chemical> chemicals = user.getChemicals();
-			return new ObjectMapper().writeValueAsString(chemicals);
-		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
 	}
 	
-	@RequestMapping(value="/chemical/request", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
-	String getPlaceRequest(HttpServletResponse response) {
+	/**
+	 * 화학약품이 보관될 장소를 추천 -> 추천해줄 곳과 추천해주지 않을 곳 나눠서 리턴
+	 * @param userId 유저 아이디
+	 * @param chemicalId 화학약품 아이디
+	 * @return 추천 장소 리스트 / 추천 아닌 장소 리스트
+	 */
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getSuggestList(@PathVariable int userId, @PathVariable int chemicalId, HttpServletResponse response) {
 		try {
-			List<String> placeList = new ArrayList<String>();
-			placeList.add("극저온냉장고");
-			placeList.add("냉장고");
-			placeList.add("실온시약장1");
-			placeList.add("실온시약장2");
-			placeList.add("인큐베이터");
-			Collections.shuffle(placeList);
-			String[] selectedPlace = new String[] {placeList.get(0), placeList.get(1), placeList.get(2)};
-			return new ObjectMapper().writeValueAsString(selectedPlace);
+			//화학약품 찾아주기
+			Chemical chemical = chemicalRepository.findById(chemicalId).get();
+			if (chemical==null) {
+				throw new Exception("cannot find chemical by id");
+			}
+			//lab 찾아주기
+			User user = userRepository.findById(userId).get();
+			Lab myLab = user.getMyLab();
+			//첫번째 원소는 추천될꺼의 리스트, 두번째 원소는 안추천될꺼의 리스트
+			List<List<Inventory>> suggestList = myLab.getSuggestList(chemical);
+			return new ObjectMapper().writeValueAsString(suggestList);
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
-
 	}
+	
+	/**
+	 * 화학약품을 이 인벤토리에 넣어도 안전한지?
+	 * @param userId
+	 * @param chemicalId
+	 * @param inventoryId
+	 * @return 안전하면 inventory정보를, 아니면 null
+	 */
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String isSafe(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable int inventoryId, HttpServletResponse response) {
+		
+	}
+
 
 }
 
-*/

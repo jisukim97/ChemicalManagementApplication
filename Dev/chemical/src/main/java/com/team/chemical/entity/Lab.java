@@ -69,4 +69,13 @@ public class Lab {
     @OrderColumn(name = "list_idx")
     private List<Apparatus> apparatus;
 
+    /**
+     * chemical이 추천될 장소. 첫번째 원소(바깥 리스트의 첫번째 원소 : 리스트)는 추천될 리스트
+     * @param chemical
+     * @return
+     */
+    public List<List<Inventory>> getSuggestList(Chemical chemical){
+    	
+    	return null;
+    }
 }
