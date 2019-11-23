@@ -65,10 +65,77 @@ class Apparatus extends Component {
                 {
                     apparatusId:1,
                     month:11,
-                    date:23,
-                    startTime: 12,
-                    endTime: 15,
-                    user: 'Eun mu'
+                    date:22,
+                    startTime: 11,
+                    endTime: 13,
+                    user: 'Eun mu2222222'
+                }, 
+
+                {   
+                    apparatusId: 1,
+                    month: 11,
+                    date: 22,
+                    startTime: 8,
+                    endTime: 10,
+                    user: 'Yeong mo222'
+                },
+                {   
+                    apparatusId: 2,
+                    month: 11,
+                    date: 22,
+                    startTime: 13,
+                    endTime: 14,
+                    user: 'Joo young2222'
+                },
+                {   
+                    apparatusId: 2,
+                    month: 11,
+                    date: 22,
+                    startTime: 13,
+                    endTime: 16,
+                    user: 'Han bin2222222'
+                },
+                {
+                    apparatusId:1,
+                    month:11,
+                    date:22,
+                    startTime: 16,
+                    endTime: 18,
+                    user: 'Eun mu2222222'
+                }
+
+                ,
+                {   
+                    apparatusId: 1,
+                    month: 11,
+                    date: 24,
+                    startTime: 8,
+                    endTime: 9,
+                    user: 'Yeong mo222'
+                },
+                {   
+                    apparatusId: 2,
+                    month: 11,
+                    date: 24,
+                    startTime: 9,
+                    endTime: 10,
+                    user: 'Joo young2222'
+                },
+                {   
+                    apparatusId: 2,
+                    month: 11,
+                    date: 24,
+                    startTime: 10,
+                    endTime: 11,
+                    user: 'Han bin2222222'
+                },
+                {
+                    apparatusId:1,
+                    month:11,
+                    date:24,
+                    startTime: 11,
+                    endTime: 12,
+                    user: 'Eun mu2222222'
                 }
             ],
             columns : [
@@ -154,14 +221,12 @@ class Apparatus extends Component {
             this.setState(
                 {
                     menu: apparatusId
-                }).then(() => {
+                }, () => {
                     this.setState({
                         realReservationList: this.getRealReservationList()
                     })
                 }
-
-                )
-            
+            )
         }
     }
     //기기별 리스트: 새롭게 선택한 기기를 예약한 사람들 뽑아서 리스트 만들기    
@@ -178,6 +243,8 @@ class Apparatus extends Component {
     }
     // 해당 기기 하나를 선택 후 그 기기 예약자만 뽑아서 
     // newList의 각 시간행에 맞게 예약자 이름을 열에 저장하는 함수 
+    
+    //Todo : 오늘 날짜인 것들만 뽑아주기
     getRealReservationList = () => {
         var newList = [];
         var byApparList = []
@@ -212,36 +279,9 @@ class Apparatus extends Component {
         newday = this.state.todayDate;
         newday.setDate(newday.getDate()-1);
         this.setState({
-            todayDate :  newday,
-            reservationList:[
-                {   
-                    apparatusId: 1,
-                    month: 11,
-                    date: 22,
-                    startTime: 8,
-                    endTime: 10,
-                    user: 'Hyeok ju'
-                },
-                {   
-                    apparatusId: 2,
-                    month: 11,
-                    date: 22,
-                    startTime: 8,
-                    endTime: 10,
-                    user: 'Eun mu'
-                },
-                {   
-                    apparatusId: 3,
-                    month: 11,
-                    date: 22,
-                    startTime: 13,
-                    endTime: 16,
-                    user: 'Ji su'
-                }
-            ],
-        })
-        this.setState({
-            realReservationList : this.getRealReservationList()
+            todayDate :  newday
+        }, () => {
+            this.setState({realReservationList : this.getRealReservationList()})
         })
     }
     //날짜 오른쪽 으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
@@ -251,34 +291,9 @@ class Apparatus extends Component {
         newday.setDate(newday.getDate()+1);
         this.setState({
             todayDate :  newday,
-            reservationList:[
-                {   
-                    apparatusId: 1,
-                    month: 11,
-                    date: 24,
-                    startTime: 9,
-                    endTime: 12,
-                    user: 'Han bin'
-                },
-                {   
-                    apparatusId: 1,
-                    month: 11,
-                    date: 24,
-                    startTime: 15,
-                    endTime: 17,
-                    user: 'Yeong mo'
-                },
-                {   
-                    apparatusId: 3,
-                    month: 11,
-                    date: 24,
-                    startTime: 13,
-                    endTime: 16,
-                    user: 'Ji su'
-                }
-            ],
+        }, () => {
+            this.setState({realReservationList : this.getRealReservationList()})
         })
-        this.setState({realReservationList : this.getRealReservationList(),})
     }
 
     makeMonth = () => {
@@ -294,7 +309,10 @@ class Apparatus extends Component {
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
         var n = this.state.menu;
-        n-=1;
+        if (n!=0){
+            //처음 눌렀을 때는 아님
+            n-=1;
+        }
         var m = this.state.apparatusList[n].nickname
         return (m)
     }
