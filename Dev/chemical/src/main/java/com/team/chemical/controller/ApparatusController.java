@@ -119,10 +119,7 @@ public class ApparatusController {
 	String getSchedules(@PathVariable int apparatusId, @PathVariable String date, HttpServletResponse response) {
 		try {
 			//날짜 파싱
-			int year = Integer.parseInt(date.substring(0, 2)) + 2000;
-			int month = Integer.parseInt(date.substring(2, 4));
-			int day = Integer.parseInt(date.substring(4));
-			LocalDate reservDate = LocalDate.of(year, month, day);
+			LocalDate reservDate = getDate(date);
 			//기기 읽어오기
 			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
 			//해당 날짜의 예약 리스트 불러오기
@@ -146,22 +143,19 @@ public class ApparatusController {
 	String makeReservation(@PathVariable int apparatusId, @PathVariable String date, @PathVariable String startTime, @PathVariable String endTime, HttpServletResponse response) {
 		try {
 			//예약 시간 파싱
-			int year = Integer.parseInt(date.substring(0, 2)) + 2000;
-			int month = Integer.parseInt(date.substring(2, 4));
-			int day = Integer.parseInt(date.substring(4));
-			int startHour = Integer.parseInt(startTime.substring(0, 2));
-			int startMin = Integer.parseInt(startTime.substring(2));
-			int endHour = Integer.parseInt(endTime.substring(0, 2));
-			int endMin = Integer.parseInt(endTime.substring(2));
-			LocalDate reservDate = LocalDate.of(year, month, day);
-			LocalTime reservStartTime = LocalTime.of(startHour, startMin);
-			LocalTime reservEndTime = LocalTime.of(endHour, endMin);
+			LocalDate reservDate = getDate(date);
+			LocalTime reservStartTime = getTime(startTime);
+			LocalTime reservEndTime = getTime(endTime);
 			
 			//겹치는 시간 있는거 찾기
 			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
 			for (Schedule alreadyReservated : apparatus.getSchedules()) {
 				if (alreadyReservated.getDate().isEqual(reservDate)) {
-					if (/* 시간 겹치면 */ true) {
+					if ((alreadyReservated.getStartTime().isBefore(reservStartTime)&&reservEndTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거시작 < 새거끝 < 원래끝
+							|| (alreadyReservated.getStartTime().isBefore(reservStartTime)&&reservStartTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거시작 < 원래끝
+							|| (alreadyReservated.getStartTime().isBefore(reservEndTime)&&reservEndTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거끝 < 원래끝
+							|| (reservStartTime.isBefore(alreadyReservated.getStartTime())&&alreadyReservated.getStartTime().isBefore(reservStartTime))//새거시작 < 원래시작 < 새거끝
+							|| (reservStartTime.isBefore(alreadyReservated.getEndTime())&&alreadyReservated.getEndTime().isBefore(reservEndTime)) /*새거시작 < 원래끝 < 새거끝*/ ) {
 						throw new Exception("시간 겹침");
 					}
 				}
@@ -187,4 +181,30 @@ public class ApparatusController {
 			return null;
 		}
 	}
+	
+	 /**
+	  * 
+	  * @param date YYMMDD형식을 LocalDate로
+	  * @return LocalDate
+	  */
+	private LocalDate getDate(String date) {
+		int year = Integer.parseInt(date.substring(0, 2)) + 2000;
+		int month = Integer.parseInt(date.substring(2, 4));
+		int day = Integer.parseInt(date.substring(4));
+		LocalDate localDate = LocalDate.of(year, month, day);
+		return localDate;
+	}
+	
+	 /**
+	  * 
+	  * @param time HHMM형식을 LocalTime으로
+	  * @return LocalTime
+	  */
+	private LocalTime getTime(String time) {
+		int hour = Integer.parseInt(time.substring(0, 2));
+		int min = Integer.parseInt(time.substring(2));
+		LocalTime localTime = LocalTime.of(hour, min);
+		return localTime;
+	}
+	
 }

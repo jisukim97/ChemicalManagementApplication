@@ -30,6 +30,27 @@ public class MyLabMemberController {
 
 	@Autowired
 	LabRepository labRepository;
+	
+	/**
+	 * 랩 아이디로 그 랩의 정보(멤버들 같은거) 찾아오기
+	 * @param labId 랩 아이디
+	 * @return 랩 정보
+	 */
+	@RequestMapping(value="/lab/{labId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getLabMemberList(@PathVariable String labId, HttpServletResponse response) {
+		try {
+			//랩 찾아주기
+			Lab findedLab = labRepository.findById(Integer.parseInt(labId)).get();
+			if (findedLab==null) {
+				throw new Exception("cannot find lab");
+			}
+			return new ObjectMapper().writeValueAsString(findedLab);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
 
 	/**
 	 * email에 해당하는 유저 찾아 보내주기
