@@ -4,30 +4,34 @@ import React, { Component } from 'react';
 class ChemicalInfo extends Component {
 
     state = {
-
     }
 
-    constructor(props){
+    constructor(props) {
         super(props);
         // this.props.chemical.stockId에 해당되는거 백엔드에서 읽어와서 저장해주기
         this.state = {
-            name : this.props.chemical.chemicalName,
-            casNo : "71-43-2",
-            formula : "C8H6",
-            mw : 78.11,
-            mp : 5.5,
-            bp : 80.1
+            information: 
+                {
+                    name: "벤젠",
+                    casNo: "71-43-2",
+                    formula: "C8H6",
+                    mw: 78.11,
+                    mp: 5.5,
+                    bp: 80.1
+                }
+            
         }
     }
 
     render() {
-        return(
-            <div style={{ margin : 10}}>
-                <b>{this.state.name}</b> <br/>
-                cas No : {this.state.casNo} <br/>
-                formula : {this.state.formula} <br/>
-                MW : {this.state.mw} <br/>
-                mp/bp : {this.state.mp}/{this.state.bp} <br/>
+
+        return (
+            <div style={{ margin: 10 }}>
+                <b>{this.state.information.name}</b> <br />
+                cas No : {this.state.information.casNo} <br />
+                formula : {this.state.information.formula} <br />
+                MW : {this.state.information.mw} <br />
+                mp/bp : {this.state.information.mp}/{this.state.information.bp} <br />
             </div>
         );
     }
