@@ -244,7 +244,26 @@ render() {
 
 ```
 
-# 우리가 할 일
-* 실습
-* GUI 보면서 각각 페이지마다 컴포넌트 정하기 (재사용 될것 고려 해서)
-* 각 컴포넌트 담당 정하기
+# 백엔드와 통신
+* 프론트엔드 --(요청)--> 백엔드 
+* 프론트엔드 <--(응답)-- 백엔드
+* 이렇게 통신을 해야 한다 
+* 그렇다면 어떻게 요청? REST
+
+# REST
+* URI(자원) + http method(행위)
+* URI는 그냥 http://asfesf.wqrkwjrkj.com 뒤에 붙는 거라고 생각하면 됨. 예를들면 /user/1 (아이디가 1인 유저의 정보를 가져와라 라는 의미라고 약속한 경우)
+* method는 GET(조회) / POST(업로드) / DELETE(삭제) / PUT(수정) 중에 골라서 약속하면 됨 (의미를 위해 쓰는거)
+* 따라서, 프론트엔드와 백엔드는 uri와 method를 서로 약속한뒤에 정보를 주고받으면 된다.
+
+# fetch
+* react에서 fetch를 이용해 요청 가능 
+```JSX
+fetch('uri', {
+    method: 'HTTPmethod',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify('body로 담을 정보')
+}).then(response => {
+    //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+})
+```
