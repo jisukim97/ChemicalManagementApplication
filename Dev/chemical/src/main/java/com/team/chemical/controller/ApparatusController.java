@@ -2,8 +2,10 @@ package com.team.chemical.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -59,8 +61,11 @@ public class ApparatusController {
 			Apparatus savedApparatus = apparatusRepository.save(apparatus);
 			//lab에 추가
 			findedLab.getApparatus().add(savedApparatus);
-			labRepository.save(findedLab);
-			return new ObjectMapper().writeValueAsString(savedApparatus);
+			findedLab = labRepository.save(findedLab);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("apparatus", savedApparatus);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -113,6 +118,7 @@ public class ApparatusController {
 	/**
 	 * 해당 기기의 해당 날짜의 리스트 받아오기
 	 * @param apparatusId
+	 * @param date YYMMDD형식
 	 * @return
 	 */
 	@RequestMapping(value="/schedule/{apparatusId}/{date}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
@@ -123,7 +129,9 @@ public class ApparatusController {
 			//기기 읽어오기
 			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
 			//해당 날짜의 예약 리스트 불러오기
-			return new ObjectMapper().writeValueAsString(getSchedulesAtDate(apparatus, reservDate));
+			Map<String, Object> result = new HashMap<>();
+			result.put("schedules", getSchedulesAtDate(apparatus, reservDate));
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -139,7 +147,7 @@ public class ApparatusController {
 	 * @param endTime : HHMM 형
 	 * @return 해당 날짜의 스케줄 리스트
 	 */
-	@RequestMapping(value="/schedule/{apparatusId}/{date}/{startTime}/{endTime}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	@RequestMapping(value="/schedule/{userID}/{apparatusId}/{date}/{startTime}/{endTime}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String makeReservation(@PathVariable int apparatusId, @PathVariable String date, @PathVariable String startTime, @PathVariable String endTime, HttpServletResponse response) {
 		try {
 			//예약 시간 파싱
@@ -170,11 +178,16 @@ public class ApparatusController {
 			newSchedule = scheduleRepository.save(newSchedule);
 			//기기에 스케줄 할당
 			apparatus.getSchedules().add(newSchedule);
-			apparatusRepository.save(apparatus);
+			apparatus = apparatusRepository.save(apparatus);
+			
+			//스케줄에도 기기정보 저장
+			newSchedule.setApparatus(apparatus);
+			scheduleRepository.save(newSchedule);
 			
 			//성공적으로 등록된 해당 날짜의 스케줄 리턴
-			return new ObjectMapper().writeValueAsString(getSchedulesAtDate(apparatus, reservDate));
-			
+			Map<String, Object> result = new HashMap<>();
+			result.put("schedules", getSchedulesAtDate(apparatus, reservDate));
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
