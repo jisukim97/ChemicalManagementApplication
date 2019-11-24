@@ -12,113 +12,125 @@ const { Title } = Typography;
 
 class MyGroup extends Component {
 
-    state = {
+  state = {
 
+  }
+
+  constructor(props){
+    super(props);
+    this.state = {
+      menu : 0,
+      labid : 0,
+      labexists : false
+      // false 도 테스트해보기
+      // 속한 lab이 없을 때, labid = 0
+    }
+  }
+
+  firstButtonClick = () => {
+    this.setState( {
+      menu : 1
+    })
+  }
+
+  secondButtonClick = () => {
+    this.setState( {
+      menu : 2
+    })
+  }
+
+  thirdButtonClick = () => {
+    this.setState( {
+      menu : 3
+    })
+  }
+
+  fourthButtonClick = () => {
+    this.setState( {
+      menu : 4
+    })
+  }
+
+  enrollLab = (id) => {
+    this.setState({labId : id,
+      labexists : true})
     }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            menu : 0,
-            labexists : true
-            // false 도 테스트해보기
-        }
-    }
+    withdrawLab = () => {
+      this.setState({labId : 0,
+        labexists : false})
+      }
 
-    firstButtonClick = () => {
-        this.setState( {
-            menu : 1
-        })
-    }
-
-    secondButtonClick = () => {
-        this.setState( {
-            menu : 2
-        })
-    }
-
-    thirdButtonClick = () => {
-        this.setState( {
-            menu : 3
-        })
-    }
-
-    fourthButtonClick = () => {
-        this.setState( {
-            menu : 4
-        })
-    }
-
-    getContent = () => {
+      getContent = () => {
         if (!this.state.labexists && this.state.menu === 1){
-            return (
-              <div>
-                <MyGroupGenerate />
-              </div>
-            )
-        } else if (this.state.labexists && this.state.menu === 2){
-            return (
-              <div>
-                <MyGroupInvite />
-              </div>
-            )
-        } else if (!this.state.labexists && this.state.menu === 3){
-            return (
-              <div>
-                <MyGroupRegister />
-              </div>
-            )
-        } else if (this.state.labexists && this.state.menu === 4){
-            return (
-              <div>
-                <MyGroupWithdraw />
-              </div>
-            )
-        } else {
-            if (this.state.labexists) {
-              return (
-                <div>
-                  <MyGroupMember />
-                  </div>
-                )
-              }
-            else {
-              return(
-                <div>
-                  <NoGroup />
-                </div>
-              )
-            }
-        }
-    }
-
-    render() {
-        return (
+          return (
             <div>
-                <br />
-                <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
-
-                {/* 버튼 4개 */}
-                <Row style={{margin : 20}}>
-                    <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick}>my Lab 생성</Button></center></Col>
-                    <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
-                </Row>
-
-                <Row style={{margin : 20}}>
-                    <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
-                    <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
-                </Row>
-
-                {/* 내용 */}
-                <div>
-                    <Card style={{margin : 20}}>
-                        {this.getContent()}
-                    </Card>
-                </div>
-
+            <MyGroupGenerate enrollLab={this.enrollLab}/>
             </div>
-        );
-    }
-}
+          )
+        } else if (this.state.labexists && this.state.menu === 2){
+          return (
+            <div>
+            <MyGroupInvite />
+            </div>
+          )
+        } else if (!this.state.labexists && this.state.menu === 3){
+          return (
+            <div>
+            <MyGroupRegister enrollLab={this.enrollLab}/>
+            </div>
+          )
+        } else if (this.state.labexists && this.state.menu === 4){
+          return (
+            <div>
+            <MyGroupWithdraw withdrawLab={this.withdrawLab}/>
+            </div>
+          )
+        } else {
+          if (this.state.labexists) {
+            return (
+              <div>
+              <MyGroupMember />
+              </div>
+            )
+          }
+          else {
+            return(
+              <div>
+              <NoGroup />
+              </div>
+            )
+          }
+        }
+      }
 
-export default MyGroup;
+      render() {
+        return (
+          <div>
+          <br />
+          <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+
+          {/* 버튼 4개 */}
+          <Row style={{margin : 20}}>
+          <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick}>my Lab 생성</Button></center></Col>
+          <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
+          </Row>
+
+          <Row style={{margin : 20}}>
+          <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
+          <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
+          </Row>
+
+          {/* 내용 */}
+          <div>
+          <Card style={{margin : 20}}>
+          {this.getContent()}
+          </Card>
+          </div>
+
+          </div>
+        );
+      }
+    }
+
+    export default MyGroup;
