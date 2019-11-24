@@ -1,7 +1,5 @@
 package com.team.chemical.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -95,7 +93,7 @@ public class ChemicalController {
 	 */
 	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
 	String isSafe(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable int inventoryId, HttpServletResponse response) {
-		
+		return null;
 	}
 
 

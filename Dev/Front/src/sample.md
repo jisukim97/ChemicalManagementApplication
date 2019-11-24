@@ -264,6 +264,108 @@ fetch('uri', {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify('body로 담을 정보')
 }).then(response => {
+    return response.json()
     //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+}).then(response => {
+    //여기서 response라는걸 제대로 쓸 수 있음
 })
 ```
+
+# 양식
+* uri : {}로 쌓여 있는 곳에는 실제 변수를 넣어줘야 함
+* HTTP method
+* body : { key : value } 형식으로 보내줘야 함
+* response : 응답 : { key : value } 형식으로 응답이 옴
+
+# 회원가입 / 로그인
+## 로그인
+* /login
+* POST
+* {
+    "email" : 이메일주소,
+    "password" : 비밀번호
+}
+* {
+    "user" : 유저 정보,
+    "lab" : lab 정보 
+}
+## 회원가입
+* /regist
+* POST
+* {
+    "email" : 이메일 주소,
+    "password" : 비밀번호,
+    "name" : 이름
+} 
+
+# my Lab 멤버 구성 유스케이스
+## Lab 생성
+* /lab/{userId}
+* POST
+* {
+    "name" : 랩이름,
+    "password" : 비밀번호
+}
+* {
+    "lab" : lab 정보
+}
+## 초대할 멤버 검색 
+* /member/{email}
+* GET
+* {
+    "email" : 찾을 유저 이메일
+}
+* {
+    "member" : 찾은 멤버 정보
+}
+## 멤버 초대 
+* /lab/{labId}/{userId}
+* PUT
+* 없음
+* 없음
+## Lab 탈퇴
+* /lab/{labId}/{userId}
+* DELETE
+* 없음
+* 없음
+## 이미 만들어진 lab에 직접 가입
+* /lab/{labId}/{userId}
+* POST
+* {
+    "password" : 암호
+}
+* 없음
+## 랩 정보 가져오기(랩이름, 회원들 목록 포함)
+* /lab/{labId}
+* GET
+* 없음
+* {
+    "lab" : 랩 정보
+}
+
+# my Lab 사용 기기 관리 유스케이스
+## 기기 추가 
+* /apparatus/{labId}
+* POST
+* {
+    "name" : 기기이름
+}
+* {
+    "apparatus" : 저장된 기기 정보
+}
+## 기기 삭제
+* /apparatus/{labId}/{apparatusId}
+* DELETE
+* 없음
+* 없음 
+## 해당 날짜의 예약 리스트 받아오기
+* /schedule/{apparatusId}/{date}  <-여기서 date는 YYMMDD 6칸짜리로
+* GET
+* 없음
+* {
+    "schedules" : [예약한것들 리스트]
+}
+## 기기 예약
+* /schedule/{userID}/{apparatusId}/{date}/{startTime}/{endTime} (YYMMDD, HHMM, HHMM 형식으로)
+* POST
+* 

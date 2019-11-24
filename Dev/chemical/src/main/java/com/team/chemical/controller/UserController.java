@@ -1,5 +1,8 @@
 package com.team.chemical.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ public class UserController {
 
 	/**
 	 * 회원가입
-	 * @param user (email, password)
+	 * @param user (email, password, name)
 	 * @return 가입된 유저의 정보
 	 */
 	@RequestMapping(value="/regist", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
@@ -59,7 +62,11 @@ public class UserController {
 				throw new Exception("password is not correct");
 			}
 			findedUser.setPassword(null);
-			return new ObjectMapper().writeValueAsString(findedUser);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("user", findedUser);
+			result.put("lab", findedUser.getMyLab());
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
