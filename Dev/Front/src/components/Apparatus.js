@@ -60,7 +60,7 @@ class Apparatus extends Component {
                     date: 23,
                     startTime: 13,
                     endTime: 16,
-                    user: 'Han bin'
+                    user: 'Yeong mo'
                 },
                 {
                     apparatusId:1,
@@ -68,7 +68,7 @@ class Apparatus extends Component {
                     date:22,
                     startTime: 11,
                     endTime: 13,
-                    user: 'Eun mu2222222'
+                    user: 'Eun mu'
                 }, 
 
                 {   
@@ -77,23 +77,23 @@ class Apparatus extends Component {
                     date: 22,
                     startTime: 8,
                     endTime: 10,
-                    user: 'Yeong mo222'
+                    user: 'Ji su'
                 },
                 {   
                     apparatusId: 2,
                     month: 11,
                     date: 22,
-                    startTime: 13,
-                    endTime: 14,
-                    user: 'Joo young2222'
+                    startTime: 11,
+                    endTime: 13,
+                    user: 'Hyeok ju'
                 },
                 {   
                     apparatusId: 2,
                     month: 11,
                     date: 22,
-                    startTime: 13,
-                    endTime: 16,
-                    user: 'Han bin2222222'
+                    startTime: 14,
+                    endTime: 17,
+                    user: 'Han bin'
                 },
                 {
                     apparatusId:1,
@@ -101,7 +101,7 @@ class Apparatus extends Component {
                     date:22,
                     startTime: 16,
                     endTime: 18,
-                    user: 'Eun mu2222222'
+                    user: 'Yeong mo'
                 }
 
                 ,
@@ -109,9 +109,9 @@ class Apparatus extends Component {
                     apparatusId: 1,
                     month: 11,
                     date: 24,
-                    startTime: 8,
-                    endTime: 9,
-                    user: 'Yeong mo222'
+                    startTime: 9,
+                    endTime: 13,
+                    user: 'Ji su'
                 },
                 {   
                     apparatusId: 2,
@@ -119,7 +119,7 @@ class Apparatus extends Component {
                     date: 24,
                     startTime: 9,
                     endTime: 10,
-                    user: 'Joo young2222'
+                    user: 'Joo young'
                 },
                 {   
                     apparatusId: 2,
@@ -127,15 +127,15 @@ class Apparatus extends Component {
                     date: 24,
                     startTime: 10,
                     endTime: 11,
-                    user: 'Han bin2222222'
+                    user: 'Hyeok ju'
                 },
                 {
-                    apparatusId:1,
+                    apparatusId:4,
                     month:11,
                     date:24,
                     startTime: 11,
                     endTime: 12,
-                    user: 'Eun mu2222222'
+                    user: 'Yeong mo'
                 }
             ],
             columns : [
@@ -151,6 +151,7 @@ class Apparatus extends Component {
                 },
              ],
             todayDate : today,   
+            realReservationList: []
          }     
     }    
     //'등록하기'버튼에 대한 메소드
@@ -248,7 +249,7 @@ class Apparatus extends Component {
     getRealReservationList = () => {
         var newList = [];
         var byApparList = []
-        byApparList = this.getbyApparList();
+        byApparList = this.getbyApparList().filter( one => one.month==this.makeMonth() && one.date==this.makeDate());
 
         for (var i = 0; i < 15; i++) {
             var newOne = {}
@@ -319,31 +320,43 @@ class Apparatus extends Component {
     // 본인 예약 삭제할 수 있는 함수 
     handleRemove=()=>{
         var newList = [];
-        newList = this.state.reservationList; 
+        newList = this.state.reservationList;
         var del = 0;
         for(var i = 0; i < newList.length; i++){
-            if (newList[i].user == 'Eun mu'){ //유저 네임은 로그인 정보 받아오는 걸로 바꾸기
+            if (newList[i].user == 'Yeong mo'){ //유저 네임은 로그인 정보 받아오는 걸로 바꾸기
                 del = i; break;
             }
         }
-        newList.splice(i,1)
+        newList.splice(del,1)
         this.setState({
             reservationList: newList,
-        })
-        this.setState({
-            realReservationList: this.getRealReservationList(),
+        }, () => {
+            this.setState({
+                realReservationList: this.getRealReservationList(),
+            })    
         })
     }
 
-    render() {
-        const { information } = this.state;
+    checkMyReservation=()=>{
+        var newList = [];
+        newList = this.state.realReservationList;
+        var present = false;
+        for(var i=0; i<newList.length; i++){
+            if(newList[i].user == 'Yeong mo'){ //login user정보 오면 넣기
+                present = true; break;
+            }
+        }
+        return (present)
+    }
+
+    render() { 
         return (
             <div>
                 <br/>
                 <center><Title style={{ marginBottom: 35 }}>Apparatus</Title></center>
 
                 <Row >
-                    <Col span={8} style={{margin : 10}} >
+                    <Col span={6} style={{margin : 10}} >
                         {/* 기기들 목록 */}
                         <List
                             grid={{ gutter: 16, column: 1 }}
@@ -364,51 +377,56 @@ class Apparatus extends Component {
                             onCancel={this.handleCancel_1}
                         >
                             <p>기기이름: <Input placeholder="등록할 기기?" /></p>
-                            <p>등록자: 김지수 </p> {/*login user 정보 받으면 넣기*/}
+                            <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
                         </Modal>
                     </Col>
-                    <Col span={13} >
+                    <Col span={16} >
                         {/* 기기들 상세 창 */}
-                        <Card>
-                            <Row span={3}>  
+                            <Card>
+                            <Row span={3}>
                                 <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
-                                    {this.makeMonth()}월 {this.makeDate()}일
+                                {this.makeMonth()}월 {this.makeDate()}일
                                 <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table size='small' dataSource = {this.state.realReservationList} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }}/>
+                                <Table size='small' dataSource={this.state.realReservationList} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
-                            <Row span ={2}>
-                                    <Button onClick={this.showModal_2}>
-                                        예약 하기
+                            <Row span={2}>
+                                <Button onClick={this.showModal_2}>
+                                    예약 하기
                                     </Button>
-                                    <Modal
-                                        title="my Apparatus 예약 하기"
-                                        visible={this.state.visible_2}
-                                        onOk={this.handleOk_2}
-                                        onCancel={this.handleCancel_2}
-                                    >
-                                        <p>예약할 기기: {this.getApparNameNow()} </p> 
-                                        <p>예약자: 김지수</p> {/*login user 정보 받으면 넣기*/}
-                                        <p>예약할 시간: (예약은 30분 단위로만 가능합니다) <br/><br/>
-                                            from <TimePicker defaultValue={moment('12:00',this.state.format)} format={this.state.foramt}/> to <TimePicker defaultValue={moment('14:00',this.state.format)} format={this.state.foramt}/></p>
-                                    </Modal>
-                                    <Divider type="vertical" />
-                                    <Button onClick={this.showModal_3}>
-                                        my예약 삭제하기
+                                <Modal
+                                    title="my Apparatus 예약 하기"
+                                    visible={this.state.visible_2}
+                                    onOk={this.handleOk_2}
+                                    onCancel={this.handleCancel_2}
+                                >
+                                    <p>예약할 기기: {this.getApparNameNow()} </p>
+                                    <p>예약자: 김지수</p> {/*login user 정보 받으면 넣기*/}
+                                    <p>예약할 시간: (예약은 30분 단위로만 가능합니다) <br /><br />
+                                        from <TimePicker defaultValue={moment('12:00', this.state.format)} format={this.state.foramt} /> to <TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.foramt} /></p>
+                                </Modal>
+                                <Divider type="vertical" />
+                                {(this.checkMyReservation()) && (
+                                    <div>
+                                        <Button onClick={this.showModal_3}>
+                                            my예약 삭제하기
                                     </Button>
-                                    <Modal
-                                        title="my 예약 삭제하기"
-                                        visible={this.state.visible_3}
-                                        onOk={this.handleOk_3}
-                                        onCancel={this.handleCancel_3}
-                                    >   <p> ---- 아래 정보의 예약을 삭제 하시겠습니까? ----</p>
-                                        <p>예약 기기: {this.getApparNameNow()} </p> 
-                                        <p>예약자: 김지수</p> {/*login user 정보 받으면 넣기*/}
-                                        <p>예약 시간: </p>
-                                    </Modal>
-                                
+                                        <Modal
+                                            title="my 예약 삭제하기"
+                                            visible={this.state.visible_3}
+                                            onOk={this.handleOk_3}
+                                            onCancel={this.handleCancel_3}
+
+                                        >   <p> ---- 아래 정보의 예약을 삭제 하시겠습니까? ----</p>
+                                            <p>예약 기기: {this.getApparNameNow()} </p>
+                                            <p>예약자: Yeong mo</p> {/*login user 정보 받으면 넣기*/}
+                                            <p>예약 시간: </p>
+                                        </Modal>
+                                    </div>)
+                                }
+
                             </Row>
                         </Card>
                     </Col>
