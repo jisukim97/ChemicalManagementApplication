@@ -314,6 +314,16 @@ fetch('uri', { // uri 넣어주기
     "password" : 비밀번호,
     "name" : 이름
 } 
+## 로그인 유저 정보 불러오기
+```JSX
+import { getUser, getLab } from '../authentication';
+
+//~중략
+//아래에서
+getUser().id -> 유저아이디
+getLab().id -> 랩아이디
+
+```
 
 ----
 ----
