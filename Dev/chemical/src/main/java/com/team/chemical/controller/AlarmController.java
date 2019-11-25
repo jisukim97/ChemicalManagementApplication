@@ -31,6 +31,8 @@ public class AlarmController {
 	@Autowired
 	UserRepository userRepository;
 	
+	
+	//TODO : 알람 전체 다시 짜기
 	void makeAlarm() {
 		//유효기간알람
 		//질병알람
