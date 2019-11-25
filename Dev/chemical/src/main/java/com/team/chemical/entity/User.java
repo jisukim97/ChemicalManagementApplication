@@ -2,8 +2,6 @@ package com.team.chemical.entity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,7 +17,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -81,12 +78,7 @@ public class User {
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
     @OrderColumn(name = "list_idx")
-    private List<Stock> alarms = new LinkedList<>();
-
-    @OneToMany(mappedBy = "reservation")
-    @JsonManagedReference("userSchedule")
-    private Set<Schedule> schedules = new HashSet<>();
-
+    private Set<Stock> alarms = new HashSet<>();
     
     
 	@Override
