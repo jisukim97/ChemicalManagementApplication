@@ -1,10 +1,10 @@
-export const login = ({ user }) => {
-    localStorage.setItem('USER', JSON.stringify(user))
-    //localStorage.setItem('token', token)
+export const login = ({ user, lab }) => {
+    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('lab', JSON.stringify(lab))
 }
 
 export const getUser = () => {
-    const user = localStorage.getItem('USER')
+    const user = localStorage.getItem('user')
     try {
         return JSON.parse(user)
     } catch (e) {
@@ -13,15 +13,14 @@ export const getUser = () => {
 }
 
 export const logout = () => {
-    localStorage.removeItem('USER')
-    //localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    localStorage.removeItem('lab')
 }
 
-export const getToken = () => {
+export const getLab = () => {
     try { 
-        return localStorage.getItem('token')
+        return localStorage.getItem('lab')
     } catch (e) {
-        //이거 토큰없으므로 처리 해 주기
         return null
     }
 }
