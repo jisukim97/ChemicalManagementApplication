@@ -48,7 +48,7 @@ public class MyLabMemberController {
 			}
 			Map<String, Object> result = new HashMap<>();
 			result.put("lab", findedLab);
-			return new ObjectMapper().writeValueAsString(findedLab);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -60,12 +60,9 @@ public class Lab {
     /**
      * 
      */
-    @OneToMany
-    @JoinTable(name="lab_inventory",
-    		joinColumns=@JoinColumn(name="lab_id"),
-    		inverseJoinColumns=@JoinColumn(name="inventory_id"))
-    @OrderColumn(name = "list_idx")
-    private List<Inventory> inventories = new LinkedList<>();
+	@OneToMany(mappedBy = "lab")
+	@JsonManagedReference("labInventory")
+    private Set<Inventory> inventories = new HashSet<>();
 
     /**
      * 
@@ -76,15 +73,21 @@ public class Lab {
     		inverseJoinColumns=@JoinColumn(name="apparatus_id"))
     @OrderColumn(name = "list_idx")
     private List<Apparatus> apparatus = new LinkedList<>();
-
+    
+    
+	
     /**
      * chemical이 추천될 장소. 첫번째 원소(바깥 리스트의 첫번째 원소 : 리스트)는 추천될 리스트
      * @param chemical
      * @return
      */
     public List<List<Inventory>> getSuggestList(Chemical chemical){
+    	List<List<Inventory>> list = new LinkedList<>();
+    	List<Inventory> temp = new LinkedList<>();
+    	list.add(temp);
+    	list.add(temp);
     	
-    	return null;
+    	return list;
     }
 
 	@Override

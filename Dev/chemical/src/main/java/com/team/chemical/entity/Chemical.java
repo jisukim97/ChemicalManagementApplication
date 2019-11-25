@@ -129,6 +129,11 @@ public class Chemical {
     @OrderColumn(name = "list_idx")
     private List<Illness> illness = new LinkedList<>();
 
+    public boolean isCrash(Chemical newChemical) {
+    	
+    	return false;
+    }
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;

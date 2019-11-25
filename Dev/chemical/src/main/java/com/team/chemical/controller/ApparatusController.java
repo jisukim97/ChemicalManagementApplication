@@ -23,6 +23,8 @@ import com.team.chemical.entity.Lab;
 import com.team.chemical.entity.LabRepository;
 import com.team.chemical.entity.Schedule;
 import com.team.chemical.entity.ScheduleRepository;
+import com.team.chemical.entity.User;
+import com.team.chemical.entity.UserRepository;
 
 /**
  * 
@@ -40,6 +42,9 @@ public class ApparatusController {
 	
 	@Autowired
 	ScheduleRepository scheduleRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	/**
 	 * 기기 추가
@@ -147,9 +152,12 @@ public class ApparatusController {
 	 * @param endTime : HHMM 형
 	 * @return 해당 날짜의 스케줄 리스트
 	 */
-	@RequestMapping(value="/schedule/{userID}/{apparatusId}/{date}/{startTime}/{endTime}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String makeReservation(@PathVariable int apparatusId, @PathVariable String date, @PathVariable String startTime, @PathVariable String endTime, HttpServletResponse response) {
+	@RequestMapping(value="/schedule/{userId}/{apparatusId}/{date}/{startTime}/{endTime}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	String makeReservation(@PathVariable int userId, @PathVariable int apparatusId, @PathVariable String date, @PathVariable String startTime, @PathVariable String endTime, HttpServletResponse response) {
 		try {
+			//회원 찾기
+			User findedUser = userRepository.findById(userId).get();
+			
 			//예약 시간 파싱
 			LocalDate reservDate = getDate(date);
 			LocalTime reservStartTime = getTime(startTime);
@@ -173,6 +181,7 @@ public class ApparatusController {
 			newSchedule.setDate(reservDate);
 			newSchedule.setStartTime(reservStartTime);
 			newSchedule.setEndTime(reservEndTime);
+			newSchedule.setReservation(findedUser);
 			
 			//스케줄 자체 저장
 			newSchedule = scheduleRepository.save(newSchedule);
@@ -195,12 +204,29 @@ public class ApparatusController {
 		}
 	}
 	
+	@RequestMapping(value="/schedule/{apparatusId}/{scheduleId}", method=RequestMethod.DELETE, produces="text/plain;charset=UTF-8") 
+	String cancelReservation(@PathVariable int apparatusId, @PathVariable int scheduleId, HttpServletResponse response) {
+		try {
+			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
+			Schedule schedule = scheduleRepository.findById(scheduleId).get();
+			apparatus.getSchedules().remove(schedule);
+			apparatusRepository.save(apparatus);
+			scheduleRepository.delete(schedule);
+			return null;
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+
+	
 	 /**
 	  * 
 	  * @param date YYMMDD형식을 LocalDate로
 	  * @return LocalDate
 	  */
-	private LocalDate getDate(String date) {
+	public static LocalDate getDate(String date) {
 		int year = Integer.parseInt(date.substring(0, 2)) + 2000;
 		int month = Integer.parseInt(date.substring(2, 4));
 		int day = Integer.parseInt(date.substring(4));
@@ -213,7 +239,7 @@ public class ApparatusController {
 	  * @param time HHMM형식을 LocalTime으로
 	  * @return LocalTime
 	  */
-	private LocalTime getTime(String time) {
+	public static LocalTime getTime(String time) {
 		int hour = Integer.parseInt(time.substring(0, 2));
 		int min = Integer.parseInt(time.substring(2));
 		LocalTime localTime = LocalTime.of(hour, min);

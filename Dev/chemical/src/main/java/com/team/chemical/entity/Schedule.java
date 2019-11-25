@@ -60,9 +60,8 @@ public class Schedule {
     @JsonBackReference("apparatusSchedule")
     private Apparatus apparatus;
     
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference("userSchedule")
+	@ManyToOne
+	@JoinColumn(name="user_id")
     private User reservation;
 
 	@Override
