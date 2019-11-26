@@ -8,6 +8,9 @@ import MyGroupWithdraw from './MyGroupWithdraw';
 import MyGroupMember from './MyGroupMember';
 import NoGroup from './NoGroup';
 
+import { getUser, getLab } from '../authentication';
+import { serverUrl } from '../setting'
+
 const { Title } = Typography;
 
 class MyGroup extends Component {
@@ -26,6 +29,8 @@ class MyGroup extends Component {
       // 속한 lab이 없을 때, labid = 0
     }
   }
+
+
 
   firstButtonClick = () => {
     this.setState( {

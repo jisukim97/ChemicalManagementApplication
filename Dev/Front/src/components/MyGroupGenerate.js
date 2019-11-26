@@ -10,29 +10,34 @@ const { Title } = Typography;
 
 class MyGroupGenerate extends Component {
 
+  constructor(props){
+    super(props);
+  }
+
   //그룹 생성 버튼 클릭했을 때
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         //그룹 생성 정보
+        console.log(values)
         const registInformation = {
           groupName : values.groupName,
           groupPassword : values.groupPassword,
         }
         //http요청
-        fetch(serverUrl + '/regist', {
+        fetch(serverUrl + '/lab/' + getUser().id, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(registInformation)
         }).then(response => {
           if (response.status === 200) {
-            //그룹 생이 성공적으로 수행 되었을 경우
+            //그룹 생성이 성공적으로 수행 되었을 경우
             message.success('그룹이 생성되었습니다!');
-            this.props.enrollLab(3);
+            localStorage.setItem('lab', JSON.stringify(response.lab))
             //history.push("/login")
           } else if (response.status === 403) {
-            //생 실패했을 경우
+            //생성 실패했을 경우
             message.error('같은 그룹 이름을 사용하는 그룹이 이미 존재합니다!');
           } else {
             //요청 오류 발생
@@ -40,7 +45,7 @@ class MyGroupGenerate extends Component {
         })
       } else {
         //비밀번호 틀렸을 경우
-        message.error('두 비밀번호가 같은지 확인 해 주세요!');
+        message.error('두 비밀번호가 같은지 확인해 주세요!');
       }
     });
   };
@@ -68,6 +73,8 @@ class MyGroupGenerate extends Component {
     return (
       <div style={{ margin: '10px 0' }}>
       <center><Title style={{marginBottom : 50}}>my Lab 생성</Title></center>
+
+      <Form onSubmit={this.handleSubmit} className="form">
 
       {/* 그룹 이름 */}
       <Form.Item>
@@ -122,6 +129,8 @@ class MyGroupGenerate extends Component {
           그룹 생성하기
           </Button>
           </Form.Item>
+
+          </Form>
 
           </div>
         );
