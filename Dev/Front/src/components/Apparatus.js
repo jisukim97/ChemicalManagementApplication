@@ -14,8 +14,9 @@ class Apparatus extends Component {
         //오늘 날짜 받아오기
         var today = new Date();
         this.state = {
-            visible_1: false, //'등록하기' 모달
-            visible_2: false, // '예약하기' 모달
+            visible_0: false, // '기기 삭제' 모달
+            visible_1: false, //'기기등록하기' 모달
+            visible_2: false, // '기기예약하기' 모달
             visible_3: false, // '본인 예약 삭제확인' 모달
             menu: apparatusId,
             format: 'HH:mm',
@@ -41,7 +42,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 1,
                     month: 11,
-                    date: 23,
+                    date: 24,
                     startTime: 8,
                     endTime: 11,
                     user: 'Yeong mo'
@@ -49,7 +50,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 23,
+                    date: 24,
                     startTime: 8,
                     endTime: 10,
                     user: 'Joo young'
@@ -57,7 +58,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 23,
+                    date: 24,
                     startTime: 13,
                     endTime: 16,
                     user: 'Yeong mo'
@@ -65,7 +66,7 @@ class Apparatus extends Component {
                 {
                     apparatusId:1,
                     month:11,
-                    date:22,
+                    date:24,
                     startTime: 11,
                     endTime: 13,
                     user: 'Eun mu'
@@ -74,7 +75,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 1,
                     month: 11,
-                    date: 22,
+                    date: 25,
                     startTime: 8,
                     endTime: 10,
                     user: 'Ji su'
@@ -82,7 +83,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 22,
+                    date: 25,
                     startTime: 11,
                     endTime: 13,
                     user: 'Hyeok ju'
@@ -90,7 +91,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 22,
+                    date: 25,
                     startTime: 14,
                     endTime: 17,
                     user: 'Han bin'
@@ -98,7 +99,7 @@ class Apparatus extends Component {
                 {
                     apparatusId:1,
                     month:11,
-                    date:22,
+                    date:25,
                     startTime: 16,
                     endTime: 18,
                     user: 'Yeong mo'
@@ -108,7 +109,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 1,
                     month: 11,
-                    date: 24,
+                    date: 26,
                     startTime: 9,
                     endTime: 13,
                     user: 'Ji su'
@@ -116,7 +117,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 24,
+                    date: 26,
                     startTime: 9,
                     endTime: 10,
                     user: 'Joo young'
@@ -124,7 +125,7 @@ class Apparatus extends Component {
                 {   
                     apparatusId: 2,
                     month: 11,
-                    date: 24,
+                    date: 26,
                     startTime: 10,
                     endTime: 11,
                     user: 'Hyeok ju'
@@ -132,7 +133,7 @@ class Apparatus extends Component {
                 {
                     apparatusId:4,
                     month:11,
-                    date:24,
+                    date:26,
                     startTime: 11,
                     endTime: 12,
                     user: 'Yeong mo'
@@ -154,6 +155,27 @@ class Apparatus extends Component {
             realReservationList: []
          }     
     }    
+    //'기기 삭제'버튼에 대한 메소드
+    showModal_0 =()=> {
+        console.log(this.state.visible_0)
+        this.setState({
+            visible_0: true
+        })
+    }
+    handleOk_0 =e=> {
+        console.log(e);
+        this.handleRemove_2();
+        this.setState({
+            visible_0: false,
+        })
+    }
+    handleCancel_0 =e=> {
+        console.log(e);
+        this.setState({
+            visible_0: false,
+        })
+    }
+
     //'등록하기'버튼에 대한 메소드
     showModal_1 =()=> {
         console.log(this.state.visible_1)
@@ -309,12 +331,13 @@ class Apparatus extends Component {
     }
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
-        var n = this.state.menu;
-        if (n!=0){
-            //처음 눌렀을 때는 아님
-            n-=1;
-        }
-        var m = this.state.apparatusList[n].nickname
+        var n = this.state.menu; 
+        // if (n!=0){
+        //     //처음 눌렀을 때는 아님
+        //     n-=1;
+        // }
+        var newList = this.state.apparatusList.filter(one => one.id == n)
+        var m = newList.nickname
         return (m)
     }
     // 본인 예약 삭제할 수 있는 함수 
@@ -334,6 +357,15 @@ class Apparatus extends Component {
             this.setState({
                 realReservationList: this.getRealReservationList(),
             })    
+        })
+    }
+    // 기기 삭제하는 함수
+    handleRemove_2=()=>{
+        var newList = [];
+        newList = this.state.apparatusList.filter(one => one.id != this.state.menu);
+       
+        this.setState({
+            apparatusList : newList,
         })
     }
 
@@ -371,12 +403,26 @@ class Apparatus extends Component {
                             기기 추가
                         </Button>
                         <Modal
-                            title="my Apparatus 기기 등록"
+                            title="Apparatus 등록"
                             visible={this.state.visible_1}
                             onOk={this.handleOk_1}
                             onCancel={this.handleCancel_1}
-                        >
+                        >  
                             <p>기기이름: <Input placeholder="등록할 기기?" /></p>
+                            <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
+                        </Modal>
+                        <p></p>
+                        <Button onClick={this.showModal_0}> {/*기기 삭제 버튼*/}
+                            기기 삭제
+                        </Button>
+                        <Modal
+                            title="Apparatus 삭제 하기"
+                            visible={this.state.visible_0}
+                            onOk={this.handleOk_0}
+                            onCancel={this.handleCancel_0}
+                        >
+                            <p> ---------- 해당 기기를 삭제하시겠습니까? ---------</p>
+                            <p>선택한 기기: {this.getApparNameNow()} </p>
                             <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
                         </Modal>
                     </Col>
@@ -384,9 +430,11 @@ class Apparatus extends Component {
                         {/* 기기들 상세 창 */}
                             <Card>
                             <Row span={3}>
-                                <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
-                                {this.makeMonth()}월 {this.makeDate()}일
-                                <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
+                                <center>
+                                    <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
+                                    {this.makeMonth()}월 {this.makeDate()}일
+                                    <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
+                                </center>
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
@@ -426,7 +474,6 @@ class Apparatus extends Component {
                                         </Modal>
                                     </div>)
                                 }
-
                             </Row>
                         </Card>
                     </Col>
