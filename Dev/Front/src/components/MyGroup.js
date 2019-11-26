@@ -8,6 +8,7 @@ import MyGroupWithdraw from './MyGroupWithdraw';
 import MyGroupMember from './MyGroupMember';
 import NoGroup from './NoGroup';
 
+import { history } from '../History';
 import { getUser, getLab } from '../authentication';
 import { serverUrl } from '../setting'
 
@@ -23,14 +24,22 @@ class MyGroup extends Component {
     super(props);
     this.state = {
       menu : 0,
-      labid : 0,
-      labexists : false
+      labexists : getLab() === null ? false : true
       // false 도 테스트해보기
       // 속한 lab이 없을 때, labid = 0
     }
   }
 
-
+//그룹 생성하고 나서 정보 새로고침 해주
+  afterGroupGenerate = (id) => {
+    console.log(12345)
+    console.log(id)
+    this.setState( {
+      menu : 0,
+      labid : id,
+      labexists : id === null ? false : true
+    })
+  }
 
   firstButtonClick = () => {
     this.setState( {
@@ -64,13 +73,13 @@ class MyGroup extends Component {
     withdrawLab = () => {
       this.setState({labId : 0,
         labexists : false})
-      }
+  }
 
       getContent = () => {
         if (!this.state.labexists && this.state.menu === 1){
           return (
             <div>
-            <MyGroupGenerate enrollLab={this.enrollLab}/>
+            <MyGroupGenerate afterGroupGenerate={this.afterGroupGenerate}/>
             </div>
           )
         } else if (this.state.labexists && this.state.menu === 2){
