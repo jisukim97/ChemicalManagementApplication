@@ -2933,7 +2933,6 @@
 									"model": {
 										"$ref": "AAAAAAFuQUDdrF0Cn9w="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
 									"left": 118,
 									"top": 422,
@@ -2945,7 +2944,7 @@
 										"$ref": "AAAAAAFuQUDdrV0FqYE="
 									},
 									"edgePosition": 2,
-									"text": "+places"
+									"text": "-lab"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -2978,17 +2977,18 @@
 									"model": {
 										"$ref": "AAAAAAFuQUDdrF0Cn9w="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 182,
+									"left": 179,
 									"top": 427,
+									"width": 7.22998046875,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
 									"hostEdge": {
 										"$ref": "AAAAAAFuQUDdrV0FqYE="
 									},
-									"edgePosition": 2
+									"edgePosition": 2,
+									"text": "1"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -18792,11 +18792,14 @@
 								"_parent": {
 									"$ref": "AAAAAAFuQUDdq10B808="
 								},
+								"name": "lab",
 								"reference": {
 									"$ref": "AAAAAAFuQOSS+E0oQMY="
 								},
+								"visibility": "private",
 								"navigable": false,
-								"aggregation": "shared"
+								"aggregation": "shared",
+								"multiplicity": "1"
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
