@@ -425,8 +425,11 @@ getLab().id -> 랩아이디
     "alarms" : [알람들이 발생한 stock들의 정보 리스트]
 }
 
+----
+----
+
 # 약품 추가 및 사용량 수정 유스케이스 
-# 화학약품 msds 불러오기
+## 화학약품 msds 불러오기
 * /chemical/info/{userId}
 * POST
 * {
@@ -435,14 +438,14 @@ getLab().id -> 랩아이디
 * {
     "chemical" : msds 정보
 }
-# 해당 유저가 속한 랩의 모든 화학약품중에 지금 닉네임과 겹치는게 있는지?
+## 해당 유저가 속한 랩의 모든 화학약품중에 지금 닉네임과 겹치는게 있는지?
 * /chemical/nickname/{userId}
 * POST
 * {
     "nickname" : 닉네임
 }
 * 없음
-# 화학약품이 저장되기 좋은 장소 불러오기
+## 화학약품이 저장되기 좋은 장소 불러오기
 * /chemical/{userId}/{chemicalId}
 * GET
 * 없음
@@ -450,7 +453,7 @@ getLab().id -> 랩아이디
     "suggest" : [추천될 inventory 리스트],
     "notSuggest" : [추천안된 inventory 리스트]
 }
-# 선택한 장소에 화학약품을 넣어도 되는지?
+## 선택한 장소에 화학약품을 넣어도 되는지?
 * /chemical/{userId}/{chemicalId}/{inventoryId}
 * GET
 * 없음
@@ -458,7 +461,7 @@ getLab().id -> 랩아이디
     "crash" : true / false (만약 같이 있으면 안되는게 존재할 경우),
     "crashWith" : stock정보 (crash가 true일 때 그 충돌을 발생시킨 원인 약품)
 }
-# 화학약품 보관장소 추가 (inventory)
+## 화학약품 보관장소 추가 (inventory)
 * /inventory/{userId}
 * POST
 * {
@@ -472,7 +475,7 @@ getLab().id -> 랩아이디
 * {
     "inventories" : [해당 유저의 lab에 저장 된 보관장소 inventory들의 정보 리스트]
 }
-# 화학약품을 보관장소에 보관(확정)
+## 화학약품을 보관장소에 보관(확정)
 * /chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
 * POST
 * {
@@ -482,21 +485,21 @@ getLab().id -> 랩아이디
 * {
     "stocks" : [방금 넣은 inventory에 저장 된 stock들의 리스트]
 }
-# 보관장소 수정
+## 보관장소 수정
 * /inventory/{userId}/{stockId}/{newInventoryId}
 * PUT
 * 없음
 * {
     "stocks" : [새로 바뀐 장소의 지금까지 저장 된 stock들의 리스트]
 }
-# 약품 사용
+## 약품 사용
 * /chemical/{userId}/{stockId}/{quantity}
 * PUT
 * 없음
 * {
     "stock" : stock 정보
 }
-# 약품 삭제
+## 약품 삭제
 * /chemical/{stockId}
 * DELETE
 * 없음
