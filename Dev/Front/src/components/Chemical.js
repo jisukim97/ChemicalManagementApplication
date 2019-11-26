@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
 
+import ChemicalInfo from './ChemicalInfo';
+
 //화학 약품 하나에 대한 거 (my Lab 화면 중에)
 class Chemical extends Component {
 
@@ -112,14 +114,7 @@ class Chemical extends Component {
                         onCancel={this.handleCancel}
                     >
                         {/* 정보 출력  */}
-                        <div style={{ margin: 10 }}>
-                            <h3>이 약품에 대한 정보</h3>
-                            <b>{this.state.stock.chemical.name}</b> <br />
-                            cas No : {this.state.stock.chemical.casNo} <br />
-                            formula : {this.state.stock.chemical.formula} <br />
-                            MW : {this.state.stock.chemical.mw} <br />
-                            mp/bp : {this.state.stock.chemical.mp}/{this.state.stock.chemical.bp} <br />
-                        </div>
+                        <ChemicalInfo chemical={this.state.stock.chemical} />
 
                         <div style={{ margin: 10 }}>
                             <h3>이 재고에 대한 정보</h3>
@@ -155,7 +150,7 @@ class Chemical extends Component {
                     </Modal>
                 </center>
                 <center>
-                    {this.props.chemical.nickname}
+                    {this.state.stock.nickname}
                 </center>
             </span>
         );
