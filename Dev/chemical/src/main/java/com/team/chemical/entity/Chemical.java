@@ -119,6 +119,12 @@ public class Chemical {
     @Column
     private Float density;
     
+    @Column
+    private String casNo;
+    
+    @Column
+    private String formula;
+    
     /**
      * 질병
      */
