@@ -1,5 +1,6 @@
 package com.team.chemical.entity;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,12 +14,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name="chemical")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 //화학약품
 public class Chemical {
@@ -114,6 +119,12 @@ public class Chemical {
     @Column
     private Float density;
     
+    @Column
+    private String casNo;
+    
+    @Column
+    private String formula;
+    
     /**
      * 질병
      */
@@ -122,6 +133,37 @@ public class Chemical {
     		joinColumns=@JoinColumn(name="chemical_id"),
     		inverseJoinColumns=@JoinColumn(name="illness_id"))
     @OrderColumn(name = "list_idx")
-    private List<Illness> illness;
+    private List<Illness> illness = new LinkedList<>();
 
+    public boolean isCrash(Chemical newChemical) {
+    	
+    	return false;
+    }
+    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Chemical other = (Chemical) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+    
 }

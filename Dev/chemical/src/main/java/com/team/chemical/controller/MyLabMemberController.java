@@ -1,6 +1,8 @@
 package com.team.chemical.controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +46,9 @@ public class MyLabMemberController {
 			if (findedLab==null) {
 				throw new Exception("cannot find lab");
 			}
-			return new ObjectMapper().writeValueAsString(findedLab);
+			Map<String, Object> result = new HashMap<>();
+			result.put("lab", findedLab);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -69,8 +73,10 @@ public class MyLabMemberController {
 			//필요없는 정보 다 없애주기
 			findedMember.setPassword(null);
 			findedMember.setAlarms(null);
-			findedMember.setSchedules(null);
-			return new ObjectMapper().writeValueAsString(findedMember);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("member", findedMember);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch(Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -83,7 +89,7 @@ public class MyLabMemberController {
 	 * @param labId
 	 * @param userId
 	 */
-	@RequestMapping(value="/lab/{labId}/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/lab/{labId}/{userId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8")
 	String addMember(@PathVariable int labId, @PathVariable int userId, HttpServletResponse response) {
 		try {
 			//lab 찾아주기
@@ -95,7 +101,11 @@ public class MyLabMemberController {
 			//lab의 members 컬렉션에 user 추가
 			myLab.getMembers().add(newMember);
 			//연관관계 저장
-			labRepository.save(myLab);
+			myLab = labRepository.save(myLab);
+			
+			//user에 lab추가
+			newMember.setMyLab(myLab);
+			userRepository.save(newMember);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,6 +132,9 @@ public class MyLabMemberController {
 			myLab.getMembers().remove(willDeletedMember);
 			//연관관계 저장
 			labRepository.save(myLab);
+			//user에서 myLab 삭제 후 저장
+			willDeletedMember.setMyLab(null);
+			userRepository.save(willDeletedMember);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -132,7 +145,7 @@ public class MyLabMemberController {
 
 	/**
 	 * userId가 lab 새로 만드는데, name, password 전해준대로 만들어줌
-	 * @param lab
+	 * @param lab (name, password)
 	 * @param userId
 	 * @return
 	 */
@@ -143,17 +156,19 @@ public class MyLabMemberController {
 			Lab savedLab = labRepository.save(lab);
 			//user 찾아주기
 			User user = userRepository.findById(userId).get();
-			user.setLabEnrollDate(LocalDate.now());
-			user = userRepository.save(user);
-			//연관관계 설정
+			
+			//lab의 연관관계 설정 및 저장
 			savedLab.getMembers().add(user);
-			//연관관계 저장
-			labRepository.save(savedLab);
+			savedLab = labRepository.save(savedLab);
+			
+			//user의 연관관계 설정 및 저장
+			user.setLabEnrollDate(LocalDate.now());			
+			user.setMyLab(savedLab);
+			userRepository.save(user);
 
-			//정보 가린 후 반환
-			savedLab.setPassword(null);
-			savedLab.setMembers(null);
-			return new ObjectMapper().writeValueAsString(savedLab);
+			Map<String, Object> result = new HashMap<>();
+			result.put("lab", savedLab);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -181,7 +196,12 @@ public class MyLabMemberController {
 			User user = userRepository.findById(userId).get();
 			findedLab.getMembers().add(user);
 			//연관관계 저장
-			labRepository.save(findedLab);
+			findedLab = labRepository.save(findedLab);
+			
+			//멤버에도 랩 저장
+			user.setMyLab(findedLab);
+			user.setLabEnrollDate(LocalDate.now());
+			userRepository.save(user);
 			return null;
 		}catch (Exception e) {
 			e.printStackTrace();
