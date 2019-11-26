@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Typography } from 'antd';
 
 import { history } from '../History';
-import { serverUrl } from '../setting';
+import { getUser, getLab } from '../authentication';
+import { serverUrl } from '../setting'
 
 const { Title } = Typography;
 
@@ -34,14 +35,25 @@ class MyGroupGenerate extends Component {
           if (response.status === 200) {
             //그룹 생성이 성공적으로 수행 되었을 경우
             message.success('그룹이 생성되었습니다!');
-            localStorage.setItem('lab', JSON.stringify(response.lab))
-            //history.push("/login")
+              return response.json()
+
+
           } else if (response.status === 403) {
             //생성 실패했을 경우
             message.error('같은 그룹 이름을 사용하는 그룹이 이미 존재합니다!');
           } else {
             //요청 오류 발생
           }
+        }).then(response => {
+          console.log(response)
+          localStorage.setItem('lab', JSON.stringify(response.lab));
+
+          console.log(12312)
+          console.log(getLab())
+          console.log(getLab().id)
+
+          this.props.afterGroupGenerate(getLab().id);
+
         })
       } else {
         //비밀번호 틀렸을 경우
