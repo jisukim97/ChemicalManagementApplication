@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
 
+import ChemicalInfo from './ChemicalInfo';
+
 //화학 약품 하나에 대한 거 (my Lab 화면 중에)
 class ChemicalAdd extends Component {
 
