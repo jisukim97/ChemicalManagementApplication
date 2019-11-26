@@ -11,90 +11,17 @@ const { Title } = Typography;
 class MyLab extends Component {
 
     state = {
-        chemicals: [
-            {
-                nickname: "benzene 2",
-                stockId: 3,
-                chemicalName: "benzene",
-                inventory: "냉장고1",
-                stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            },
-            {
-                nickname: "acetone 1",
-                stockId: 4,
-                chemicalName: "acetone",
-                inventory: "시약장2",
-                stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            },
-            {
-                nickname: "something-A",
-                stockId: 5,
-                chemicalName: "something",
-                inventory: "시약장2",
-                stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            },
-            {
-                nickname: "something-B",
-                stockId: 6,
-                chemicalName: "something",
-                inventory: "시약장2",
-                stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            },
-            {
-                nickname: "something-C",
-                stockId: 7,
-                chemicalName: "something",
-                inventory: "시약장2",
-                stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            },
-            {
-                nickname: "something-D",
-                stockId: 8,
-                chemicalName: "something",
-                inventory: "시약장2",
-                 stockInfo: {
-                    inventory: '냉장고1',
-                    putDate: "2019/10/31",
-                    expireDate: "2019/10/31",
-                    volume: 100,
-                    remainingVolume: 50
-                }
-            }
-        ]
     }
 
     constructor(props) {
         super(props);
+        //Mylab의 this.state에는 현재 확인중인 인벤토리의 아이디인 inventoryId와 해당 인벤토리에 들어있는 stock의 id의 리스트!!!가 들어있음
+        this.state = {
+            inventoryId : 1,
+            stocks : [
+                1, 2, 3, 4, 5, 6, 7, 8
+            ]
+        }
     }
 
     changeVolume = (stockId, change) => {
@@ -124,10 +51,10 @@ class MyLab extends Component {
                 <center><Title style={{ marginBottom: 50 }}>My Lab</Title></center>
                 <List
                     grid={{ gutter: 16, column: 3 }}
-                    dataSource={this.state.chemicals}
-                    renderItem={item => (
+                    dataSource={this.state.stocks}
+                    renderItem={stockId => (
                         <List.Item>
-                            <Chemical chemical={item} />
+                            <Chemical stockId={stockId} /> {/* Chemical 컴포넌트에 stockId를 전해줌*/}
                         </List.Item>
                     )}
                 />
