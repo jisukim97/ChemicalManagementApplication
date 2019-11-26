@@ -152,7 +152,7 @@ class Apparatus extends Component {
                 },
              ],
             todayDate : today,   
-            realReservationList: []
+            realReservationList: [],
          }     
     }    
     //'기기 삭제'버튼에 대한 메소드
@@ -332,12 +332,12 @@ class Apparatus extends Component {
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
         var n = this.state.menu; 
-        // if (n!=0){
-        //     //처음 눌렀을 때는 아님
-        //     n-=1;
-        // }
+
         var newList = this.state.apparatusList.filter(one => one.id == n)
-        var m = newList.nickname
+        if(newList.length>0){
+            var m = newList[0].nickname
+        }
+        else { var m = ''} // 없어지는 순간의 오류를 막기 위한 else구문
         return (m)
     }
     // 본인 예약 삭제할 수 있는 함수 
@@ -369,6 +369,7 @@ class Apparatus extends Component {
         })
     }
 
+    // 현재 날짜의 현재 기기 예약 중 내 예약이 있는지 없는지 
     checkMyReservation=()=>{
         var newList = [];
         newList = this.state.realReservationList;
@@ -379,6 +380,32 @@ class Apparatus extends Component {
             }
         }
         return (present)
+    }
+
+    //삭제하고자 하는 예약이 옛날 건지 확인 
+    checkReservtionDate =()=> {
+        var nowMonth = this.getMonth();
+        var nowDate = this.getDate();
+        var isPast = false;
+        if(this.today.getMonth() >= nowMonth && this.today.getDate() > nowDate){
+            isPast = true;
+        }
+        return(isPast)
+    }
+
+    //새로 추가할 때 기기 이름이 중복되는지 체크해서 >> 중복되면 uniqueName값을 false로
+    checkApparatusNickname=(newName)=>{
+        var newList = []
+        newList = this.state.apparatusList;
+        var uniqueName = true;
+        for( var i = 0; i<newList.length; i++){
+            if( newList[i].nickname == newName){
+                uniqueName = false;
+                break;
+            }
+        }
+
+        return(uniqueName)
     }
 
     render() { 
@@ -395,11 +422,11 @@ class Apparatus extends Component {
                             dataSource={this.state.apparatusList}
                             renderItem={item => (
                                 <List.Item>
-                                    <Link to={this.getUrl(item.id)}><Button type="primary">{item.nickname}</Button></Link>
+                                    <Link to={this.getUrl(item.id)}><Button type="primary" active>{item.nickname}</Button></Link>
                                 </List.Item>
                             )}
                         />
-                        <Button onClick={this.showModal_1}>
+                        <Button onClick={this.showModal_1} active>
                             기기 추가
                         </Button>
                         <Modal
@@ -412,7 +439,7 @@ class Apparatus extends Component {
                             <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
                         </Modal>
                         <p></p>
-                        <Button onClick={this.showModal_0}> {/*기기 삭제 버튼*/}
+                        <Button onClick={this.showModal_0} active> {/*기기 삭제 버튼*/}
                             기기 삭제
                         </Button>
                         <Modal
@@ -441,7 +468,7 @@ class Apparatus extends Component {
                                 <Table size='small' dataSource={this.state.realReservationList} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
                             <Row span={2}>
-                                <Button onClick={this.showModal_2}>
+                                <Button onClick={this.showModal_2} active>
                                     예약 하기
                                     </Button>
                                 <Modal
@@ -451,14 +478,14 @@ class Apparatus extends Component {
                                     onCancel={this.handleCancel_2}
                                 >
                                     <p>예약할 기기: {this.getApparNameNow()} </p>
-                                    <p>예약자: 김지수</p> {/*login user 정보 받으면 넣기*/}
+                                    <p>예약자: Yeong mo</p> {/*login user 정보 받으면 넣기*/}
                                     <p>예약할 시간: (예약은 30분 단위로만 가능합니다) <br /><br />
                                         from <TimePicker defaultValue={moment('12:00', this.state.format)} format={this.state.foramt} /> to <TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.foramt} /></p>
                                 </Modal>
                                 <Divider type="vertical" />
                                 {(this.checkMyReservation()) && (
                                     <div>
-                                        <Button onClick={this.showModal_3}>
+                                        <Button onClick={this.showModal_3} active>
                                             my예약 삭제하기
                                     </Button>
                                         <Modal
