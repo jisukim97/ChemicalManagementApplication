@@ -28,11 +28,9 @@ class Register extends Component {
                         //가입이 성공적으로 수행 되었을 경우
                         message.success('회원이 되신 것을 환영합니다!');
                         history.push("/login")
-                    } else if (response.status === 403) {
-                        //가입 실패했을 경우
-                        message.error('같은 이메일을 사용하는 사용자가 이미 존재합니다!');
                     } else {
                         //요청 오류 발생
+                        message.error('같은 이메일을 사용하는 사용자가 이미 존재합니다!');
                     }
                 })
             } else {

@@ -1,8 +1,9 @@
 package com.team.chemical.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,9 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Chemical;
+import com.team.chemical.entity.ChemicalRepository;
+import com.team.chemical.entity.Inventory;
+import com.team.chemical.entity.InventoryRepository;
+import com.team.chemical.entity.Lab;
+import com.team.chemical.entity.LabRepository;
+import com.team.chemical.entity.Msds;
+import com.team.chemical.entity.Stock;
+import com.team.chemical.entity.StockRepository;
 import com.team.chemical.entity.User;
-import com.team.chemical.repository.ChemicalRepository;
-import com.team.chemical.repository.UserRepository;
+import com.team.chemical.entity.UserRepository;
 
 @RestController
 public class ChemicalController {
@@ -27,52 +35,286 @@ public class ChemicalController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	InventoryRepository inventoryRepository;
+	
+	@Autowired 
+	Msds msds;
 
-	@RequestMapping(value="/chemical/add/{userID}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String addChemical(@PathVariable int userID, @RequestBody Chemical chemical, HttpServletResponse response) {
+	@Autowired
+	LabRepository labRepository;
+	
+	@Autowired
+	StockRepository stockRepository;
+	
+	/**
+	 * 화학약품의 정보를 불러오는거
+	 * @param userId 사용자의 아이디
+	 * @param chemical - name (화학약품 이름)
+	 * @return 화학약품 정보
+	 */
+	@RequestMapping(value="/chemical/info/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	String addChemical(@PathVariable int userId, @RequestBody Chemical chemical, HttpServletResponse response) {
 		try {
-			chemical.setPresentTime();
-			Chemical savedChemical = chemicalRepository.save(chemical);
-			
-			User user = userRepository.findById(userID);
-			user.addChemical(savedChemical);
-			
-			userRepository.save(user);
-			return null;
+			//화학약품 정보 받아오기
+			Chemical msdsInfo = msds.searchChemical(chemical.getName());
+			//약품이 없을 경우
+			if (msdsInfo==null) {
+				throw new Exception("cannot find chemical by name");
+			}
+			//저장 후 리턴
+			msdsInfo = chemicalRepository.save(msdsInfo);
+			Map<String, Object> result = new HashMap<>();
+			result.put("chemical", msdsInfo);
+			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@RequestMapping(value="/chemical/list/{userID}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
-	String getChemicalList(@PathVariable int userID, HttpServletResponse response) {
-		try {
-			User user = userRepository.findById(userID);
-			List<Chemical> chemicals = user.getChemicals();
-			return new ObjectMapper().writeValueAsString(chemicals);
-		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
 	}
 	
-	@RequestMapping(value="/chemical/request", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
-	String getPlaceRequest(HttpServletResponse response) {
+	/**
+	 * userId가 속한 랩의 stock중에 nickname과 겹치는 게 있는지? 
+	 * @param userId
+	 * @param stock (nickname)
+	 * @return null (200 or 500)
+	 */
+	@RequestMapping(value="/chemical/nickname/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	String nicknameCheck(@PathVariable int userId, @RequestBody Stock stock, HttpServletResponse response) {
 		try {
-			List<String> placeList = new ArrayList<String>();
-			placeList.add("극저온냉장고");
-			placeList.add("냉장고");
-			placeList.add("실온시약장1");
-			placeList.add("실온시약장2");
-			placeList.add("인큐베이터");
-			Collections.shuffle(placeList);
-			String[] selectedPlace = new String[] {placeList.get(0), placeList.get(1), placeList.get(2)};
-			return new ObjectMapper().writeValueAsString(selectedPlace);
+			for (Inventory inventory : userRepository.findById(userId).get().getMyLab().getInventories()) {
+				for (Stock existStock : inventory.getStocks()) {
+					if (existStock.getNickname().equals(stock.getNickname())) {
+						throw new Exception("Already Exist");
+					}
+				}
+			}
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
+	}
+	
+	/**
+	 * 화학약품이 보관될 장소를 추천 -> 추천해줄 곳과 추천해주지 않을 곳 나눠서 리턴
+	 * @param userId 유저 아이디
+	 * @param chemicalId 화학약품 아이디
+	 * @return 추천 장소 리스트 / 추천 아닌 장소 리스트
+	 */
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getSuggestList(@PathVariable int userId, @PathVariable int chemicalId, HttpServletResponse response) {
+		try {
+			//화학약품 찾아주기
+			Chemical chemical = chemicalRepository.findById(chemicalId).get();
+			if (chemical==null) {
+				throw new Exception("cannot find chemical by id");
+			}
+			//lab 찾아주기
+			User user = userRepository.findById(userId).get();
+			Lab myLab = user.getMyLab();
+			//첫번째 원소는 추천될꺼의 리스트, 두번째 원소는 안추천될꺼의 리스트
+			Map<String, Object> result = new HashMap<>();
+			List<List<Inventory>> suggestList = myLab.getSuggestList(chemical);
+			result.put("suggest", suggestList.get(0));
+			result.put("notSuggest", suggestList.get(1));
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/**
+	 * 화학약품을 이 인벤토리에 넣어도 안전한지? 적합성 확인
+	 * @param userId
+	 * @param chemicalId
+	 * @param inventoryId
+	 * @return 안전하면 inventory정보를, 아니면 null
+	 */
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String isSafe(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable String inventoryId, HttpServletResponse response) {
+		try {
+			Inventory inventory = inventoryRepository.findById(inventoryId).get();
+			Chemical newChemical = chemicalRepository.findById(chemicalId).get();
+			
+			Map<String, Object> result = new HashMap<>();
+			//inventory의 모든 stock의 chemical과 newchemical이 충돌일어나는지
+			for(Stock stock : inventory.getStocks()) {
+				if (stock.getChemical().isCrash(newChemical)) {
+					result.put("crash", true);
+					result.put("crashWith", stock);
+					return new ObjectMapper().writeValueAsString(result);
+				}
+			}
+			result.put("crash", false);
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/**
+	 * 새로운 화학약품을 결정한 인벤토리에 저장
+	 * @param userId
+	 * @param chemicalId
+	 * @param inventoryId
+	 * @param put (YYMMDD)
+	 * @param expire (YYMMDD)
+	 * @param stock 
+	 * @param response
+	 * @return 해당 inventory에 저장된 stock들 리스트
+	 */
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	String addChemical(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable String inventoryId, 
+			@PathVariable String put, @PathVariable String expire, @RequestBody Stock stock, HttpServletResponse response) {
+		try {
+			Chemical chemical = chemicalRepository.findById(chemicalId).get();
+			
+			LocalDate putDate = ApparatusController.getDate(put);
+			LocalDate expireDate = ApparatusController.getDate(expire);
+			
+			stock.setPutDate(putDate);
+			stock.setExpireDate(expireDate);
+			stock.setChemical(chemical);
+			stock.setRemainingVolume(stock.getVolume());
 
+			Stock savedStock = stockRepository.save(stock);
+			
+			Inventory inventory = inventoryRepository.findById(inventoryId).get();
+			inventory.getStocks().add(savedStock);
+			inventory = inventoryRepository.save(inventory);
+			
+			savedStock.setInventory(inventory);
+			savedStock = stockRepository.save(savedStock);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("stocks", inventory.getStocks());
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
 	}
 
+	/**
+	 * 인벤토리 추가
+	 * @param userId의 lab에 inventory 추가하기
+	 * @param inventory attribute들
+	 * @return
+	 */
+	@RequestMapping(value="/inventory/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	String makeInventory(@PathVariable int userId, Inventory inventory, HttpServletResponse response) {
+		try {
+			Inventory savedInventory = inventoryRepository.save(inventory);
+			Lab lab = userRepository.findById(userId).get().getMyLab();
+			
+			lab.getInventories().add(savedInventory);
+			lab = labRepository.save(lab);
+						
+			savedInventory.setLab(lab);
+			savedInventory = inventoryRepository.save(savedInventory);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("inventories", lab.getInventories());
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/**
+	 * 인벤토리 바꾸기
+	 * @param userId
+	 * @param stockId
+	 * @param newInventoryId
+	 * @return 새로운 인벤토리에 지금 저장되어 있는 stock들의 리스트
+	 */
+	@RequestMapping(value="/inventory/{userId}/{stockId}/{newInventoryId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
+	String changeInventory(@PathVariable int userId, @PathVariable int stockId, @PathVariable String newInventoryId, HttpServletResponse response) {
+		try {
+			Stock stock = stockRepository.findById(stockId).get();
+			Inventory beforeInventory = stock.getInventory();
+			
+			beforeInventory.getStocks().remove(stock);
+			beforeInventory = inventoryRepository.save(beforeInventory);
+			
+			Inventory newInventory = inventoryRepository.findById(newInventoryId).get();
+			newInventory.getStocks().add(stock);
+			
+			newInventory = inventoryRepository.save(newInventory);
+			
+			stock.setInventory(newInventory);
+			stock = stockRepository.save(stock);
+			
+			Map<String, Object> result = new HashMap<>();
+			result.put("stocks", newInventory.getStocks());
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+
+	/**
+	 * quantity만큼 사용
+	 * @param userId
+	 * @param stockId
+	 * @param quantity (부피)
+	 * @return 
+	 */
+	@RequestMapping(value="/chemical/{userId}/{stockId}/{quantity}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
+	String useChemical(@PathVariable int userId, @PathVariable int stockId, @PathVariable float quantity, HttpServletResponse response) {
+		try {
+			Stock stock = stockRepository.findById(stockId).get();
+			stock.setRemainingVolume(stock.getRemainingVolume()-quantity);
+			stock = stockRepository.save(stock);
+			if ((stock.getRemainingVolume()/stock.getVolume())<0.2) {
+				//TODO : 알람 구현
+			}
+			Map<String, Object> result = new HashMap<>();
+			result.put("stock", stock);
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/**
+	 * stockId 삭제
+	 * @param stockId
+	 * @return
+	 */
+	@RequestMapping(value="/chemical/{stockId}", method=RequestMethod.DELETE, produces="text/plain;charset=UTF-8") 
+	String deleteChemical(@PathVariable int stockId, HttpServletResponse response) {
+		try {
+			Stock stock = stockRepository.findById(stockId).get();
+			Inventory inventory = stock.getInventory();
+			//인벤토리에서 삭제
+			inventory.getStocks().remove(stock);
+			inventory = inventoryRepository.save(inventory);
+			//자기자체를 삭제
+			stockRepository.delete(stock);
+			//TODO : 알람 구현
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 }
+
