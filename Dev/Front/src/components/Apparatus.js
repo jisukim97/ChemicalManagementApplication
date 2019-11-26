@@ -1,25 +1,48 @@
 import React, { Component } from 'react'; 
-import { Typography, Icon, Row, Col, Button, Modal, Divider, Table,Card, List, Input, TimePicker} from 'antd'
+import { Typography, Icon, Row, Col, Button, Modal, Divider, Table,Card, List, Input, Form, TimePicker, message} from 'antd'
 import { Link } from "react-router-dom"; 
 import moment from 'moment';
+import { getUser, getLab } from '../authentication';
+
 
 const { Title } = Typography; 
 
 class Apparatus extends Component {
     state = {
+        
     }
     constructor(props){
         super(props);
         const { apparatusId } = this.props.match.params;
+        //현재 랩 id로 기기 리스트 받아와서 변수에 저장하기 
         //오늘 날짜 받아오기
         var today = new Date();
+      
         this.state = {
+            menu: apparatusId,
+            todayDate: today,
+            realReservationList: [],
             visible_0: false, // '기기 삭제' 모달
             visible_1: false, //'기기등록하기' 모달
             visible_2: false, // '기기예약하기' 모달
             visible_3: false, // '본인 예약 삭제확인' 모달
-            menu: apparatusId,
+            visible_4: false, // '예약 중복' 모달
+            visible_5: false, // '예약 삭제 오류 - 지난 날짜 삭제 안됨' 모달 
             format: 'HH:mm',
+            columns: [
+                {
+                    title: 'Time',
+                    dataIndex: 'time',
+                    key: 'time',
+                },
+                {
+                    title: 'User',
+                    dataIndex: 'user',
+                    key: 'user',
+                },
+            ],
+            userId: getUser().id,
+            labId: getLab().id,
             apparatusList: [
                 {
                     id: 1,
@@ -139,20 +162,7 @@ class Apparatus extends Component {
                     user: 'Yeong mo'
                 }
             ],
-            columns : [
-                {
-                    title: 'Time',
-                    dataIndex: 'time', 
-                    key: 'time',
-                },
-                {
-                    title: 'User',
-                    dataIndex:'user',
-                    key:'user',
-                },
-             ],
-            todayDate : today,   
-            realReservationList: [],
+           
          }     
     }    
     //'기기 삭제'버튼에 대한 메소드
@@ -177,24 +187,30 @@ class Apparatus extends Component {
     }
 
     //'등록하기'버튼에 대한 메소드
-    showModal_1 =()=> {
-        console.log(this.state.visible_1)
-        this.setState({
-            visible_1: true
-        })
-    }
-    handleOk_1 =e=> {
-        console.log(e);
-        this.setState({
-            visible_1: false,
-        })
-    }
-    handleCancel_1 =e=> {
-        console.log(e);
-        this.setState({
-            visible_1: false,
-        })
-    }
+    handleSubmit = e => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values)=> {
+            if (!err) {
+                console.log(values)
+                fetch('http://13.124.122.246:8080/apparatus/'+this.state.menu, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(values) //여기에다가 body 넣어주기
+                }).then(response => {
+                    if (response === 200) {
+                        return response.json()
+                    } else {
+                        // 오류 난 경우 처리 
+                    }
+                }).then(response => {
+                    this.setStatus({
+                        apparatusList: response
+                    })
+                })
+            }
+        });
+    };
+
     //'예약하기'버튼에 대한 메소드
     showModal_2 =()=> {
         console.log(this.state.visible_2)
@@ -245,6 +261,7 @@ class Apparatus extends Component {
                 {
                     menu: apparatusId
                 }, () => {
+                    //클릭한 기기 ID에 대해서 예약 리스트 받아와서 STATE에 저장 
                     this.setState({
                         realReservationList: this.getRealReservationList()
                     })
@@ -252,59 +269,37 @@ class Apparatus extends Component {
             )
         }
     }
-    //기기별 리스트: 새롭게 선택한 기기를 예약한 사람들 뽑아서 리스트 만들기    
-    getbyApparList = () => {
-        var byAppar = []
-        for (var i = 0; i < this.state.reservationList.length; i++) {
-            var one = {}
-            one = this.state.reservationList[i]
-            if (one.apparatusId == this.state.menu) {
-                byAppar.push(one);
-            }
-        }
-        return (byAppar)
-    }
-    // 해당 기기 하나를 선택 후 그 기기 예약자만 뽑아서 
-    // newList의 각 시간행에 맞게 예약자 이름을 열에 저장하는 함수 
-    
-    //Todo : 오늘 날짜인 것들만 뽑아주기
-    getRealReservationList = () => {
-        var newList = [];
-        var byApparList = []
-        byApparList = this.getbyApparList().filter( one => one.month==this.makeMonth() && one.date==this.makeDate());
-
-        for (var i = 0; i < 15; i++) {
-            var newOne = {}
-            var time = i + 8;
-            newOne['time'] = time
-            newOne['user'] = ''
-            for (var j = 0; j < byApparList.length; j++) {
-                var one = {}
-                one = byApparList[j]
-                var start = one.startTime
-                var end = one.endTime
-                if (start <= time && time < end) {
-                    newOne['user'] = one.user;
-                    break;
-                }
-            }
-            newList.push(newOne)
-        }
-        return (newList)
-    }
+   
     getUrl = (id) => {
         const url = '/apparatus/' + id;
         return (url)
     }
+
     //날짜 왼쪽으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
     goToLeft = () => {
         var newday = new Date();
         newday = this.state.todayDate;
         newday.setDate(newday.getDate()-1);
-        this.setState({
-            todayDate :  newday
-        }, () => {
-            this.setState({realReservationList : this.getRealReservationList()})
+        var yy = newday.getFullYear();
+        yy+=''
+        yy = yy.substring(2,4);
+        var mm = newday.getMonth()
+        var dd = newday.getDate()
+        var todayInfo = yy+mm+dd ;
+        fetch('http://13.124.122.246:8080/schedule/apparatus/'+this.state.menu+'/'+todayInfo ,{ 
+            method: 'GET', 
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if(response === 200){
+                return response.json()
+            } else {
+                // 오류 난 경우 처리 
+            }
+        }).then(response => { 
+            this.setStatus({ 
+                todayDate : newday,
+                realReservationList: response
+            })
         })
     }
     //날짜 오른쪽 으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
@@ -312,10 +307,26 @@ class Apparatus extends Component {
         var newday = new Date();
         newday = this.state.todayDate;
         newday.setDate(newday.getDate()+1);
-        this.setState({
-            todayDate :  newday,
-        }, () => {
-            this.setState({realReservationList : this.getRealReservationList()})
+        var yy = newday.getFullYear();
+        yy+=''
+        yy = yy.substring(2,4);
+        var mm = newday.getMonth()
+        var dd = newday.getDate()
+        var todayInfo = yy+mm+dd ;
+        fetch('http://13.124.122.246:8080/schedule/apparatus/'+this.state.menu+'/'+todayInfo ,{ 
+            method: 'GET', 
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if(response === 200){
+                return response.json()
+            } else {
+                // 오류 난 경우 처리 
+            }
+        }).then(response => { 
+            this.setStatus({ 
+                todayDate : newday,
+                realReservationList: response
+            })
         })
     }
 
@@ -363,9 +374,19 @@ class Apparatus extends Component {
     handleRemove_2=()=>{
         var newList = [];
         newList = this.state.apparatusList.filter(one => one.id != this.state.menu);
-       
-        this.setState({
-            apparatusList : newList,
+        fetch('http://13.124.122.246:8080/apparatus/'+this.labId+'/'+this.state.menu ,{ 
+            method: 'DELETE', 
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if(response === 200){
+                return response.json()
+            } else {
+                // 오류 난 경우 처리 
+            }
+        }).then(response => { 
+            this.setStatus({ 
+                apparatusList : newList,
+            })
         })
     }
 
@@ -393,22 +414,8 @@ class Apparatus extends Component {
         return(isPast)
     }
 
-    //새로 추가할 때 기기 이름이 중복되는지 체크해서 >> 중복되면 uniqueName값을 false로
-    checkApparatusNickname=(newName)=>{
-        var newList = []
-        newList = this.state.apparatusList;
-        var uniqueName = true;
-        for( var i = 0; i<newList.length; i++){
-            if( newList[i].nickname == newName){
-                uniqueName = false;
-                break;
-            }
-        }
-
-        return(uniqueName)
-    }
-
     render() { 
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <br/>
@@ -426,18 +433,25 @@ class Apparatus extends Component {
                                 </List.Item>
                             )}
                         />
-                        <Button onClick={this.showModal_1} active>
-                            기기 추가
-                        </Button>
-                        <Modal
-                            title="Apparatus 등록"
-                            visible={this.state.visible_1}
-                            onOk={this.handleOk_1}
-                            onCancel={this.handleCancel_1}
-                        >  
-                            <p>기기이름: <Input placeholder="등록할 기기?" /></p>
-                            <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
-                        </Modal>
+                        <Form onSubmit={this.handleSubmit} className = "form">
+                            {/*기기추가 창*/}
+                            <Form.Item>
+                                {getFieldDecorator('apparatusName', {
+                                    rules: [{required:true, message: "Apparatus 등록"}],
+                                })(
+                                    <Input
+                                        placeholder="new Apparatus 이름"
+                                    />
+                                )}
+                            </Form.Item>
+                            <Form.Item>
+                                <Button htmlType='submit' className="button">
+                                    등록
+                                </Button>
+                            </Form.Item>
+                        </Form>
+
+
                         <p></p>
                         <Button onClick={this.showModal_0} active> {/*기기 삭제 버튼*/}
                             기기 삭제
@@ -512,4 +526,4 @@ class Apparatus extends Component {
     }
 }
 
-export default Apparatus;
+export default Form.create()(Apparatus);
