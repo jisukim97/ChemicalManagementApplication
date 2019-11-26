@@ -18,7 +18,6 @@ class Header extends Component {
         history.push('/login')
     }
 
-
     toHome = () => {
         history.push('/home/' + getUser().userID)
     }

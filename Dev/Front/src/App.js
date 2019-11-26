@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
 
 import { history } from './History';
+import { PrivateRoute } from './PrivateRoute';
+
 import LoginAndRegister from './components/LoginAndRegister';
 import Main from './components/Main';
 
@@ -19,7 +21,7 @@ class App extends Component {
             <Route path='/register' exact component={LoginAndRegister} />
 
             {/* /로 시작하는 모든 경로는 Main으로 라우팅 */}
-            <Route path='/' component={Main} />
+            <PrivateRoute path='/' component={Main} />
           </Switch>
         </Router>
       </div>

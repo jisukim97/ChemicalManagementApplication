@@ -30,14 +30,12 @@ class Login extends Component {
                                 login(response)
                                 console.log(response)
                                 message.success(response.user.name + '님 환영합니다!');
-                                history.push("/main")
+                                history.push("/mylab")
                             })
-                        } else if (result === 401) {
+                        } else {
                             //비밀번호 불일치 혹은 이메일이 등록되지 않았음
                             message.error('로그인에 실패 하였습니다. 이메일 혹은 비밀번호를 다시 확인 해 주세요.');
                             console.log("fail!")
-                        } else {
-                            //내부 오류
                         }
                     })
             }
