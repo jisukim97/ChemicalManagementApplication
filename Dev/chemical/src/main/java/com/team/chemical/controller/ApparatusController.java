@@ -220,6 +220,20 @@ public class ApparatusController {
 		}
 	}
 
+	@RequestMapping(value="/apparatus/{userId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getApparatus(@PathVariable int userId, HttpServletResponse response) {
+		try {
+			List<Apparatus> apparatuses = userRepository.findById(userId).get().getMyLab().getApparatus();
+			Map<String, Object> result = new HashMap<>();
+			result.put("apparatuses", apparatuses);
+			return new ObjectMapper().writeValueAsString(result);
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 	
 	 /**
 	  * 
