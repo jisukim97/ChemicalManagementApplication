@@ -411,6 +411,13 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+## 기기 리스트 받아오기
+* /apparatus/{userId}
+* GET
+* 없음
+* {
+    "apparatuses" : [기기들 정보 리스트]
+}
 
 ----
 ----
