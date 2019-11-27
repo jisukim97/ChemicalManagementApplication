@@ -126,9 +126,7 @@ class Apparatus extends Component {
                     startTime: 16,
                     endTime: 18,
                     user: 'Yeong mo'
-                }
-
-                ,
+                },
                 {   
                     apparatusId: 1,
                     month: 11,
@@ -185,8 +183,28 @@ class Apparatus extends Component {
             visible_0: false,
         })
     }
+    //'기기 등록하기' 버튼 메소드
+    showModal_1 =()=> {
+        console.log(this.state.visible_1)
+        this.setState({
+            visible_1:true,
+        })
 
-    //'등록하기'버튼에 대한 메소드
+    }
+    handleOk_1 =e=> {
+        console.log(e);
+        this.setState({
+            visible_1: false,
+        })
+    }
+    handleCancel_1 =e=> {
+        console.log(e);
+        this.setState({
+            visible_1: false,
+        })
+    }
+
+    //'등록하기'버튼 입력받기?
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values)=> {
@@ -203,8 +221,9 @@ class Apparatus extends Component {
                         // 오류 난 경우 처리 
                     }
                 }).then(response => {
-                    this.setStatus({
-                        apparatusList: response
+                    this.state.apparatusList.push(response)
+                    this.setState({
+                        apparatusList: this.state.apparatusList
                     })
                 })
             }
@@ -263,7 +282,7 @@ class Apparatus extends Component {
                 }, () => {
                     //클릭한 기기 ID에 대해서 예약 리스트 받아와서 STATE에 저장 
                     this.setState({
-                        realReservationList: this.getRealReservationList()
+                        realReservationList:[]
                     })
                 }
             )
@@ -343,8 +362,9 @@ class Apparatus extends Component {
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
         var n = this.state.menu; 
-
-        var newList = this.state.apparatusList.filter(one => one.id == n)
+        var newList = this.state.apparatusList
+        console.log(newList)
+        newList = newList.filter(one => one.id == n)
         if(newList.length>0){
             var m = newList[0].nickname
         }
@@ -357,46 +377,46 @@ class Apparatus extends Component {
         newList = this.state.reservationList;
         var del = 0;
         for(var i = 0; i < newList.length; i++){
-            if (newList[i].user == 'Yeong mo'){ //유저 네임은 로그인 정보 받아오는 걸로 바꾸기
+            if (newList[i].user == getUser().name ){ //유저 네임은 로그인 정보 받아오는 걸로 바꾸기
                 del = i; break;
             }
         }
-        newList.splice(del,1)
+        newList.splice(del, 1)
         this.setState({
             reservationList: newList,
         }, () => {
             this.setState({
                 realReservationList: this.getRealReservationList(),
-            })    
+            })
         })
     }
     // 기기 삭제하는 함수
-    handleRemove_2=()=>{
+    handleRemove_2 = () => {
         var newList = [];
         newList = this.state.apparatusList.filter(one => one.id != this.state.menu);
-        fetch('http://13.124.122.246:8080/apparatus/'+this.labId+'/'+this.state.menu ,{ 
-            method: 'DELETE', 
+        fetch('http://13.124.122.246:8080/apparatus/' + this.labId + '/' + this.state.menu, {
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
-            if(response === 200){
+            if (response === 200) {
                 return response.json()
             } else {
                 // 오류 난 경우 처리 
             }
-        }).then(response => { 
-            this.setStatus({ 
-                apparatusList : newList,
+        }).then(response => {
+            this.setState({
+                apparatusList: newList,
             })
         })
     }
 
     // 현재 날짜의 현재 기기 예약 중 내 예약이 있는지 없는지 
-    checkMyReservation=()=>{
+    checkMyReservation = () => {
         var newList = [];
         newList = this.state.realReservationList;
         var present = false;
-        for(var i=0; i<newList.length; i++){
-            if(newList[i].user == 'Yeong mo'){ //login user정보 오면 넣기
+        for (var i = 0; i < newList.length; i++) {
+            if (newList[i].user == getUser().name) { //login user정보 오면 넣기
                 present = true; break;
             }
         }
@@ -404,25 +424,25 @@ class Apparatus extends Component {
     }
 
     //삭제하고자 하는 예약이 옛날 건지 확인 
-    checkReservtionDate =()=> {
+    checkReservtionDate = () => {
         var nowMonth = this.getMonth();
         var nowDate = this.getDate();
         var isPast = false;
-        if(this.today.getMonth() >= nowMonth && this.today.getDate() > nowDate){
+        if (this.today.getMonth() >= nowMonth && this.today.getDate() > nowDate) {
             isPast = true;
         }
-        return(isPast)
+        return (isPast)
     }
 
-    render() { 
+    render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <br/>
+                <br />
                 <center><Title style={{ marginBottom: 35 }}>Apparatus</Title></center>
 
                 <Row >
-                    <Col span={6} style={{margin : 10}} >
+                    <Col span={6} style={{ margin: 10 }} >
                         {/* 기기들 목록 */}
                         <List
                             grid={{ gutter: 16, column: 1 }}
@@ -433,25 +453,32 @@ class Apparatus extends Component {
                                 </List.Item>
                             )}
                         />
-                        <Form onSubmit={this.handleSubmit} className = "form">
-                            {/*기기추가 창*/}
-                            <Form.Item>
-                                {getFieldDecorator('apparatusName', {
-                                    rules: [{required:true, message: "Apparatus 등록"}],
-                                })(
-                                    <Input
-                                        placeholder="new Apparatus 이름"
-                                    />
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                <Button htmlType='submit' className="button">
-                                    등록
-                                </Button>
-                            </Form.Item>
-                        </Form>
+                        <Button onClick={this.showModal_1} active>
+                            기기 등록
+                        </Button>
+                        <Modal
+                            title="new Apparatus 등록 하기"
+                            visible={this.state.visible_1}
+                            
+                            onOk={this.handleOk_1}
+                            onCancel={this.handleCancel_1}
 
-
+                        >
+                            <Form onSubmit={this.handleSubmit} className="form">
+                               <Form.Item>
+                                    {getFieldDecorator('name', {
+                                        rules: [{ required: true, message: '등록할 기기 이름을 입력하세요. ' }],
+                                    })(
+                                        <Input placeholder="new apparatue name?" />
+                                    )}
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit" className="button">
+                                        등록하기
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                         <p></p>
                         <Button onClick={this.showModal_0} active> {/*기기 삭제 버튼*/}
                             기기 삭제
@@ -464,7 +491,7 @@ class Apparatus extends Component {
                         >
                             <p> ---------- 해당 기기를 삭제하시겠습니까? ---------</p>
                             <p>선택한 기기: {this.getApparNameNow()} </p>
-                            <p>등록자: Yeong mo </p> {/*login user 정보 받으면 넣기*/}
+                         
                         </Modal>
                     </Col>
                     <Col span={16} >
@@ -492,8 +519,8 @@ class Apparatus extends Component {
                                     onCancel={this.handleCancel_2}
                                 >
                                     <p>예약할 기기: {this.getApparNameNow()} </p>
-                                    <p>예약자: Yeong mo</p> {/*login user 정보 받으면 넣기*/}
-                                    <p>예약할 시간: (예약은 30분 단위로만 가능합니다) <br /><br />
+                                    <p>예약자: {getUser().name}</p>
+                                    <p>예약할 시간: (예약은 한시간 단위로만 가능합니다) <br /><br />
                                         from <TimePicker defaultValue={moment('12:00', this.state.format)} format={this.state.foramt} /> to <TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.foramt} /></p>
                                 </Modal>
                                 <Divider type="vertical" />
@@ -510,7 +537,7 @@ class Apparatus extends Component {
 
                                         >   <p> ---- 아래 정보의 예약을 삭제 하시겠습니까? ----</p>
                                             <p>예약 기기: {this.getApparNameNow()} </p>
-                                            <p>예약자: Yeong mo</p> {/*login user 정보 받으면 넣기*/}
+                                            <p>예약자: {getUser().name}</p>
                                             <p>예약 시간: </p>
                                         </Modal>
                                     </div>)
