@@ -9,47 +9,61 @@ const { Title } = Typography;
 
 class Apparatus extends Component {
     state = {
-        visible_0: false, // '기기 삭제' 모달
-        visible_1: false, //'기기등록하기' 모달
-        visible_2: false, // '기기예약하기' 모달
-        visible_3: false, // '본인 예약 삭제확인' 모달
-        visible_4: false, // '예약 중복' 모달
-        visible_5: false, // '예약 삭제 오류 - 지난 날짜 삭제 안됨' 모달 
-        format: 'HH:mm',
-        columns: [
-            {
-                title: 'Time',
-                dataIndex: 'time',
-                key: 'time',
-            },
-            {
-                title: 'User',
-                dataIndex: 'user',
-                key: 'user',
-            },
-        ],
+        
     }
     constructor(props) {
         super(props);
         const { apparatusId } = this.props.match.params;
         //오늘 날짜 받아오기
         var today = new Date();
+        this.state = {
+            visible_0: false, // '기기 삭제' 모달
+            visible_1: false, //'기기등록하기' 모달
+            visible_2: false, // '기기예약하기' 모달
+            visible_3: false, // '본인 예약 삭제확인' 모달
+            visible_4: false, // '예약 중복' 모달
+            visible_5: false, // '예약 삭제 오류 - 지난 날짜 삭제 안됨' 모달 
+            format: 'HH:mm',
+            columns: [
+                {
+                    title: 'Time',
+                    dataIndex: 'time',
+                    key: 'time',
+                },
+                {
+                    title: 'User',
+                    dataIndex: 'user',
+                    key: 'user',
+                },
+            ],
+            menu: apparatusId, // 처음들어오면 menu가 0임
+            apparatusList : [],
+            realReservationList : [],
+            todayDate : today
+        }
+
+    }
+
+    //0. 아래에 있는 곳에서 state의 변수들을 참조하므로, 변수들을 미리 선언 해 놓고, fetch를 해줘야 하네여
+    // 순서가 fetch되고 난 결과는 너무 늦게 나타나기 때문에 아래에 함수들에서 undefined된걸 읽어버려서 오류가 난것 같아요
+    // 그래서 그냥 state에다 변수이름과 타입정도만 미리 다 알려주고 난 후에 fetch된 실제 결과를 setState 해주기
+    // 그런데 constructor에서는 setState 할 수 없으니까 componentDidMount를 써줌
+    componentDidMount(){
         fetch('http://13.124.122.246:8080/apparatus/' + getUser().id, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
-            if (response === 200) {
-                console.log(response)
+            if (response.status === 200) { //1. 여기 response가 200이 아니라 response.status가 200이여야함!! 아래도 다 고쳐주세여 
                 return response.json()
             } else {
                 // 오류 난 경우 처리 
             }
         }).then(response => {
             this.setState({
-                menu: apparatusId,
-                apparatusList: response,
-                realReservationList: [],
-                todayDate: today,
+                apparatusList: response.apparatuses // 2.백엔드의 response형식대로 불러와줘야 함 그냥 response가 아니라 response.apparatuses
+            }, () => {
+                console.log(123123123123123)
+                console.log(this.state)
             })
         })
 
@@ -177,17 +191,20 @@ class Apparatus extends Component {
             var mm = newday.getMonth()
             var dd = newday.getDate()
             var todayInfo = yy+mm+dd ;
+            console.log("todayInfo = " + todayInfo)
             fetch('http://13.124.122.246:8080/schedule/apparatus/'+this.state.menu+'/'+todayInfo ,{ 
                 method: 'GET', 
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
-                if(response === 200){
+                if(response.statue === 200){
                     return response.json()
                 } else {
                     // 오류 난 경우 처리 
                 }
             }).then(response => { 
-                this.setStatus({ 
+                console.log(4)
+                console.log(response)
+                this.setStatus({
                     menu: apparatusId,
                     realReservationList: response
                 })
@@ -256,6 +273,7 @@ class Apparatus extends Component {
     }
 
     makeMonth = () => {
+        console.log(this.state)
         var newday = new Date();
         newday = this.state.todayDate;
         return (newday.getMonth()+1)
@@ -267,19 +285,19 @@ class Apparatus extends Component {
     }
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
-        if(n == 0){return (" ") }
-        var n = this.state.menu; 
-        console.log(n)
-        console.log(this.state.apparatusList)
-        var newList = this.state.apparatusList
-        console.log(newList)
-        var m;
-        newList = newList.filter(one => one.id == n) 
-        if(newList.length>0){
-            m = newList[0].name
+        try {
+            console.log("test")
+            console.log(this.state.apparatusList)
+            for (let i=0 ; i<this.state.apparatusList.length ; i++){
+                if (this.state.apparatusList[i].id === this.state.menu){
+                    return this.state.apparatusList[i].name
+                }
+            }
+            return "error"
+    
+        } catch (e) {
+            return "waiting"
         }
-        else { m = ''} // 없어지는 순간의 오류를 막기 위한 else구문
-        return (m)
     }
     // 본인 예약 삭제할 수 있는 함수 
     handleRemove=()=>{
