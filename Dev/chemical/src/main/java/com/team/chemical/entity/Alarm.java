@@ -68,7 +68,48 @@ public class Alarm {
 	 * 질병 알림
 	 */
 	public void makeIllnessAlarm() {
+		//TODO: 질병 알림 구현
 		
+		//전체 lab의 stock을 대상으로
+		Iterator<Stock> wholeStock = stockRepository.findAll().iterator();
+		Iterator<User> wholeUser = userRepository.findAll().iterator();
+		Stock stock;
+		User user;
+		LocalDate today = LocalDate.now();
+
+		//질병 알람
+		while(wholeUser.hasNext()) {
+			user = wholeUser.next();
+			if (user.getLabEnrollDate() == null) {
+				continue;
+			}
+			for(Inventory inventory : user.getMyLab().getInventories()) {
+				for (Stock inventoryStock : inventory.getStocks()) {
+					//가입일자가 넣은날짜보다 뒤면 가입일자, 아니면 넣은일자
+					LocalDate startDate = user.getLabEnrollDate().isAfter(inventoryStock.getPutDate()) ? 
+							user.getLabEnrollDate() : inventoryStock.getPutDate();
+					IllnessAlarm illnessAlarm = new IllnessAlarm();
+					illnessAlarm.setStock(inventoryStock);
+					if (user.getIllnessAlarm().contains(illnessAlarm)) {
+						//illness알람 이미 떴음. 
+						for (IllnessAlarm beforeIllAlarm : user.getIllnessAlarm()) {
+							//그럼 날짜를 알람 지운 날짜부터로 시작 하면 됨
+							if (beforeIllAlarm.getStock().equals(inventory)) {
+								startDate = beforeIllAlarm.getDeleteDate();
+							}
+						}
+					}
+					//stock의 모든 illness대상으로 period보다 많이 지났으면 알람에 추가
+					for (Illness illness : inventoryStock.getChemical().getIllness()) {
+						if (startDate.plusMonths(illness.getPeriod()).isAfter(today)) {
+							
+							//user.getAlarms().add(inventoryStock);
+						}
+					}
+				}
+			}
+		}
+
 	}
 	
 	
