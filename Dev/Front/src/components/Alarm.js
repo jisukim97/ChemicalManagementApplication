@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Card, List } from 'antd'
 import AlarmInfoList from './AlarmInfoList';
-
+import { getUser, getLab } from '../authentication';
 const { Title } = Typography;
 
 class Alarm extends Component {
@@ -9,9 +9,9 @@ class Alarm extends Component {
     state = {
     }
     
-    
-  
-    constructor(props){
+   
+
+    constructor(props) {
         super(props);
         var information = [
             {
@@ -65,6 +65,32 @@ class Alarm extends Component {
                   alarmType : 3
                }
         ]
+
+        fetch('http://13.124.122.246:8080/alarm/' + getUser().id, {
+            method: GET, //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify('body로 담을 정보') //여기에다가 body 넣어주기
+        }).then(response => {
+            if (response.status === 200) {
+                //이건 정상적으로 된 경우
+                return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+            //여기서 response라는걸 제대로 쓸 수 있음
+            console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
+            var list = [] //response.alarms
+            var information = list.map({
+                
+            })
+            this.setStatus({
+                information: information
+            })
+            //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
+        })
+
         this.state = {
             type : 1,
             information: information,
