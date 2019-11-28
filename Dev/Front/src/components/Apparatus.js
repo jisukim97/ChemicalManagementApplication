@@ -113,25 +113,33 @@ class Apparatus extends Component {
 
     //'등록하기'버튼 입력받기?
     handleSubmit = e => {
-        e.preventDefault();
+        console.log(e)
+        //e.preventDefault();
         this.props.form.validateFields((err, values)=> {
             if (!err) {
                 console.log(values)
-                fetch('http://13.124.122.246:8080/apparatus/'+this.state.menu, {
+                fetch('http://13.124.122.246:8080/apparatus/'+getLab().id, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }, 
                     body: JSON.stringify(values) //여기에다가 body 넣어주기
                 }).then(response => {
-                    if (response === 200) {
+                    if (response.status === 200) {
                         return response.json()
                     } else {
-                        // 오류 난 경우 처리 
+                        // 오류 난 경우 처리
+                        console.log("중복") 
+                        return 1
                     }
                 }).then(response => {
-                    this.state.apparatusList.push(response)
-                    this.setState({
-                        apparatusList: this.state.apparatusList
-                    })
+                    if (response === 1){
+                        console.log("here")
+                    } else {
+                        this.state.apparatusList.push(response)
+                        this.setState({
+                            apparatusList: this.state.apparatusList
+                        })
+    
+                    }
                 })
             }
         });
@@ -204,7 +212,7 @@ class Apparatus extends Component {
             }).then(response => { 
                 console.log(4)
                 console.log(response)
-                this.setStatus({
+                this.setState({
                     menu: apparatusId,
                     realReservationList: response
                 })
@@ -238,7 +246,7 @@ class Apparatus extends Component {
                 // 오류 난 경우 처리 
             }
         }).then(response => { 
-            this.setStatus({ 
+            this.setState({ 
                 todayDate : newday,
                 realReservationList: response
             })
@@ -265,7 +273,7 @@ class Apparatus extends Component {
                 // 오류 난 경우 처리 
             }
         }).then(response => { 
-            this.setStatus({ 
+            this.setState({ 
                 todayDate : newday,
                 realReservationList: response
             })
@@ -286,10 +294,12 @@ class Apparatus extends Component {
     // 현재 누른 기기의 이름을 받아오는 함수
     getApparNameNow =()=>{
         try {
-            console.log("test")
+            console.log("기기 이름")
+            console.log(this.state.apparatusList)
+            console.log(this.state.menu)
             console.log(this.state.apparatusList)
             for (let i=0 ; i<this.state.apparatusList.length ; i++){
-                if (this.state.apparatusList[i].id === this.state.menu){
+                if ( this.state.apparatusList[i].id ==this.state.menu){
                     return this.state.apparatusList[i].name
                 }
             }
@@ -340,6 +350,7 @@ class Apparatus extends Component {
 
     // 현재 날짜의 현재 기기 예약 중 내 예약이 있는지 없는지 
     checkMyReservation = () => {
+        /*
         var newList = [];
         newList = this.state.realReservationList;
         var present = false;
@@ -349,6 +360,8 @@ class Apparatus extends Component {
             }
         }
         return (present)
+        */
+       return false
     }
 
     //삭제하고자 하는 예약이 옛날 건지 확인 
