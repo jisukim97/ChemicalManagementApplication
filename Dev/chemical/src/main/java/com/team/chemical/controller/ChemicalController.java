@@ -206,6 +206,7 @@ public class ChemicalController {
 
 	/**
 	 * 인벤토리 추가
+	 * TODO : 무슨 타입의 인벤토리인지 ABCDE
 	 * @param userId의 lab에 inventory 추가하기
 	 * @param inventory attribute들
 	 * @return
@@ -213,6 +214,8 @@ public class ChemicalController {
 	@RequestMapping(value="/inventory/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String makeInventory(@PathVariable int userId, Inventory inventory, HttpServletResponse response) {
 		try {
+			int labId = userRepository.findById(userId).get().getMyLab().getId();
+			inventory.setId(""+labId+"A");
 			Inventory savedInventory = inventoryRepository.save(inventory);
 			Lab lab = userRepository.findById(userId).get().getMyLab();
 			

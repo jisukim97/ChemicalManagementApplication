@@ -411,19 +411,32 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+## 기기 리스트 받아오기
+* /apparatus/{userId}
+* GET
+* 없음
+* {
+    "apparatuses" : [기기들 정보 리스트]
+}
 
 ----
 ----
 
 
 # 알람 유스케이스
+* 알람타입 1:유효기간, 2:재고소진, 3:질병
 ## 알람 받아오기
 * /alarm/{userId}
 * GET
 * 없음
 * {
-    "alarms" : [알람들이 발생한 stock들의 정보 리스트]
+    "alarms" : [{"alarmType" : 타입, "stock" : stock정보} 들의 리스트]
 }
+## 알람 삭제
+* /alarm/{userId}/{alarmType}/{stockId}
+* DELETE
+* 없음
+* 없음
 
 ----
 ----
