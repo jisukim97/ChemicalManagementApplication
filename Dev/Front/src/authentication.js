@@ -18,8 +18,9 @@ export const logout = () => {
 }
 
 export const getLab = () => {
+    const lab = localStorage.getItem('lab')
     try { 
-        return localStorage.getItem('lab')
+        return JSON.parse(lab)
     } catch (e) {
         return null
     }
