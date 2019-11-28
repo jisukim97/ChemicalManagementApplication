@@ -138,7 +138,6 @@ class Apparatus extends Component {
                         this.setState({
                             apparatusList: this.state.apparatusList
                         })
-    
                     }
                 })
             }
@@ -147,8 +146,9 @@ class Apparatus extends Component {
 
     // 기기 예약 등록 버튼
     handleSubmit2 = e => {
+        console.log('a')
         console.log(e)
-        e.preventDefault();
+        //e.preventDefault();
         this.props.form.validateFields((err, values)=> {
             if (!err) {
                 console.log('내가 보고자 하는 밸류 여기')
@@ -379,6 +379,7 @@ class Apparatus extends Component {
         newday = this.state.todayDate;
         return (newday.getMonth()+1)
     }
+
     makeDate = () => {
         var newday = new Date();
         newday = this.state.todayDate;
@@ -551,7 +552,14 @@ class Apparatus extends Component {
                                     <p>* 예약자: {getUser().name}</p>
                                     <p>* 예약할 시간: </p>
                                    
-                                    <Form onSubmit={this.handleSubmit2()} className="form">
+                                    {/*</Modal><Form onSubmit={this.handleSubmit2()} className="form">
+                                원래 이렇게 돼있었는데 
+                                1. 함수를 파라미터로 전달해줄때는 () 없음
+                                2. 함수를 호출할때는 () 있음
+                                이렇게 두개를 잘 구분해서 써야 함!!
+                                원래처럼 () 써버리면 무한루프
+                                */}
+                                    <Form onSubmit={this.handleSubmit2} className="form">
                                         <Form.Item>
                                             {getFieldDecorator('name', {
                                                 rules: [{ required: true, message: '예약 시작 시간을 입력하세요. ' }],
