@@ -11,7 +11,6 @@ const { Title } = Typography;
 class MyLab extends Component {
 
     state = {
-
     }
 
     constructor(props) {
@@ -23,6 +22,25 @@ class MyLab extends Component {
                 1, 2, 3, 4, 5, 6, 7, 8
             ]
         }
+    }
+
+    changeVolume = (stockId, change) => {
+        const chemicalArray = [];
+
+        for(let i = 0 ; i < this.state.chemicals.length ; i++){
+            if (this.state.chemicals.stockId === stockId){
+                this.state.chemicals.remainingVolume = this.state.chemicals.remainingVolume - change 
+                chemicalArray.push(this.state.chemicals)
+            } 
+            this.setState({chemicals : chemicalArray})
+        }
+
+        console.log(chemicalArray)
+        //state에 있는 배열 탐색하면서 그거의 stockId가 stockId인거 찾기
+        //나머지들은 바로 chemicalArray에 넣어주고
+        //찾은거면 그거의 stockInfo.volume에서 change만큼을 뺴준다
+        //그리고 그걸 chemicalArray에 넣어주기
+        //탐색 끝나면 this.setState({chemicals : chemicalArray})
     }
 
     render() {

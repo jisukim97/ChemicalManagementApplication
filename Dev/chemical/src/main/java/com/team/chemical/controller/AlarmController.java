@@ -1,10 +1,9 @@
 package com.team.chemical.controller;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,12 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team.chemical.entity.Illness;
-import com.team.chemical.entity.Inventory;
+import com.team.chemical.entity.Alarm;
+import com.team.chemical.entity.IllnessAlarm;
 import com.team.chemical.entity.Stock;
 import com.team.chemical.entity.StockRepository;
 import com.team.chemical.entity.User;
 import com.team.chemical.entity.UserRepository;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+class AlarmForm {
+	int alarmType;
+	Stock stock;
+}
 
 @RestController
 public class AlarmController {
@@ -31,75 +40,12 @@ public class AlarmController {
 	@Autowired
 	UserRepository userRepository;
 	
-	
-	//TODO : 알람 전체 다시 짜기
-	void makeAlarm() {
-		//유효기간알람
-		//질병알람
-		
-		//전체 lab의 stock을 대상으로
-		Iterator<Stock> wholeStock = stockRepository.findAll().iterator();
-		Iterator<User> wholeUser = userRepository.findAll().iterator();
-		Stock stock;
-		User user;
-		LocalDate today = LocalDate.now();
-		
-		//유효기간알람
-		while(wholeStock.hasNext()) {
-			//stock은 모든 stock들 다
-			stock = wholeStock.next();
-			//만약 유효기간 지난거면 (2주 이하로 남아있으면)
-			if (stock.getExpireDate().plusWeeks(2).isEqual(today) || stock.getExpireDate().plusWeeks(2).isAfter(today)) {
-				//이거에 대한 걸 모든 유저에 추가
-				Set<User> members = stock.getInventory().getLab().getMembers();
-				for (User member : members) {
-					member.getAlarms().add(stock);
-					userRepository.save(member);
-				}
-			}
-		}
-		
-		//질병 알람
-		while(wholeUser.hasNext()) {
-			user = wholeUser.next();
-			if (user.getLabEnrollDate() == null) {
-				continue;
-			}
-			for(Inventory inventory : user.getMyLab().getInventories()) {
-				for (Stock inventoryStock : inventory.getStocks()) {
-					//가입일자가 넣은날짜보다 뒤면 가입일자, 아니면 넣은일자
-					LocalDate startDate = user.getLabEnrollDate().isAfter(inventoryStock.getPutDate()) ? 
-							user.getLabEnrollDate() : inventoryStock.getPutDate();
-					//stock의 모든 illness대상으로 period보다 많이 지났으면 알람에 추가
-					for (Illness illness : inventoryStock.getChemical().getIllness()) {
-						if (startDate.plusMonths(illness.getPeriod()).isAfter(today)) {
-							user.getAlarms().add(inventoryStock);
-						}
-					}
-				}
-			}
-			userRepository.save(user);
-		}
-		
-	}
-	
-	/*
-	 * 알람 만들기 테스트
-	 */
-	@RequestMapping(value="/alarmtest", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
-	String alarmTest(HttpServletResponse response) {
-		try {
-			makeAlarm();
-			return null;
-		} catch(Exception e) {
-			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return null;
-		}
-	}
+	@Autowired
+	Alarm alarm;
 	
 	/**
 	 * 유저의 전체 알람 리스트 받아오기
+	 * 유효기간알람:1, 재고소진알람:2, 질병알람:3
 	 * @param userId
 	 * @return
 	 */
@@ -110,8 +56,20 @@ public class AlarmController {
 			if (user == null) {
 				throw new Exception("cannot find user");
 			}
+
+			List<AlarmForm> alarms = new LinkedList<>();
+			for (Stock stock : user.getDateAlarm()) {
+				alarms.add(new AlarmForm(1, stock));
+			}
+			for (Stock stock : user.getVolumeAlarm()) {
+				alarms.add(new AlarmForm(2, stock));
+			}
+			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
+				alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+			}
+			
 			Map<String, Object> result = new HashMap<>();
-			result.put("alarms", user.getAlarms());
+			result.put("alarms", alarms);
 			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,4 +77,49 @@ public class AlarmController {
 			return null;
 		}
 	}
+
+	
+	/*
+	 * 알람 만들기 테스트
+	 */
+	@RequestMapping(value="/alarmtest", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String alarmTest(HttpServletResponse response) {
+		try {
+			alarm.makeDateAlarm();
+			alarm.makeVolumeAlarm();
+			alarm.makeIllnessAlarm();
+			return null;
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/*
+	 * 알람 지우기
+	 */
+	@RequestMapping(value="/alarm/{userId}/{alarmType}/{stockId}", method=RequestMethod.DELETE, produces="text/plain;charset=UTF-8") 
+	String deleteAlarm(@PathVariable int userId, @PathVariable int alarmType, @PathVariable int stockId, HttpServletResponse response) {
+		try {
+			Stock stock = stockRepository.findById(stockId).get();
+			User user = userRepository.findById(userId).get();
+			if (alarmType == 1) {
+				user.getDateAlarm().remove(stock);
+			} else if (alarmType == 2) {
+				user.getVolumeAlarm().remove(stock);
+			} else if (alarmType == 3) {
+				//TODO : 질병 알람 지우는거 추가
+			} else {
+				throw new Exception("AlarmType is wrong!");
+			}
+			userRepository.save(user);
+			return null;
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 }
