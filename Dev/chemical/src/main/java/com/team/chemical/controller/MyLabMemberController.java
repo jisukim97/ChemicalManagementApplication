@@ -72,7 +72,7 @@ public class MyLabMemberController {
 			}
 			//필요없는 정보 다 없애주기
 			findedMember.setPassword(null);
-			findedMember.setAlarms(null);
+			//findedMember.setAlarms(null);
 			
 			Map<String, Object> result = new HashMap<>();
 			result.put("member", findedMember);
