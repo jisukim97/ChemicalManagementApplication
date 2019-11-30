@@ -59,11 +59,11 @@ public class Schedule {
     @JoinColumn(name = "apparatus_id")
     @JsonBackReference("apparatusSchedule")
     private Apparatus apparatus;
-    
+	
 	@ManyToOne
 	@JoinColumn(name="user_id")
-    @JsonBackReference("userSchedule")
     private User reservation;
+
 
 	@Override
 	public int hashCode() {
