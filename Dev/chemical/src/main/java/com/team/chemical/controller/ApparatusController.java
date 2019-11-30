@@ -93,10 +93,8 @@ public class ApparatusController {
 			//기기 찾기
 			Apparatus findedApparatus = apparatusRepository.findById(apparatusId).get();
 			//기기를 랩에서 삭제 후 저장
-			System.out.println(findedLab);
 			findedLab.getApparatus().remove(findedApparatus);
 			findedLab = labRepository.save(findedLab);
-			System.out.println(findedLab);
 			//기기 자체를 삭제
 			apparatusRepository.delete(findedApparatus);
 			return null;
