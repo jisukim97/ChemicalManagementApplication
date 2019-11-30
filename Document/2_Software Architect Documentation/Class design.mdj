@@ -3793,6 +3793,7 @@
 									"model": {
 										"$ref": "AAAAAAFuQUnPdGoGY1s="
 									},
+									"visible": false,
 									"font": "Arial;13;0",
 									"left": 575,
 									"top": 667,
@@ -3836,6 +3837,7 @@
 									"model": {
 										"$ref": "AAAAAAFuQUnPdGoGY1s="
 									},
+									"visible": false,
 									"font": "Arial;13;0",
 									"left": 656,
 									"top": 665,
@@ -4405,14 +4407,14 @@
 									"font": "Arial;13;0",
 									"left": 1105,
 									"top": 238,
-									"width": 20,
+									"width": 21.68359375,
 									"height": 13,
 									"alpha": -5.441243783258057,
 									"distance": 37.53664875824692,
 									"hostEdge": {
 										"$ref": "AAAAAAFuWU7zFk1brgc="
 									},
-									"text": "0..*"
+									"text": "0..1"
 								},
 								{
 									"_type": "UMLQualifierCompartmentView",
@@ -19518,7 +19520,7 @@
 									"$ref": "AAAAAAFuWU4fBkLiHxc="
 								},
 								"visibility": "private",
-								"multiplicity": "0..*"
+								"multiplicity": "0..1"
 							}
 						}
 					],
@@ -19728,13 +19730,11 @@
 								"_parent": {
 									"$ref": "AAAAAAFuQUnPdGoF6wc="
 								},
-								"name": "schedules",
 								"reference": {
 									"$ref": "AAAAAAFuQOaVXk2rZOs="
 								},
 								"visibility": "private",
-								"navigable": false,
-								"multiplicity": "0..*"
+								"navigable": false
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -19747,7 +19747,6 @@
 									"$ref": "AAAAAAFuQSoClVFpvdw="
 								},
 								"visibility": "private",
-								"navigable": false,
 								"multiplicity": "1"
 							}
 						}
