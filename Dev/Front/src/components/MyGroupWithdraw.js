@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { Modal, Form, Button } from 'antd';
 import { Typography } from 'antd';
 
+import { history } from '../History';
+import { getUser, getLab } from '../authentication';
+import { serverUrl } from '../setting'
+
 const { Title } = Typography;
 const { Text } = Typography;
+
+
 
 class MyGroupWithdraw extends Component {
 
@@ -28,6 +34,9 @@ class MyGroupWithdraw extends Component {
       visible: false,
     });
   };
+
+
+
 
   render() {
     const { getFieldDecorator } = this.props.form;

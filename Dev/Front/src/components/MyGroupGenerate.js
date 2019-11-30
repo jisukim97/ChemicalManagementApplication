@@ -47,11 +47,6 @@ class MyGroupGenerate extends Component {
         }).then(response => {
           console.log(response)
           localStorage.setItem('lab', JSON.stringify(response.lab));
-
-          console.log(12312)
-          console.log(getLab())
-          console.log(getLab().id)
-
           this.props.afterGroupGenerate(getLab().id);
 
         })
