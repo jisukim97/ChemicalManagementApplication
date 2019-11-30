@@ -23,8 +23,8 @@ class MyGroupGenerate extends Component {
         //그룹 생성 정보
         console.log(values)
         const registInformation = {
-          groupName : values.groupName,
-          groupPassword : values.groupPassword,
+          name : values.groupName,
+          password : values.groupPassword,
         }
         //http요청
         fetch(serverUrl + '/lab/' + getUser().id, {
