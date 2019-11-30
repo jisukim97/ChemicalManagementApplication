@@ -60,23 +60,6 @@ class Chemical extends Component {
     };
 
 
-
-    handleRemove = (id) => {
-        // 삭제 버튼이 클릭되면 MyLab에서 해당되는 stockId를 찾아 그것을 삭제한다.
-        alert("폐기하기를 누르셨습니다.");
-        /*  const chemicals = MyLab.state;
-          if (MyLab.state.chemicals === id.chemicals) //내가 눌렀던 약품의 chemicals.StockId를 찾는다.
-              //slice 전후로 데이터를 복사하고, 우리가 찾는 index (누른 index)는 제외시킨다.
-              this.setState({
-                  chemicals: [
-                      ...chemicals.slice(0, 4),
-                      ...chemicals.slice(4 + 1, chemicals.lenght)
-                  ]
-              });
-          */
-    }
-
-
     handleChoosePlace = () => {
         this.setState({
             visible: false,
