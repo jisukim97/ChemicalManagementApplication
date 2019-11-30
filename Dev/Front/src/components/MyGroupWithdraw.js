@@ -54,7 +54,7 @@ class MyGroupWithdraw extends Component {
       console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
       //예를들면
       this.setStatus({
-        labName : getLab().name
+        labName : getLab().name,
         labMemberCount : (getLab().members).length
       })
       //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
