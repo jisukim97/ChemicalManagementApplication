@@ -12,7 +12,7 @@ class MyGroupInvite extends Component {
 
   state = { visible: false };
 
-  showModal = () => {
+  showModal = e => {
     this.setState({
       visible: true,
     });
@@ -53,7 +53,7 @@ class MyGroupInvite extends Component {
 
                 {/* 초대하기 버튼 */}
 
-                  <Button type="primary" onClick={this.showModal}>
+                  <Button type="primary" onClick={this.show1Modal}>
                   초대하기
                   </Button>
                   <Modal
