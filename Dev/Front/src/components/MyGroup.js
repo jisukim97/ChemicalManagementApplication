@@ -111,6 +111,13 @@ class MyGroup extends Component {
     })
   }
 
+  firstButtonClick2 = () => {
+    this.setState( {
+      menu : 1
+    })
+    this.getGroupMembers()
+  }
+
   secondButtonClick = () => {
     this.setState( {
       menu : 2
@@ -121,6 +128,13 @@ class MyGroup extends Component {
     this.setState( {
       menu : 3
     })
+  }
+
+  thirdButtonClick2 = () => {
+    this.setState( {
+      menu : 3
+    })
+    this.getGroupMembers()
   }
 
   fourthButtonClick = () => {
@@ -183,31 +197,61 @@ class MyGroup extends Component {
       }
 
       render() {
-        return (
-          <div>
-          <br />
-          <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+        if (getLab() === null) {
+          return (
+            <div>
+              <br />
+              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
 
-          {/* 버튼 4개 */}
-          <Row style={{margin : 20}}>
-          <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick}>my Lab 생성</Button></center></Col>
-          <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
-          </Row>
+              {/* 버튼 4개 */}
+              <Row style={{ margin: 20 }}>
+                <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick}>my Lab 생성</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
+              </Row>
 
-          <Row style={{margin : 20}}>
-          <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
-          <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
-          </Row>
+              <Row style={{ margin: 20 }}>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
+              </Row>
 
-          {/* 내용 */}
-          <div>
-          <Card style={{margin : 20}}>
-          {this.getContent()}
-          </Card>
-          </div>
+              {/* 내용 */}
+              <div>
+                <Card style={{ margin: 20 }}>
+                  {this.getContent()}
+                </Card>
+              </div>
 
-          </div>
-        );
+            </div>
+
+          );
+        }
+        else{
+          return (
+            <div>
+              <br />
+              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+
+              {/* 버튼 4개 */}
+              <Row style={{ margin: 20 }}>
+                <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick2}>my Lab 생성</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
+              </Row>
+
+              <Row style={{ margin: 20 }}>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
+              </Row>
+
+              {/* 내용 */}
+              <div>
+                <Card style={{ margin: 20 }}>
+                  {this.getContent()}
+                </Card>
+              </div>
+
+            </div>
+          );
+        }
       }
     }
 
