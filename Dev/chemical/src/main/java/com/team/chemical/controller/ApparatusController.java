@@ -89,6 +89,7 @@ public class ApparatusController {
 		try {
 			//lab 찾기
 			Lab findedLab = labRepository.findById(labId).get();
+			System.out.println(1);
 			//기기 찾기
 			Apparatus findedApparatus = apparatusRepository.findById(apparatusId).get();
 			//기기를 랩에서 삭제 후 저장
