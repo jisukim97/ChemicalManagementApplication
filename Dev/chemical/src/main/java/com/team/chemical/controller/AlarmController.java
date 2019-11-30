@@ -1,5 +1,7 @@
 package com.team.chemical.controller;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,20 +17,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Alarm;
+import com.team.chemical.entity.Illness;
 import com.team.chemical.entity.IllnessAlarm;
 import com.team.chemical.entity.Stock;
 import com.team.chemical.entity.StockRepository;
 import com.team.chemical.entity.User;
 import com.team.chemical.entity.UserRepository;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@AllArgsConstructor
-@NoArgsConstructor
 class AlarmForm {
 	int alarmType;
 	Stock stock;
+	long left;
+	AlarmForm(int alarmType, Stock stock){
+		this.alarmType = alarmType;
+		this.stock = stock;
+		if (alarmType==1) {
+			LocalDate today = LocalDate.now();
+			stock.getExpireDate();
+			left = ChronoUnit.DAYS.between(today, stock.getExpireDate());
+		}
+	}
 }
 
 @RestController
@@ -53,10 +61,11 @@ public class AlarmController {
 	String getAlarms(@PathVariable int userId, HttpServletResponse response) {
 		try {
 			User user = userRepository.findById(userId).get();
+			LocalDate today = LocalDate.now();
 			if (user == null) {
 				throw new Exception("cannot find user");
 			}
-
+			//alarm들 리스트
 			List<AlarmForm> alarms = new LinkedList<>();
 			for (Stock stock : user.getDateAlarm()) {
 				alarms.add(new AlarmForm(1, stock));
@@ -64,8 +73,15 @@ public class AlarmController {
 			for (Stock stock : user.getVolumeAlarm()) {
 				alarms.add(new AlarmForm(2, stock));
 			}
+			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
-				alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+				// 몇달 지났는지?
+				long after = ChronoUnit.MONTHS.between(illnessAlarm.getDeleteDate(), today);
+				//만약 illness중 하나라도 지났으면
+				Illness illness = illnessAlarm.getStock().getChemical().getIllness();
+				if (illness!=null && illness.getPeriod() < after) {
+					alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+				}
 			}
 			
 			Map<String, Object> result = new HashMap<>();
@@ -109,7 +125,12 @@ public class AlarmController {
 			} else if (alarmType == 2) {
 				user.getVolumeAlarm().remove(stock);
 			} else if (alarmType == 3) {
-				//TODO : 질병 알람 지우는거 추가
+				for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
+					if (illnessAlarm.getStock().getId() == stockId) {
+						illnessAlarm.setDeleteDate(LocalDate.now());
+						break;
+					}
+				}
 			} else {
 				throw new Exception("AlarmType is wrong!");
 			}
