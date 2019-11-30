@@ -24,9 +24,10 @@ class MyGroup extends Component {
     super(props);
     this.state = {
       menu : 0,
-      labexists : getLab() === null ? false : true
+      labexists : getLab() === null ? false : true,
       // false 도 테스트해보기
       // 속한 lab이 없을 때, labid = 0
+      
     }
   }
 
@@ -104,7 +105,7 @@ class MyGroup extends Component {
           if (this.state.labexists) {
             return (
               <div>
-              <MyGroupMember />
+              <MyGroupMember members={this.state.members}/>
               </div>
             )
           }
