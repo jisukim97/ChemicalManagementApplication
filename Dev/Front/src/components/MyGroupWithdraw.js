@@ -9,8 +9,6 @@ import { serverUrl } from '../setting'
 const { Title } = Typography;
 const { Text } = Typography;
 
-
-
 class MyGroupWithdraw extends Component {
 
   state = { visible: false };
@@ -53,9 +51,9 @@ class MyGroupWithdraw extends Component {
       //여기서 response라는걸 제대로 쓸 수 있음
       console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
       //예를들면
-      this.setStatus({
+      this.setState({
         labName : getLab().name,
-        labMemberCount : (getLab().members).length
+        labMemberCount : getLab().members.length
       })
       //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
     })
@@ -73,8 +71,8 @@ class MyGroupWithdraw extends Component {
       <div style={{ margin: '10px 0' }}>
       <center><Title style={{marginBottom : 50}}>my Lab 탈퇴</Title></center>
 
-      <br /><Text type="secondary">현재 속한 my Lab 이름 : </Text>
-      <br /><Text type="secondary">현재 속한 my Lab 인원수 : </Text>
+      <br /><Text type="secondary">현재 속한 my Lab 이름 : {this.state.labName} </Text>
+      <br /><Text type="secondary">현재 속한 my Lab 인원수 : {this.state.labMemberCount} </Text>
 
       <br />
 
@@ -87,7 +85,7 @@ class MyGroupWithdraw extends Component {
       onOk={this.handleOk}
       onCancel={this.handleCancel}
       >
-      <p>에서 정말 탈퇴 하시겠습니까?</p>
+      <p>{this.state.labName} 에서 정말 탈퇴 하시겠습니까?</p>
       <p>(탈퇴시, 기기 예약, 알림 등의 정보가 모두 삭제 됩니다.)</p>
 
       </Modal>
