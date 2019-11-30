@@ -33,13 +33,6 @@ class MyGroupMember extends Component {
     ]
   }
 
-  constructor(props){
-    super(props);
-
-    fetch( ).
-
-  }
-
 
 
   render() {
