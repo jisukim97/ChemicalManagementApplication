@@ -17,7 +17,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -94,11 +93,7 @@ public class User {
     		inverseJoinColumns=@JoinColumn(name="illnessalarm_id"))
     @OrderColumn(name = "list_idx")
     private Set<IllnessAlarm> illnessAlarm = new HashSet<>();
-    
-	@OneToMany(mappedBy = "user")
-	@JsonManagedReference("userSchedule")
-    private Set<Schedule> schedules = new HashSet<>();
-
+   
     
 	@Override
 	public int hashCode() {

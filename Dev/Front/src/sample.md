@@ -430,7 +430,7 @@ getLab().id -> 랩아이디
 * GET
 * 없음
 * {
-    "alarms" : [{"alarmType" : 타입, "stock" : stock정보} 들의 리스트]
+    "alarms" : [{"alarmType" : 타입, "stock" : stock정보, "inventory" : 인벤토리들의 리스트} 들의 리스트]
 }
 ## 알람 삭제
 * /alarm/{userId}/{alarmType}/{stockId}
