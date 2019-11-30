@@ -87,7 +87,7 @@ class Alarm extends Component {
                         alarmType: i.alarmType,
                         id: i.stock.id,
                         name: i.stock.chemical.name,
-                        date: 
+                        date: i.left
                     }
                     information.push(a)
                 }
@@ -113,19 +113,16 @@ class Alarm extends Component {
                 }
             }
             this.state = {
-                information: information
-            }
+                type : 1,
+                information: information,
+                alarm1Count : information.filter( value => value.alarmType === 1).length,
+                alarm2Count : information.filter( value => value.alarmType === 2).length,
+                alarm3Count : information.filter( value => value.alarmType === 3).length
+                
+                }
             //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
         })
 
-        this.state = {
-            type : 1,
-            information: information,
-            alarm1Count : information.filter( value => value.alarmType === 1).length,
-            alarm2Count : information.filter( value => value.alarmType === 2).length,
-            alarm3Count : information.filter( value => value.alarmType === 3).length
-            
-        }
     }
 
     handleRemove = (id, alarmType) => {
