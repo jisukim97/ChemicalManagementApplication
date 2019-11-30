@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
 import { Link } from "react-router-dom";
 import { Typography } from 'antd';
-
 import { history } from '../History';
 import { getUser, getLab } from '../authentication';
 import { serverUrl } from '../setting'
@@ -19,13 +18,15 @@ class MyGroupGenerate extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      console.log(222222);
       if (!err) {
         //그룹 생성 정보
         console.log(values)
         const registInformation = {
-          groupName : values.groupName,
-          groupPassword : values.groupPassword,
+          name : values.groupName,
+          password : values.groupPassword,
         }
+        console.log(registInformation)
         //http요청
         fetch(serverUrl + '/lab/' + getUser().id, {
           method: 'POST',
@@ -47,11 +48,6 @@ class MyGroupGenerate extends Component {
         }).then(response => {
           console.log(response)
           localStorage.setItem('lab', JSON.stringify(response.lab));
-
-          console.log(12312)
-          console.log(getLab())
-          console.log(getLab().id)
-
           this.props.afterGroupGenerate(getLab().id);
 
         })
