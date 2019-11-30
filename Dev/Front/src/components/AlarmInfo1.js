@@ -42,7 +42,7 @@ class AlarmInfo extends Component {
   }
 
   deleteFetch = () => {
-    fetch('http://13.124.122.246:8080/alarm/' + getUser().id + this.props.info.alarmType + this.props.info.id,  {
+    fetch('http://13.124.122.246:8080/alarm/' + getUser().id +"/"+ this.props.info.alarmType + "/" + this.props.info.id,  {
       method: 'DELETE', //'GET', 'POST', 'DELETE' 등등
       headers: { 'Content-Type': 'application/json' } //안고쳐도 됨
     }).then(response => {
