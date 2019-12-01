@@ -138,7 +138,7 @@ class StockButtons extends Component {
                     <Button type="primary" onClick={this.clickDeleteButton}> 폐기하기 </Button>
                 </span>
                 <span style={{marginLeft : 10, marginRight : 10}}>
-                    <Button type="primary"> 장소수정 </Button>
+                    <Button type="primary" onClick={this.props.showInventoryChangeButton}> 장소수정 </Button>
                 </span>
             </div>
             </Fragment>
