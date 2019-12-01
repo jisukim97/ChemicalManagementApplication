@@ -83,11 +83,18 @@ class PriceInput extends React.Component {
 
 class StockButtons extends Component {
 
+    constructor(props){
+        super(props)
+    }
+
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                // 값 : values.value.number
+                // 단위 : values.value.unit
+                this.props.changeVolume(values.value.number, values.value.unit)
             }
         });
     };
@@ -96,9 +103,17 @@ class StockButtons extends Component {
         if (value.number > 0) {
             callback();
             return;
+        } 
+        if (this.props.remainingVolume < value.number){
+            callback('너무 큰 수를 입력하셨습니다!')
+            return;
         }
-        callback('Number must greater than zero!');
+        callback('0보다 큰 수를 입력 해 주세요!');
     };
+
+    clickDeleteButton = () => {
+        this.props.deleteStock();
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -107,7 +122,7 @@ class StockButtons extends Component {
 
             <Form layout="inline" onSubmit={this.handleSubmit}>
                 <Form.Item style={{marginRight : '1.5%'}}>
-                    {getFieldDecorator('here2', {
+                    {getFieldDecorator('value', {
                         initialValue: { number: 0, unit: 'g' },
                         rules: [{ validator: this.checkNumber }],
                     })(<PriceInput />)}
@@ -120,7 +135,7 @@ class StockButtons extends Component {
             </Form>
             <div style={{margin : 10}}>
                 <span style={{marginLeft : 10, marginRight : 10}}>
-                    <Button type="primary"> 폐기하기 </Button>
+                    <Button type="primary" onClick={this.clickDeleteButton}> 폐기하기 </Button>
                 </span>
                 <span style={{marginLeft : 10, marginRight : 10}}>
                     <Button type="primary"> 장소수정 </Button>

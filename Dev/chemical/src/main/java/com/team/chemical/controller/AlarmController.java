@@ -51,6 +51,25 @@ public class AlarmController {
 	@Autowired
 	Alarm alarm;
 	
+	private Map<String, int[]> illnessCheck;
+	
+	AlarmController(){
+		/*
+		 * illnessCheck
+		 * {
+		 * 		"chemicalName" : [처음사용 후 n개월, 삭제 후 m개월]
+		 * }
+		 */
+		illnessCheck = new HashMap<String, int[]>();
+		illnessCheck.put("Dimethylacetamide", new int[] {1, 6} );
+		illnessCheck.put("Benzene", new int[] {2, 6} );
+		illnessCheck.put("Tetrachloroethane", new int[] {3, 6} );
+		illnessCheck.put("Carbon tetrachloride", new int[] {3, 6} );
+		illnessCheck.put("Acrylonitrile", new int[] {3, 6} );
+		illnessCheck.put("Polyvinyl chloride", new int[] {3, 6} );
+		illnessCheck.put("Silicon dioxide", new int[] {12, 12} );
+	}
+	
 	/**
 	 * 유저의 전체 알람 리스트 받아오기
 	 * 유효기간알람:1, 재고소진알람:2, 질병알람:3
@@ -79,11 +98,13 @@ public class AlarmController {
 				long after = ChronoUnit.MONTHS.between(illnessAlarm.getDeleteDate(), today);
 				//만약 illness중 하나라도 지났으면
 				Illness illness = illnessAlarm.getStock().getChemical().getIllness();
-				if (illness!=null && illness.getPeriod() < after) {
-					alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+				if (illness!=null) {
+					if ((illnessAlarm.isAlreadyChecked()&&after > illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[1])
+							|| (!illnessAlarm.isAlreadyChecked()&&after > illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[0])) {
+						alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+					}
 				}
 			}
-			
 			Map<String, Object> result = new HashMap<>();
 			result.put("alarms", alarms);
 			return new ObjectMapper().writeValueAsString(result);
@@ -128,6 +149,7 @@ public class AlarmController {
 				for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
 					if (illnessAlarm.getStock().getId() == stockId) {
 						illnessAlarm.setDeleteDate(LocalDate.now());
+						illnessAlarm.setAlreadyChecked(true);
 						break;
 					}
 				}
