@@ -277,6 +277,38 @@ class MyLab extends Component {
         })
     }
 
+    //인벤토리 바꾸기
+    changeInventory = (stockId, newInventoryId) => {
+        //여기서 fetch 해주기
+        let inventories = this.state.inventories;
+        let stock;
+        for (var i=0; i<inventories.length; i++){
+            if(inventories[i].id === this.state.inventory){ //현재 인벤토리에 있는것
+                for (var j=0; j<inventories[i].stocks.length; j++){
+                    if (inventories[i].stocks[j].id === stockId){
+                        stock = inventories[i].stocks[j];
+                        inventories[i].stocks.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        console.log('here1')
+        console.log(newInventoryId)
+        for (var i=0; i<inventories.length; i++){
+            if (inventories[i].id === newInventoryId){
+                console.log('here2')
+                inventories[i].stocks.push(stock)
+                break;
+            }
+        }
+
+        this.setState({
+            inventories : inventories
+        })
+    }
+
     render() {  
 
         return (
@@ -302,7 +334,8 @@ class MyLab extends Component {
                     dataSource={this.state.inventories.filter(inventory => inventory.id===this.state.inventory)[0].stocks}
                     renderItem={stock => (
                         <List.Item>
-                            <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock}/> {/* Chemical 컴포넌트에 stock을 전해줌*/}
+                            <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock} 
+                            changeInventory={this.changeInventory} /> {/* Chemical 컴포넌트에 stock을 전해줌*/}
                         </List.Item>
                     )}
                 />
