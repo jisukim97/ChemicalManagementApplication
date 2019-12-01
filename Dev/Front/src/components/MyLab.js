@@ -226,7 +226,7 @@ class MyLab extends Component {
             inventories : inventories, //인벤토리 배열 
             inventory: firstInventoryId, //현재 인벤토리 아이디
             inventoryName: inventories[0].name, //현재 인벤토리 이름
-            realInventory : inventories.filter(inventory => inventory.id===firstInventoryId) //현재 인벤토리에 있는 것들만
+            //realInventory : inventories.filter(inventory => inventory.id===firstInventoryId) //현재 인벤토리에 있는 것들만
         }
     }
 
@@ -238,13 +238,47 @@ class MyLab extends Component {
                 this.setState({
                     inventory : inventory.id,
                     inventoryName : inventory.name,
-                    realInventory : inventory
+                    //realInventory : inventory
                 })
             }
         })
     };
 
-    render() {
+    //볼륨 바꿀 경우
+    changeVolume = (stockId, change, unit) => {
+        //여기서 fetch 해준다
+        //volume 바꿔주는걸로
+        let inventories = this.state.inventories;
+        for (var i=0 ; i<inventories.length; i++){
+            for (var j=0 ; j<inventories[i].stocks.length; j++){
+                if (inventories[i].stocks[j].id===stockId){
+                    if (unit === 'mL'){
+                        change *= inventories[i].stocks[j].chemical.density;
+                    }
+                    inventories[i].stocks[j].remainingVolume -= change;
+                    break;
+                }
+            }
+        }
+        this.setState({inventories : inventories})
+    }
+
+    //재고 삭제하기
+    deleteStock = (stockId) => {
+        //여기서 fetch 해주기
+        let inventories = this.state.inventories;
+        for (var i=0; i<inventories.length; i++){
+            if(inventories[i].id===this.state.inventory){
+                inventories[i].stocks=inventories[i].stocks.filter(stock => stock.id!==stockId)
+            }
+        }
+        this.setState({
+            inventories : inventories
+        })
+    }
+
+    render() {  
+
         return (
             <div>
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
@@ -265,10 +299,10 @@ class MyLab extends Component {
 
                 <List
                     grid={{ gutter: 16, column: 3 }}
-                    dataSource={this.state.realInventory.stocks}
+                    dataSource={this.state.inventories.filter(inventory => inventory.id===this.state.inventory)[0].stocks}
                     renderItem={stock => (
                         <List.Item>
-                            <Stock stock={stock} /> {/* Chemical 컴포넌트에 stock을 전해줌*/}
+                            <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock}/> {/* Chemical 컴포넌트에 stock을 전해줌*/}
                         </List.Item>
                     )}
                 />

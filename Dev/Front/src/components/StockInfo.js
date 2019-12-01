@@ -19,6 +19,15 @@ class StockInfo extends Component {
         
     }
 
+
+    changeVolume = (change, unit) => {
+        this.props.changeVolume(this.props.stock.id, change, unit);
+    }
+
+    deleteStock = () => {
+        this.props.deleteStock(this.props.stock.id)
+    }
+
     render() {
 
         {/*
@@ -55,7 +64,7 @@ class StockInfo extends Component {
                 {/* 버튼들 */}
                 <div>
                     <center>
-                        <StockButtons />
+                        <StockButtons changeVolume={this.changeVolume} remainingVolume={stock.remainingVolume} deleteStock={this.deleteStock}/>
 
                     </center>
 
