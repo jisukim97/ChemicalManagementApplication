@@ -66,23 +66,22 @@ class ChemicalAdd extends Component {
         }).then(response => {
             if( response.status === 200){
                 //이건 정상적으로 된 경우
-                    return response.json()
+                response.json().then(response => {
+                    console.log(23123)
+                    console.log(response)
+                    //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+                    //여기서 response라는걸 제대로 쓸 수 있음
+                    this.setState({
+                        chemical : response.chemical
+                    },  () => {
+                        this.getInventorySuggestList()
+                    })
+                })
             } else {
-                message.error('This is an error message');
+                message.error('약품을 찾을 수 없습니다!');
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
-        }).then(response => {
-            console.log(23123)
-            console.log(response)
-            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-            //여기서 response라는걸 제대로 쓸 수 있음
-            this.setState({
-                chemical : response.chemical
-            },  () => {
-                this.getInventorySuggestList()
-            })
         })
-
 /*
         console.log(chemicalName)
         var chemical = {
