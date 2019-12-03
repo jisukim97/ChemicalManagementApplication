@@ -36,24 +36,7 @@ class MyGroupWithdraw extends Component {
   constructor(props) {
     super(props);
 
-    fetch(serverUrl + '/lab/' + getLab().id, { // uri 넣어주기
-      method: 'GET', //'GET', 'POST', 'DELETE' 등등
-      headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-    }).then(response => {
-      if( response.status === 200){
-        //이건 정상적으로 된 경우
-        return response.json()
-      } else {
-        //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
-      }
-    }).then(response => {
-      //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-      //여기서 response라는걸 제대로 쓸 수 있음
-      console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-      //예를들면
-    })
   }
-
 
 
   withdrawGroup = () => {
@@ -69,10 +52,9 @@ class MyGroupWithdraw extends Component {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
     }).then(response => {
-      var a = null
-      console.log(a)
-      this.props.afterGroupGenerate(a)  //질문하기 localStorage.setItem('lab', JSON.stringify(response.lab))
-      
+      console.log(1111)
+      localStorage.setItem('lab', null)
+      this.props.afterGroupWithdraw()
     })
   }
 

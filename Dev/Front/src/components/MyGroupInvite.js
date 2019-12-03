@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Modal } from 'antd';
+import { Form, Icon, Input, Button, Modal, message } from 'antd';
 import { Link } from "react-router-dom";
 import { Typography } from 'antd';
 import { getUser, getLab } from '../authentication';
@@ -52,25 +52,7 @@ class MyGroupInvite extends Component {
         return response.json()
       } else {
         console.log('fetch error')
-        
-        const onClose = e => {
-          console.log(e, 'I was closed.');
-        }
-        
-        ReactDOM.render(
-          <div>
-            <Alert
-              message="Warning Text Warning Text Warning TextW arning Text Warning Text Warning TextWarning Text"
-              type="warning"
-              closable
-              onClose={onClose}
-
-           />
-           </div>
-        
-        )
-
-
+        message.warning('해당 이메일을 가진 사용자가 존재하지 않습니다 !');
       }
     }).then(response => {
 
@@ -89,7 +71,8 @@ class MyGroupInvite extends Component {
           console.log(response)
           return response.json()
         } else {
-          //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+          console.log('fetch error')
+          message.warning('해당 사용자는 이미 속해있는 Lab이 있습니다 !');
         }
       }).then(response => {
 

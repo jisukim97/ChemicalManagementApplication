@@ -96,7 +96,6 @@ class MyGroup extends Component {
 
 //그룹 생성하고 나서 정보 새로고침 해주
   afterGroupGenerate = (id) => {
-    console.log(12345)
     console.log(id)
     this.setState( {
       menu : 0,
@@ -104,6 +103,16 @@ class MyGroup extends Component {
     })
     this.getGroupMembers()
   }
+
+  afterGroupWithdraw = () => {
+    console.log(333)
+    this.setState( {
+      menu : 0,
+      labexists : false
+    })
+    this.getGroupMembers()
+  }
+
 
   firstButtonClick = () => {
     this.setState( {
@@ -178,7 +187,7 @@ class MyGroup extends Component {
         } else if (this.state.labexists && this.state.menu === 4){
           return (
             <div>
-            <MyGroupWithdraw afterGroupGenerate={this.afterGroupGenerate} count={this.state.members.length}/>
+            <MyGroupWithdraw afterGroupWithdraw={this.afterGroupWithdraw} count={this.state.members.length}/>
             </div>
           )
         } else {
