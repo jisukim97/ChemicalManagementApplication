@@ -126,18 +126,17 @@ public class MyLabMemberController {
 	String quitLab(@PathVariable int labId, @PathVariable int userId, HttpServletResponse response) {
 		try {
 			//lab 찾아주기
-			Lab myLab = labRepository.findById(labId).get();
 			//user 찾아주고 가입일 삭제
 			User willDeletedMember = userRepository.findById(userId).get();
 			willDeletedMember.setLabEnrollDate(null);
 			willDeletedMember = userRepository.save(willDeletedMember);
+			willDeletedMember.setMyLab(null);
+			willDeletedMember = userRepository.save(willDeletedMember);
 			//lab의 members 컬렉션에 user 삭제
+			Lab myLab = labRepository.findById(labId).get();
 			myLab.getMembers().remove(willDeletedMember);
 			//연관관계 저장
 			labRepository.save(myLab);
-			//user에서 myLab 삭제 후 저장
-			willDeletedMember.setMyLab(null);
-			userRepository.save(willDeletedMember);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
