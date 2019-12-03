@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Typography, Radio } from 'antd'
+import { List, Typography, Radio, Button } from 'antd'
 
 import Stock from './Stock';
 import ChemicalAdd from './ChemicalAdd';
@@ -309,6 +309,14 @@ class MyLab extends Component {
         })
     }
 
+    addChemical = (chemical, inventoryId, put, expire) => {
+        //chemical을 inventoryId에 추가
+        //각각 validation check해 준 뒤에 추가
+        console.log("추가")
+        console.log(chemical, inventoryId, put, expire)
+        //그리고 추가 해주기
+    }
+
     render() {  
 
         return (
@@ -323,7 +331,8 @@ class MyLab extends Component {
                                 return (<Radio.Button value={inventory.id}>{inventory.name}</Radio.Button>)
                             })
                         }
-                    </Radio.Group>
+                    </Radio.Group> 
+                    <Button>장소 추가</Button>
                     </center>
                 </div>
 
@@ -339,8 +348,10 @@ class MyLab extends Component {
                         </List.Item>
                     )}
                 />
+
+                {/* 약품 추가*/}
                 <div style={{ marginTop: 100 }}>
-                    <ChemicalAdd />
+                    <ChemicalAdd addChemical={this.addChemical} />
                 </div>
             </div>
         );
