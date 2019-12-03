@@ -189,7 +189,7 @@ public class MyLabMemberController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/lab/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/lab/{userId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8")
 	String joinLab(@RequestBody Lab lab, @PathVariable int userId, HttpServletResponse response) {
 		try {
 			//랩 찾아오기
