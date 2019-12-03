@@ -1,55 +1,65 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Typography, Icon, Row, Col, Button, Modal, Divider, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import { getUser, getLab } from '../authentication';
+import { history } from '../History';
 
 
-class ApparatusReservation extends Component{
+class ApparatusReservation extends Component {
 
     state = {
     }
     handleSubmit2 = e => {
-        
+
         e.preventDefault();
-        this.props.form.validateFields((err, values)=> {
-            
+        this.props.form.validateFields((err, values) => {
+
             if (!err) {
                 var startTime = values['start']
                 var endTime = values['end']
-                var newday = this.props.todayDate;    
+                var newday = this.props.todayDate;
                 console.log(newday)
                 var yy = newday.getFullYear();
                 yy += ''
                 yy = yy.substring(2, 4);
                 var mm = newday.getMonth() + 1
                 var dd = newday.getDate()
-                if(dd<10){ dd="0"+dd}
+                if (dd < 10) { dd = "0" + dd }
                 var newdayInfo = yy + mm + dd;
-                console.log(newdayInfo)
-                if(startTime >= endTime) { message.error("끝 시간이 시작 시간보다 빠릅니다.")}
-
+                console.log(3)
+                if (startTime >= endTime) { message.error("끝 시간이 시작 시간보다 빠릅니다.") }
+                else if( getLab() === null ){
+                    message.error("가입된 lab이 없습니다.")
+                    history.push('/mygroup')
+                }
                 else {
-                fetch('http://13.124.122.246:8080/schedule/' + getUser().id + '/' + this.props.apparatusId + '/' + newdayInfo + "/" + startTime + "/" + endTime, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(values)
-                }).then(response => {
-                    if (response.status === 200) {
-                        return response.json()
-                    } else {
-                        message.warning('예약 시간이 중복되었습니다.');
-                    }
-                }).then(response => {
-                        this.props.plusReservation(response.schedules)
-                })
-            }
-        }
+                    fetch('http://13.124.122.246:8080/schedule/' + getUser().id + '/' + this.props.apparatusId + '/' + newdayInfo + "/" + startTime + "/" + endTime, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(values)
+                    }).then(response => {
+                        if (response.status === 200) {
+                            response.json().then(
+                                response => {
+                                    try {
+                                        this.props.plusReservation(response.schedules)
+                                    }
+                                    catch (e) {
+                                        message.warning("등록된 기기가 없습니다")
+                                    }
+                                }
+                            )
+                        } else {
+                            message.warning('예약 시간이 중복되었습니다.');
+                        }
+                    })
+                }  
+                }
         });
-    };
 
-  
-    render() {
+    }
+        render() {
         const { getFieldDecorator } = this.props.form;
         return(
             <Form onSubmit={this.handleSubmit2} className="form">
