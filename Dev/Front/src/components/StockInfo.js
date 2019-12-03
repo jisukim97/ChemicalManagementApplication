@@ -8,9 +8,7 @@ import StockInventoryChangeButton from './StockInventoryChangeButton';
 import { serverUrl } from '../setting'
 import { getUser, getLab } from '../authentication';
 
-
 const { Title } = Typography;
-
 
 //약품 정보 중에서 약품 특성에 대한 박스
 class StockInfo extends Component {
@@ -183,7 +181,6 @@ class StockInfo extends Component {
                             chemical={stock.chemical} blindInventoryChangeButton={this.blindInventoryChangeButton} suggest={this.state.suggest}
                             notSuggest={this.state.notSuggest}/>
                         }
-
                     </center>
 
                 </div>

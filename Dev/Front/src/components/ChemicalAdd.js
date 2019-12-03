@@ -82,36 +82,7 @@ class ChemicalAdd extends Component {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
         })
-/*
-        console.log(chemicalName)
-        var chemical = {
-            id: 30,
-            name: "name6",
-            casNo: "71-43-2",
-            formula: "C6H6",
-            molecularWeight: 78.11,
-            status: 1,
 
-            meltingPoint: 20.0,
-            boilingPoint: 30.0,
-            pH: 7.0,
-            density: 3.5,
-            deliquescent: false,
-            efflorescence: false,
-
-            photoReaction: false,
-            flammability: false,
-            ignitability: true,
-            explosive: false,
-            combustibility: true,
-
-            classifiaction: 1,
-        }
-        this.setState({ chemical: chemical })
-
-        //그다음 장소 추천 받아오기
-        this.getInventorySuggestList()
-        */
     }
 
     getInventorySuggestList = () => {
@@ -138,64 +109,6 @@ class ChemicalAdd extends Component {
                 notSuggest : response.notSuggest
             })
         })
-
-        /*
-        var suggest = [{
-            id: "id3",
-            name: "보관함1",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }, {
-            id: "suggestInventory2",
-            name: "보관함2",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }, {
-            id: "suggestInventory3",
-            name: "보관함3",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }]
-        var notSuggest = [{
-            id: "notSuggestInventory1",
-            name: "보관함4",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }, {
-            id: "notSuggestInventory2",
-            name: "보관함5",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }, {
-            id: "notSuggestInventory3",
-            name: "보관함6",
-            temperature: 20.0,
-            humidity: 0,
-            illuminance: false,
-            oximeter: false,
-            explosion: false
-        }]
-
-        this.setState({
-            suggest: suggest,
-            notSuggest: notSuggest
-        })
-        */
 
     }
 
@@ -226,8 +139,6 @@ class ChemicalAdd extends Component {
                 message.error('닉네임이 겹칩니다')
             }
         })
-        
-
     }
 
 
@@ -325,7 +236,6 @@ class ChemicalAdd extends Component {
                         <div>
                             <SelectInventory suggest={this.state.suggest} notSuggest={this.state.notSuggest} selectInventory={this.selectInventory} />
                         </div>
-
 
                     </Modal>
                 </center>

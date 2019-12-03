@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Modal, Button, Radio, Checkbox } from 'antd';
+import { Input, Modal, Button, Radio, Checkbox, Icon } from 'antd';
 
 class InventoryAdd extends Component {
 
@@ -97,10 +97,8 @@ class InventoryAdd extends Component {
 
 
         return (
-            <div>
-                <Button type="primary" onClick={this.showModal}>
-                    보관 장소 추가
-          </Button>
+            <span>
+                <Button type="primary" onClick={this.showModal} size="small" icon="plus" shape="circle"/>
                 <Modal
                     title="보관 장소 추가"
                     visible={this.state.visible}
@@ -120,7 +118,7 @@ class InventoryAdd extends Component {
 
                 <Button onClick={this.submit} > 추가하기 </Button>
                 </Modal>
-            </div>
+            </span>
         );
     }
 
