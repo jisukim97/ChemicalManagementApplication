@@ -72,7 +72,7 @@ class MyGroupInvite extends Component {
           return response.json()
         } else {
           console.log('fetch error')
-          message.warning('해당 사용자는 이미 속해있는 Lab이 있습니다 !');
+          message.warning('해당 사용자는 이미 속해있는 Lab이 있습니다!');
         }
       }).then(response => {
 

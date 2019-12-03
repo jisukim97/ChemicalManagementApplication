@@ -181,7 +181,7 @@ class MyGroup extends Component {
         } else if (!this.state.labexists && this.state.menu === 3){
           return (
             <div>
-            <MyGroupRegister enrollLab={this.enrollLab}/>
+            <MyGroupRegister enrollLab={this.enrollLab} afterGroupGenerate={this.afterGroupGenerate}/>
             </div>
           )
         } else if (this.state.labexists && this.state.menu === 4){
