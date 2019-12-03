@@ -36,17 +36,17 @@ class Apparatus extends Component {
                     key: 'user',
                 },
                 {
-                    title : 'Button',
-                    dataIndex : 'deleteButton',
-                    key : 'deleteButton'
+                    title: 'Button',
+                    dataIndex: 'deleteButton',
+                    key: 'deleteButton'
                 }
             ],
             menu: apparatusId, // 처음들어오면 menu가 0임
-            apparatusList : [],
-            realReservationList : [],
+            apparatusList: [],
+            realReservationList: [],
             reservationDataSource: [], // 예약정보 받아와서 시작 끝 시간 파싱 적절히 해서 column형식 만들어서 넣기
             // 예약 등록 직후에 반영 되는건 어떻게?
-            todayDate : today, //Date형식
+            todayDate: today, //Date형식
         }
 
     }
@@ -55,12 +55,12 @@ class Apparatus extends Component {
     // 순서가 fetch되고 난 결과는 너무 늦게 나타나기 때문에 아래에 함수들에서 undefined된걸 읽어버려서 오류가 난것 같아요
     // 그래서 그냥 state에다 변수이름과 타입정도만 미리 다 알려주고 난 후에 fetch된 실제 결과를 setState 해주기
     // 그런데 constructor에서는 setState 할 수 없으니까 componentDidMount를 써줌
-    componentDidMount(){
+    componentDidMount() {
         fetch('http://13.124.122.246:8080/apparatus/' + getUser().id, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-        }).then(response => { 
-            if (response.status === 200) { 
+        }).then(response => {
+            if (response.status === 200) {
                 return response.json()
             } else {
                 // 오류 난 경우 처리 
@@ -71,49 +71,76 @@ class Apparatus extends Component {
                 newList = response.apparatuses
             }
             this.setState({
-                apparatusList: newList 
-            })   
+                apparatusList: newList
+            }, () => {
+                var newList2 = []
+                fetch('http://13.124.122.246:8080/schedule/' + apparatusList[0] + '/' + todayInfo, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+                }).then(response => {
+                    if (response.status === 200) {
+                        return response.json()
+                    } else {
+                        // 오류 난 경우 처리 
+                    }
+                }).then(response => {
+                    var newList = []
+                    if (response == undefined) {
+                        this.makeDataSource([])
+                    }
+                    else {
+                        this.makeDataSource(response.schedules)
+                        newList = response.schedules
+                    }
+                    this.setState({
+                        menu: apparatusId,
+                        realReservationList: newList
+                    })
+                }
+                )
+            }
+            )
         }
         )
     }
 
-    //'기기 삭제'버튼에 대한 메소드
-    showModal_0 = () => {
-        console.log(this.state.visible_0)
-        this.setState({
-            visible_0: true
-        })
-    }
+//'기기 삭제'버튼에 대한 메소드
+showModal_0 = () => {
+    console.log(this.state.visible_0)
+    this.setState({
+        visible_0: true
+    })
+}
 
-    handleOk_0 =e=> {
-        console.log(e);
-        this.handleRemove_2();
-        this.setState({
-            visible_0: false,
-        })
-    }
-    handleCancel_0 =e=> {
-        console.log(e);
-        this.setState({
-            visible_0: false,
-        })
-    }
+handleOk_0 = e => {
+    console.log(e);
+    this.handleRemove_2();
+    this.setState({
+        visible_0: false,
+    })
+}
+handleCancel_0 = e => {
+    console.log(e);
+    this.setState({
+        visible_0: false,
+    })
+}
 
     //'기기 등록하기' 버튼 메소드
-    showModal_1 =()=> {
+    showModal_1 = () => {
         console.log(this.state.visible_1)
         this.setState({
-            visible_1:true,
+            visible_1: true,
         })
 
     }
-    handleOk_1 =e=> {
+    handleOk_1 = e => {
         console.log(e);
         this.setState({
             visible_1: false,
         })
     }
-    handleCancel_1 =e=> {
+    handleCancel_1 = e => {
         console.log(e);
         this.setState({
             visible_1: false,
@@ -125,23 +152,23 @@ class Apparatus extends Component {
         console.log(1)
         console.log(e)
         e.preventDefault();
-        this.props.form.validateFields((err, values)=> {
+        this.props.form.validateFields((err, values) => {
             console.log(err)
             if (!err) {
                 console.log(values)
-                fetch('http://13.124.122.246:8080/apparatus/'+getLab().id, {
+                fetch('http://13.124.122.246:8080/apparatus/' + getLab().id, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(values) 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(values)
                 }).then(response => {
                     if (response.status === 200) {
                         return response.json()
                     } else {
                         message.warning('기기 이름이 중복되었습니다.');
                         return 1
-                    } 
+                    }
                 }).then(response => {
-                    if (response === 1){
+                    if (response === 1) {
                         console.log("here")
                     } else {
                         console.log('newAPp')
@@ -158,30 +185,29 @@ class Apparatus extends Component {
         this.handleOk_1()
     };
 
-
     //기기예약 버튼 이후 예약 리스트 업데이트
-    plusReservation =(list)=> {
+    plusReservation = (list) => {
         this.setState({
-            realReservationList : list
+            realReservationList: list
         })
         this.makeDataSource(list)
         this.handleOk_2()
     }
 
     //'예약하기'버튼에 대한 메소드
-    showModal_2 =()=> {
+    showModal_2 = () => {
         console.log(this.state.visible_2)
         this.setState({
             visible_2: true
         })
     }
-    handleOk_2 =e=> {
+    handleOk_2 = e => {
         console.log(e);
         this.setState({
             visible_2: false,
         })
     }
-    handleCancel_2 =e=> {
+    handleCancel_2 = e => {
         console.log(e);
         this.setState({
             visible_2: false,
@@ -215,16 +241,16 @@ class Apparatus extends Component {
     componentWillReceiveProps(newProps) {
         var today = this.state.todayDate;
         var yy = today.getFullYear();
-        yy+=''
-        yy = yy.substring(2,4);
-        var mm = today.getMonth()+1
+        yy += ''
+        yy = yy.substring(2, 4);
+        var mm = today.getMonth() + 1
         var dd = today.getDate()
-        if(dd<10) { dd ='0'+dd}
-        var todayInfo = yy+mm+dd ;
+        if (dd < 10) { dd = '0' + dd }
+        var todayInfo = yy + mm + dd;
         if (this.props.match.params !== newProps.match.params) {
             const { apparatusId } = this.props.match.params;
-           
-            fetch('http://13.124.122.246:8080/schedule/'+this.state.menu+'/'+todayInfo ,{ 
+
+            fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + todayInfo, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
@@ -234,12 +260,12 @@ class Apparatus extends Component {
                     // 오류 난 경우 처리 
                 }
             }).then(response => {
-                var newList= []
+                var newList = []
                 if (response == undefined) {
                     this.makeDataSource([])
                 }
                 else {
-                    this.makeDataSource(response.schedules) 
+                    this.makeDataSource(response.schedules)
                     newList = response.schedules
                 }
 
@@ -260,20 +286,20 @@ class Apparatus extends Component {
     //날짜 왼쪽으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
     goToLeft = () => {
         var newday = this.state.todayDate;
-        newday.setDate(newday.getDate()-1);
+        newday.setDate(newday.getDate() - 1);
         var yy = newday.getFullYear();
-        yy+=''
-        yy = yy.substring(2,4);
-        var mm = newday.getMonth()+1
+        yy += ''
+        yy = yy.substring(2, 4);
+        var mm = newday.getMonth() + 1
         var dd = newday.getDate()
-        if(dd<10) { dd ='0'+dd}
-        var newdayInfo = yy+mm+dd ;
+        if (dd < 10) { dd = '0' + dd }
+        var newdayInfo = yy + mm + dd;
 
-        fetch('http://13.124.122.246:8080/schedule/'+this.state.menu+'/'+newdayInfo ,{ 
-            method: 'GET', 
+        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
-            if(response.status === 200){
+            if (response.status === 200) {
                 return response.json()
             } else {
                 // 오류 난 경우 처리 
@@ -300,13 +326,13 @@ class Apparatus extends Component {
         var yy = newday.getFullYear();
         yy += ''
         yy = yy.substring(2, 4);
-        var mm = newday.getMonth()+1
+        var mm = newday.getMonth() + 1
         var dd = newday.getDate()
-        if(dd<10) { dd ='0'+dd}
-        var newdayInfo = yy+mm+dd ;
+        if (dd < 10) { dd = '0' + dd }
+        var newdayInfo = yy + mm + dd;
 
-        fetch('http://13.124.122.246:8080/schedule/'+this.state.menu+'/'+newdayInfo ,{ 
-            method: 'GET', 
+        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
             if (response.status === 200) {
@@ -333,13 +359,13 @@ class Apparatus extends Component {
     //예약 삭제
     deleteReservation = (event) => {
         //console.log(this.props.value)
-        const {param} = event.target.dataset;
- 
+        const { param } = event.target.dataset;
+
         //realReservationList 업데이트
         var toDelete = 0
         var newArray = this.state.realReservationList
-        for(var i = 0; i < newArray.length ; i++){
-            if( newArray[i].id == param){
+        for (var i = 0; i < newArray.length; i++) {
+            if (newArray[i].id == param) {
                 toDelete = i
             }
         }
@@ -347,45 +373,45 @@ class Apparatus extends Component {
 
         //reservationDataSource 업데이트
         var newList = this.state.reservationDataSource;
-        for(var i = 0; i < newList.length ; i++){
+        for (var i = 0; i < newList.length; i++) {
             console.log(newList[i])
-            if( newList[i].id == param){
+            if (newList[i].id == param) {
                 console.log('hereeee')
                 newList[i].user = ''
-                newList[i].deleteButton =''
+                newList[i].deleteButton = ''
             }
         }
-        fetch('http://13.124.122.246:8080/schedule/'+this.state.menu+'/'+param ,{ 
-            method: 'DELETE', 
+        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + param, {
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
-            if(response.status === 200){
+            if (response.status === 200) {
                 console.log("success")
                 this.setState({
-                realReservationList: newArray,
-                reservationDataSource: newList
-            })
+                    realReservationList: newArray,
+                    reservationDataSource: newList
+                })
             } else {
                 // 오류 난 경우 처리 
             }
         })
     }
-        
+
 
     // DataSource형식으로 정제하는 함수
-    makeDataSource=(list)=>{
+    makeDataSource = (list) => {
         if (list == undefined) {
             list = []
         }
         var newList = list;
         var result = []
-        var startHour, startMinute, endHour, endMinute, reserver;    
-        for (var h = 8, m = true; h <= 22 && m <= 30; h++) { 
+        var startHour, startMinute, endHour, endMinute, reserver;
+        for (var h = 8, m = true; h <= 22 && m <= 30; h++) {
             var checker = 0;
-            
-            while(checker <= 1) {
+
+            while (checker <= 1) {
                 var oneBlock = {}
-                var hh, mm ; //h,m은 숫자형식의 시간단위, hh,mm은 두음절 짜리 string시간단위
+                var hh, mm; //h,m은 숫자형식의 시간단위, hh,mm은 두음절 짜리 string시간단위
                 if (m) { mm = "00" } else { mm = "30" }
                 if (h < 10) { hh = "0" + h } else { hh = "" + h }
                 var time = hh + ":" + mm
@@ -393,31 +419,31 @@ class Apparatus extends Component {
                 oneBlock['user'] = ''
                 oneBlock['deleteButton'] = (<span></span>)
                 oneBlock['id'] = 0
-                
+
                 result.push(oneBlock)
-                checker ++
+                checker++
                 m = (!m)
             }
         }
 
-        for (var i = 0; i < newList.length ; i++){
+        for (var i = 0; i < newList.length; i++) {
 
             startHour = list[i].startTime['hour']
             startMinute = list[i].startTime['minute']
             endHour = list[i].endTime['hour']
             endMinute = list[i].endTime['minute']
             reserver = list[i].reservation['name']
-        
+
 
             console.log("list[i].id : " + list[i].id)
 
-            var checker2 = false;           
+            var checker2 = false;
             var m2;
-            for (var j = 0, h =8, m = true; h<=22; h++) { //m 이 true면 00분
+            for (var j = 0, h = 8, m = true; h <= 22; h++) { //m 이 true면 00분
                 var checker = 0;
                 while (checker <= 1) {
                     if (m) { mm = "00"; m2 = 0 } else { mm = "30"; m2 = 30 }
-                
+
                     if (startHour == h && startMinute == m2) { //시작 시간이 예약시간과 같으면
                         checker2 = true; //checker2 ON
                     }
@@ -427,18 +453,17 @@ class Apparatus extends Component {
                     if (checker2) {
                         result[j]['user'] = reserver
                         if (reserver === getUser().name) {
-                            result[j]['deleteButton'] = ( (!this.checkReservtionDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
-                            }
+                            result[j]['deleteButton'] = ((!this.checkReservtionDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
+                        }
                         result[j]['id'] = list[i].id
                     }
                     checker++; j++
                     m = (!m)
                 }
             }
-            
         }
         this.setState({
-            reservationDataSource : result
+            reservationDataSource: result
         })
     }
 
@@ -446,7 +471,7 @@ class Apparatus extends Component {
         console.log(this.state)
         var newday = new Date();
         newday = this.state.todayDate;
-        return (newday.getMonth()+1)
+        return (newday.getMonth() + 1)
     }
 
     makeDate = () => {
@@ -455,15 +480,15 @@ class Apparatus extends Component {
         return (newday.getDate())
     }
     // 현재 누른 기기의 이름을 받아오는 함수
-    getApparNameNow =()=>{
+    getApparNameNow = () => {
         try {
-            for (let i=0 ; i<this.state.apparatusList.length ; i++){
-                if ( this.state.apparatusList[i].id ==this.state.menu){
+            for (let i = 0; i < this.state.apparatusList.length; i++) {
+                if (this.state.apparatusList[i].id == this.state.menu) {
                     return this.state.apparatusList[i].name
                 }
             }
             return "선택 없음"
-    
+
         } catch (e) {
             return "waiting"
         }
@@ -530,18 +555,17 @@ class Apparatus extends Component {
         var nowMonth = realToday.getMonth()+1
         var nowDate = realToday.getDate();
         var isPast = false;
-       
-        if (this.state.todayDate.getMonth()+1 < nowMonth) { isPast = true}
-        else if (this.state.todayDate.getMonth()+1 == nowMonth && this.state.todayDate.getDate() < nowDate) {
+
+        if (this.state.todayDate.getMonth() + 1 < nowMonth) { isPast = true }
+        else if (this.state.todayDate.getMonth() + 1 == nowMonth && this.state.todayDate.getDate() < nowDate) {
             isPast = true;
         }
         return (isPast)
     }
 
-
     //기계 클릭하면 페이지 바뀌게 하기
     clickApparatus = (event) => {
-        const {param} = event.target.dataset;
+        const { param } = event.target.dataset;
 
         var today = new Date(); //새로운 기기 누르면 어쨋거나 '오늘'기준으로 데이터 보여주기
         var yy = today.getFullYear();
@@ -549,7 +573,7 @@ class Apparatus extends Component {
         yy = yy.substring(2, 4);
         var mm = today.getMonth() + 1
         var dd = today.getDate()
-        if(dd<10) { dd ='0'+dd}
+        if (dd < 10) { dd = '0' + dd }
         var todayInfo = yy + mm + dd;
         console.log('apparatus id: ', param)
         fetch('http://13.124.122.246:8080/schedule/' + param + '/' + todayInfo, {
@@ -574,7 +598,6 @@ class Apparatus extends Component {
                 menu: param,
                 realReservationList: newList
             })
-
         }
         )
     }
