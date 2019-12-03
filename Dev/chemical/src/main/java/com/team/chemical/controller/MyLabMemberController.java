@@ -189,14 +189,22 @@ public class MyLabMemberController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/lab/{labId}/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
-	String joinLab(@RequestBody Lab lab, @PathVariable int labId, @PathVariable int userId, HttpServletResponse response) {
+	@RequestMapping(value="/lab/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	String joinLab(@RequestBody Lab lab, @PathVariable int userId, HttpServletResponse response) {
 		try {
 			//랩 찾아오기
-			Lab findedLab = labRepository.findById(labId).get();
+			if (!labRepository.existsByName(lab.getName())) {
+				//400
+				//이름 못찾는경우
+				response.setStatus(400);
+				return null;
+			}
+			Lab findedLab = labRepository.findByName(lab.getName());
 			//비밀번호 판별
 			if (!findedLab.getPassword().equals(lab.getPassword())) {
-				throw new Exception("랩 비밀번호 틀림");
+				//비밀번호 틀릴 경우
+				response.setStatus(401);
+				return null;
 			}
 			//유저 찾아오기
 			User user = userRepository.findById(userId).get();
