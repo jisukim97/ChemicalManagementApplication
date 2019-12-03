@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Alarm;
-import com.team.chemical.entity.Illness;
 import com.team.chemical.entity.IllnessAlarm;
 import com.team.chemical.entity.Stock;
 import com.team.chemical.entity.StockRepository;
 import com.team.chemical.entity.User;
 import com.team.chemical.entity.UserRepository;
 
+import lombok.Data;
+
+@Data
 class AlarmForm {
 	int alarmType;
 	Stock stock;
@@ -96,11 +98,9 @@ public class AlarmController {
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
 				// 몇달 지났는지?
 				long after = ChronoUnit.MONTHS.between(illnessAlarm.getDeleteDate(), today);
-				//만약 illness중 하나라도 지났으면
-				Illness illness = illnessAlarm.getStock().getChemical().getIllness();
-				if (illness!=null) {
-					if ((illnessAlarm.isAlreadyChecked()&&after > illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[1])
-							|| (!illnessAlarm.isAlreadyChecked()&&after > illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[0])) {
+				if (illnessCheck.containsKey(illnessAlarm.getStock().getChemical().getName())) {
+					int illnessMonth = illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[illnessAlarm.isAlreadyChecked() ? 1 : 0];
+					if (illnessMonth > after) {
 						alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
 					}
 				}

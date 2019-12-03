@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { List, Typography, Radio, Button } from 'antd'
+import { List, Typography, Radio, Button, message } from 'antd'
 
 import Stock from './Stock';
 import ChemicalAdd from './ChemicalAdd';
 import InventoryAdd from './InventoryAdd';
+import { history } from '../History';
+
 
 import { serverUrl } from '../setting'
 import { getUser, getLab } from '../authentication';
@@ -256,12 +258,18 @@ class MyLab extends Component {
             //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
             //여기서 response라는걸 제대로 쓸 수 있음
             console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-            this.setState({
-                inventories: response.inventories,
-                inventory: response.inventories.length>0 ? response.inventories[0].id : 0,
-                inventoryName: response.inventories.length>0 ?response.inventories[0].name : '',
-                isInventoryExist: response.inventories.length > 0 ? true : false
-            })
+            try {
+                this.setState({
+                    inventories: response.inventories,
+                    inventory: response.inventories.length>0 ? response.inventories[0].id : 0,
+                    inventoryName: response.inventories.length>0 ?response.inventories[0].name : '',
+                    isInventoryExist: response.inventories.length > 0 ? true : false
+                })
+            } catch (e){
+                message.warning('가입된 lab이 없습니다!')
+                history.push('/mygroup')
+            }
+           
         })
     }
 
@@ -283,6 +291,26 @@ class MyLab extends Component {
     changeVolume = (stockId, change, unit) => {
         //여기서 fetch 해준다
         //volume 바꿔주는걸로
+        const url = serverUrl + '/chemical/' + getUser().id + '/' + stockId + '/' + change
+        fetch(url, { // uri 넣어주기
+            method: 'PUT', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if (response.status === 200) {
+                //이건 정상적으로 된 경우
+                return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+            //여기서 response라는걸 제대로 쓸 수 있음
+            message.success('성공적으로 반영 되었습니다')
+            this.getInventories()
+        })
+
+        /*
+
         let inventories = this.state.inventories;
         for (var i = 0; i < inventories.length; i++) {
             for (var j = 0; j < inventories[i].stocks.length; j++) {
@@ -296,11 +324,33 @@ class MyLab extends Component {
             }
         }
         this.setState({ inventories: inventories })
+        */
     }
 
     //재고 삭제하기
     deleteStock = (stockId) => {
         //여기서 fetch 해주기
+        const url = serverUrl + '/chemical/' + stockId
+        fetch(url, { // uri 넣어주기
+            method: 'DELETE', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if (response.status === 200) {
+                //이건 정상적으로 된 경우
+                message.success('성공적으로 삭제 되었습니다')
+                this.setState({
+                    inventories : [],
+                    isInventoryExist : false
+                }, () => {
+                    this.getInventories()
+                })
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        })
+
+
+        /*
         let inventories = this.state.inventories;
         for (var i = 0; i < inventories.length; i++) {
             if (inventories[i].id === this.state.inventory) {
@@ -310,11 +360,30 @@ class MyLab extends Component {
         this.setState({
             inventories: inventories
         })
+        */
     }
 
     //인벤토리 바꾸기
     changeInventory = (stockId, newInventoryId) => {
         //여기서 fetch 해주기
+        console.log(stockId, newInventoryId)
+        const url = serverUrl + '/inventory/' + getUser().id + '/' + stockId + '/' + newInventoryId
+        fetch(url, { // uri 넣어주기
+            method: 'PUT', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            this.getInventories()
+        })
+        
+/*
+
         let inventories = this.state.inventories;
         let stock;
         for (var i = 0; i < inventories.length; i++) {
@@ -342,14 +411,36 @@ class MyLab extends Component {
         this.setState({
             inventories: inventories
         })
+        */
     }
 
-    addChemical = (chemical, inventoryId, put, expire) => {
+    addChemical = (chemical, inventoryId, put, expire, nickname) => {
         //chemical을 inventoryId에 추가
         //각각 validation check해 준 뒤에 추가
         console.log("추가")
         console.log(chemical, inventoryId, put, expire)
         //그리고 추가 해주기
+
+        const url = serverUrl + '/chemical/' + getUser().id + '/' + chemical.id + '/' + inventoryId + '/' + expire
+        const body = {
+            nickname : nickname,
+            volume : put
+        }
+        fetch(url, { // uri 넣어주기
+            method: 'POST', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify(body) //여기에다가 body 넣어주기
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            this.getInventories()
+        })
+        
     }
 
     addInventory = (name, temperature, humidity, illuminance, oximeter, explosion) => {
@@ -431,7 +522,6 @@ class MyLab extends Component {
                     <div>
                         아무것도 없음!
                         <InventoryAdd addInventory={this.addInventory} />
-
                     </div>
                 }
 

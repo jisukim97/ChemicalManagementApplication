@@ -40,7 +40,7 @@ public class Chemical {
      * 성상
      */
 	@Column
-    private Integer status;
+    private String status;
 
     /**
      * 녹는점
@@ -81,8 +81,8 @@ public class Chemical {
     /**
      * 발화성(산소농도)
      */
-    @Column
-    private Boolean ignitability;
+    //@Column
+    //private Boolean ignitability;
 
     /**
      * 폭발성
@@ -105,8 +105,8 @@ public class Chemical {
     /**
      * 식별체계
      */
-    @Column
-    private Integer classification;
+    //@Column
+    //private Integer classification;
     
     /**
      * 밀도
@@ -119,6 +119,18 @@ public class Chemical {
     
     @Column
     private String formula;
+    
+    @Column
+    private float molecularWeight;
+    
+    @Column
+    private boolean alkaliMetal;
+    
+    @Column
+    private boolean alkalineEarthMetal;
+    
+    @Column
+    private boolean halogen;
     
     /**
      * 질병

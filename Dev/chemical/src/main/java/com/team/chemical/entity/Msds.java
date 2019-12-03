@@ -1,8 +1,5 @@
 package com.team.chemical.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -17,7 +14,7 @@ public class Msds {
 	
 	private HttpComponentsClientHttpRequestFactory factory;
 	
-	private String crawlingUrl = " ";
+	private String crawlingUrl = "http://127.0.0.1:5000/search/";
 	
 	public Msds () {
 		//출처 : https://sjh836.tistory.com/141
@@ -42,8 +39,8 @@ public class Msds {
      */
     public Chemical searchChemical(String chemicalName) {
         // TODO 
-    	Map<String, Object> body = new HashMap<>();
-		Chemical chemical = getRestTemplate().postForObject(crawlingUrl, body, Chemical.class);
+    	String url = crawlingUrl + chemicalName;
+		Chemical chemical = getRestTemplate().getForObject(url, Chemical.class);
 		return chemical;
     }
 
