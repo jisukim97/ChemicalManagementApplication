@@ -39,6 +39,7 @@ class AlarmInfo extends Component {
     // 삭제 버튼이 클릭되면 onRemove 에 id 넣어서 호출
     const { info, onRemove } = this.props;
     onRemove(info.id, info.alarmType);
+    this.deleteFetch();
   }
 
   deleteFetch = () => {
@@ -63,7 +64,7 @@ class AlarmInfo extends Component {
         <div style={{ fontSize: 18 }}>
           <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>
           의 유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
-          <Button icon="delete" onClick={this.handleRemove, this.deleteFetch}></Button>
+          <Button icon="delete" onClick={this.handleRemove}></Button>
           
           <Modal
             title="약품 정보"
@@ -82,7 +83,7 @@ class AlarmInfo extends Component {
 
           <div style={{ fontSize: 18 }}>
             <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>의 양이 얼마남지 않았습니다.
-                <Button icon="delete" onClick={this.handleRemove, this.deleteFetch}></Button>
+                <Button icon="delete" onClick={this.handleRemove}></Button>
 
             <Modal
               title="약품 정보"
@@ -100,7 +101,7 @@ class AlarmInfo extends Component {
 
           <div style={{ fontSize: 18 }}>
             <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>이 전부 소진되었습니다.
-                <Button icon="delete" onClick={this.handleRemove, this.deleteFetch}></Button>
+                <Button icon="delete" onClick={this.handleRemove}></Button>
 
             <Modal
               title="약품 정보"
@@ -119,7 +120,7 @@ class AlarmInfo extends Component {
 
         <div style={{ fontSize: 18 }}>
           <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>를 사용한지 <b>{this.props.info.period}</b>이 지났습니다. <b>{this.props.info.disease}</b>의 위험이 있습니다.
-              <Button icon="delete" onClick={this.handleRemove, this.deleteFetch}></Button>
+              <Button icon="delete" onClick={this.handleRemove}></Button>
 
           <Modal
             title="약품 정보"
