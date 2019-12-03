@@ -5,6 +5,9 @@ import { Typography } from 'antd';
 import { getUser, getLab } from '../authentication';
 import { history } from '../History';
 import { serverUrl } from '../setting';
+import { Alert } from 'antd';
+
+
 
 const { Title } = Typography;
 
@@ -32,6 +35,9 @@ class MyGroupInvite extends Component {
     });
   };
 
+  
+  
+
   searchMember = (email) => {
     console.log(3)
     console.log(email)
@@ -46,7 +52,25 @@ class MyGroupInvite extends Component {
         return response.json()
       } else {
         console.log('fetch error')
-        //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+        
+        const onClose = e => {
+          console.log(e, 'I was closed.');
+        }
+        
+        ReactDOM.render(
+          <div>
+            <Alert
+              message="Warning Text Warning Text Warning TextW arning Text Warning Text Warning TextWarning Text"
+              type="warning"
+              closable
+              onClose={onClose}
+
+           />
+           </div>
+        
+        )
+
+
       }
     }).then(response => {
 

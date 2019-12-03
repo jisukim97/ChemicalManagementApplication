@@ -141,6 +141,9 @@ class MyGroup extends Component {
     this.setState( {
       menu : 4
     })
+    if (getLab() !== null) {
+      this.getGroupMembers()
+    }
   }
 
   enrollLab = (id) => {
@@ -175,7 +178,7 @@ class MyGroup extends Component {
         } else if (this.state.labexists && this.state.menu === 4){
           return (
             <div>
-            <MyGroupWithdraw withdrawLab={this.withdrawLab}/>
+            <MyGroupWithdraw afterGroupGenerate={this.afterGroupGenerate} count={this.state.members.length}/>
             </div>
           )
         } else {
