@@ -3,6 +3,11 @@ import { List, Typography, Radio, Button } from 'antd'
 
 import Stock from './Stock';
 import ChemicalAdd from './ChemicalAdd';
+import InventoryAdd from './InventoryAdd';
+
+import { serverUrl } from '../setting'
+import { getUser, getLab } from '../authentication';
+
 
 const { Title } = Typography;
 
@@ -15,7 +20,7 @@ class MyLab extends Component {
     constructor(props) {
         super(props);
         //state에는 
-
+        /*
         let inventories = [
             {
                 id: "id1",
@@ -220,24 +225,54 @@ class MyLab extends Component {
             },
         ]
 
-        let firstInventoryId = inventories[0].id
+        */
+        // let firstInventoryId = inventories[0].id
 
         this.state = {
-            inventories : inventories, //인벤토리 배열 
-            inventory: firstInventoryId, //현재 인벤토리 아이디
-            inventoryName: inventories[0].name, //현재 인벤토리 이름
+            inventories: [],//inventories, //인벤토리 배열 
+            inventory: 0, //firstInventoryId, //현재 인벤토리 아이디
+            inventoryName: '',//inventories[0].name, //현재 인벤토리 이름
+            isInventoryExist: false
             //realInventory : inventories.filter(inventory => inventory.id===firstInventoryId) //현재 인벤토리에 있는 것들만
         }
+        this.getInventories()
+
+    }
+
+    getInventories = () => {
+        const url = serverUrl + '/chemical/' + getUser().id
+        console.log(url)
+        fetch(url, { // uri 넣어주기
+            method: 'GET', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if (response.status === 200) {
+                //이건 정상적으로 된 경우
+                return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+            //여기서 response라는걸 제대로 쓸 수 있음
+            console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
+            this.setState({
+                inventories: response.inventories,
+                inventory: response.inventories.length>0 ? response.inventories[0].id : 0,
+                inventoryName: response.inventories.length>0 ?response.inventories[0].name : '',
+                isInventoryExist: response.inventories.length > 0 ? true : false
+            })
+        })
     }
 
     //인벤토르 바꿨을 경우
     handleInventoryChange = e => {
         this.state.inventories.forEach(inventory => {
             console.log(inventory)
-            if (inventory.id===e.target.value){
+            if (inventory.id === e.target.value) {
                 this.setState({
-                    inventory : inventory.id,
-                    inventoryName : inventory.name,
+                    inventory: inventory.id,
+                    inventoryName: inventory.name,
                     //realInventory : inventory
                 })
             }
@@ -249,10 +284,10 @@ class MyLab extends Component {
         //여기서 fetch 해준다
         //volume 바꿔주는걸로
         let inventories = this.state.inventories;
-        for (var i=0 ; i<inventories.length; i++){
-            for (var j=0 ; j<inventories[i].stocks.length; j++){
-                if (inventories[i].stocks[j].id===stockId){
-                    if (unit === 'mL'){
+        for (var i = 0; i < inventories.length; i++) {
+            for (var j = 0; j < inventories[i].stocks.length; j++) {
+                if (inventories[i].stocks[j].id === stockId) {
+                    if (unit === 'mL') {
                         change *= inventories[i].stocks[j].chemical.density;
                     }
                     inventories[i].stocks[j].remainingVolume -= change;
@@ -260,20 +295,20 @@ class MyLab extends Component {
                 }
             }
         }
-        this.setState({inventories : inventories})
+        this.setState({ inventories: inventories })
     }
 
     //재고 삭제하기
     deleteStock = (stockId) => {
         //여기서 fetch 해주기
         let inventories = this.state.inventories;
-        for (var i=0; i<inventories.length; i++){
-            if(inventories[i].id===this.state.inventory){
-                inventories[i].stocks=inventories[i].stocks.filter(stock => stock.id!==stockId)
+        for (var i = 0; i < inventories.length; i++) {
+            if (inventories[i].id === this.state.inventory) {
+                inventories[i].stocks = inventories[i].stocks.filter(stock => stock.id !== stockId)
             }
         }
         this.setState({
-            inventories : inventories
+            inventories: inventories
         })
     }
 
@@ -282,10 +317,10 @@ class MyLab extends Component {
         //여기서 fetch 해주기
         let inventories = this.state.inventories;
         let stock;
-        for (var i=0; i<inventories.length; i++){
-            if(inventories[i].id === this.state.inventory){ //현재 인벤토리에 있는것
-                for (var j=0; j<inventories[i].stocks.length; j++){
-                    if (inventories[i].stocks[j].id === stockId){
+        for (var i = 0; i < inventories.length; i++) {
+            if (inventories[i].id === this.state.inventory) { //현재 인벤토리에 있는것
+                for (var j = 0; j < inventories[i].stocks.length; j++) {
+                    if (inventories[i].stocks[j].id === stockId) {
                         stock = inventories[i].stocks[j];
                         inventories[i].stocks.splice(j, 1);
                         break;
@@ -296,8 +331,8 @@ class MyLab extends Component {
 
         console.log('here1')
         console.log(newInventoryId)
-        for (var i=0; i<inventories.length; i++){
-            if (inventories[i].id === newInventoryId){
+        for (var i = 0; i < inventories.length; i++) {
+            if (inventories[i].id === newInventoryId) {
                 console.log('here2')
                 inventories[i].stocks.push(stock)
                 break;
@@ -305,7 +340,7 @@ class MyLab extends Component {
         }
 
         this.setState({
-            inventories : inventories
+            inventories: inventories
         })
     }
 
@@ -317,42 +352,89 @@ class MyLab extends Component {
         //그리고 추가 해주기
     }
 
-    render() {  
+    addInventory = (name, temperature, humidity, illuminance, oximeter, explosion) => {
+        console.log(name, temperature, humidity, illuminance, oximeter, explosion)
+        const url = serverUrl + '/inventory/' + getUser().id
+        const body = {
+            "name" : name,
+            "temperature" : temperature,
+            "humidity" : humidity,
+            "illuminance" : illuminance,
+            "oximeter" : oximeter,
+            "explosion" : explosion
+        }
+        fetch(url, { // uri 넣어주기
+            method: 'POST', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify(body) //여기에다가 body 넣어주기
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            console.log('success')
+            this.getInventories()
+        })
+        
+    }
+
+    render() {
 
         return (
+
             <div>
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
                 <br />
                 <center><Title style={{ marginBottom: 50 }}>My Lab</Title></center>
-                <div><center> {/* 인벤토리 고르는 곳 */}
-                    <Radio.Group value={this.state.inventory} onChange={this.handleInventoryChange}>
-                        {
-                            this.state.inventories.map( inventory => {
-                                return (<Radio.Button value={inventory.id}>{inventory.name}</Radio.Button>)
-                            })
-                        }
-                    </Radio.Group> 
-                    <Button>장소 추가</Button>
+                {
+                    this.state.isInventoryExist && 
+                    <div>
+                    <div><center> {/* 인벤토리 고르는 곳 */}
+                        <Radio.Group value={this.state.inventory} onChange={this.handleInventoryChange}>
+                            {
+                                this.state.inventories.map(inventory => {
+                                    return (<Radio.Button value={inventory.id}>{inventory.name}</Radio.Button>)
+                                })
+                            }
+                        </Radio.Group>
+                        <InventoryAdd addInventory={this.addInventory} />
                     </center>
+                    </div>
+
+                    <br />
+
+                    <List
+                        grid={{ gutter: 16, column: 3 }}
+                        dataSource={this.state.inventories.filter(inventory => inventory.id === this.state.inventory)[0].stocks}
+                        renderItem={stock => (
+                            <List.Item>
+                                <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                                    changeInventory={this.changeInventory} /> {/* Chemical 컴포넌트에 stock을 전해줌*/}
+                            </List.Item>
+                        )}
+                    />
+
+
+
+                    {/* 약품 추가*/}
+                    <div style={{ marginTop: 100 }}>
+                        <ChemicalAdd addChemical={this.addChemical} />
+                    </div>
                 </div>
+                }
 
-                <br />
+                {
+                    !this.state.isInventoryExist  &&
+                    <div>
+                        아무것도 없음!
+                        <InventoryAdd addInventory={this.addInventory} />
 
-                <List
-                    grid={{ gutter: 16, column: 3 }}
-                    dataSource={this.state.inventories.filter(inventory => inventory.id===this.state.inventory)[0].stocks}
-                    renderItem={stock => (
-                        <List.Item>
-                            <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock} 
-                            changeInventory={this.changeInventory} /> {/* Chemical 컴포넌트에 stock을 전해줌*/}
-                        </List.Item>
-                    )}
-                />
+                    </div>
+                }
 
-                {/* 약품 추가*/}
-                <div style={{ marginTop: 100 }}>
-                    <ChemicalAdd addChemical={this.addChemical} />
-                </div>
             </div>
         );
     }
