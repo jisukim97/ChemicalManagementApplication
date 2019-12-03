@@ -1,5 +1,5 @@
 from flask import Flask, request, url_for, redirect, jsonify
-from wiki import search as sch
+from msds import search as sch
 
 
 app = Flask(__name__)
