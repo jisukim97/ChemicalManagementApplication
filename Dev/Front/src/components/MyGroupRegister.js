@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message, Modal } from 'antd';
 import { Link } from "react-router-dom";
 import { Typography } from 'antd';
-
+import { getUser, getLab } from '../authentication';
 import { history } from '../History';
 import { serverUrl } from '../setting';
 import { login } from '../authentication';
@@ -13,109 +13,88 @@ class MyGroupRegister extends Component {
 
   state = { visible: false };
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
-
-  //로그인 정보 입력 하고 로그인 버튼 눌렀을 때
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        //요청 양식은 이미 values에 동일하게 맞춰져 있는 상태이므로
-        //따로 가공해줄 필요 없이 바로 http 요청을 보낸다
         console.log(values)
-        fetch(serverUrl + '/login', {
-          method: 'POST',
+        const registInformation = {
+          name: values.groupName,
+          password: values.password,
+        }
+        fetch(serverUrl + '/lab/' + getUser().id, {
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(values)
-        })
-        .then(response => {
-          const result = response.status;
-          if (result === 200) {
-            //로그인이 성공하였을 경우
-            response.json().then(response => {
-              //로컬스토리지에 토큰 및 로그인 정보 저장
-              login(response)
-              console.log(response)
-              message.success(response.user.name + '그룹 가입에 성공하였습니다!');
-              this.props.enrollLab(3);
-              history.push("/main")
-            })
-          } else if (result === 401) {
-            //비밀번호 불일치 혹은 이메일이 등록되지 않았음
-            message.error('그룹 가입 신청에 실패하였습니다. 그룹 이름 혹은 그룹 비밀번호를 다시 확인해 주세요.');
-            console.log("fail!")
-          } else {
-            //내부 오류
+          body: JSON.stringify(registInformation)
+        }).then(response => {
+          if (response.status === 200) {
+            //가입이 성공적으로 수행 되었을 경우
+            message.success('그룹의 맴버가 되신 것을 환영합니다!');
+            console.log(112233)
+            localStorage.setItem('lab', JSON.stringify(response.lab));
+            this.props.afterGroupGenerate(getUser().id);
+          } 
+          else if (response.status === 400) {
+            //그룹 이름이 없을 경우
+            message.warning('그룹 이름이 존재하지 않습니다!');
+          }
+          else {
+            //패스워드가 틀릴 경우
+            message.warning('패스워드가 올바르지 않습니다!');
           }
         })
+      } else {
       }
     });
   };
 
-
+  //비밀번호 검증 과정인데 따로 규칙 지정 안했으므로 항상 true
+  validateToNextPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    form.validateFields(['confirm'], { force: true });
+    callback();
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
-      <center><Title style={{marginBottom : 50}}>Lab 가입 신청</Title></center>
-      {/* 이메일 폼*/}
-      <Form.Item>
-      {getFieldDecorator('LabName', {
-        rules: [{ required: true, message: 'Lab 이름을 입력해 주세요!' }],
-      })(
-        <Input
-        //prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        placeholder="Lab Name"
-        />,
-      )}
-      </Form.Item>
+      <Form onSubmit={this.handleSubmit} className="form">
 
-      {/* 비밀번호 폼*/}
-      <Form.Item>
-      {getFieldDecorator('password', {
-        rules: [{ required: true, message: '그룹 비밀번호를 입력해 주세요!' }],
-      })(
-        <Input
-        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        type="Group Password"
-        placeholder="Group Password"
-        />,
-      )}
-      </Form.Item>
+        {/* 이름 */}
+        <Form.Item>
+          {getFieldDecorator('groupName', {
+            rules: [{ required: true, message: '그룹 이름을 입력해 주세요!' }],
+          })(
+            <Input
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Group Name"
+            />,
+          )}
+        </Form.Item>
 
-      <Button type="primary" onClick={this.showModal}>
-      가입 신청
-      </Button>
-      <Modal
-      title="가입 신청"
-      visible={this.state.visible}
-      onOk={this.handleOk}
-      onCancel={this.handleCancel}
-      >
-      <p>에 가입하시겠습니까?</p>
-      </Modal>
+        {/* 비밀번호 */}
+        <Form.Item hasFeedback>
+          {getFieldDecorator('password', {
+            rules: [
+              {
+                required: true, message: '비밀번호를 입력 해 주세요!',
+              },
+              {
+                validator: this.validateToNextPassword,
+              },
+            ],
+          })(<Input.Password
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            placeholder="Group Password" />)}
+        </Form.Item>
 
-      </div>
+        {/* 가입 버튼 */}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="button">
+            가입 신청
+          </Button>
+        </Form.Item>
+      </Form>
     );
   }
 }

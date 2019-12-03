@@ -46,20 +46,18 @@ class MyGroupWithdraw extends Component {
       headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
     }).then(response => {
       if (response.status === 200) {
-        //이건 정상적으로 된 경우
-        return response.json()
+        console.log(11112222)
+        localStorage.setItem('lab', null)
+        this.props.afterGroupWithdraw()
+
       } else {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
-    }).then(response => {
-      console.log(1111)
-      localStorage.setItem('lab', null)
-      this.props.afterGroupWithdraw()
-    })
+    }).then(response => {})
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    //const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
       <center><Title style={{marginBottom : 50}}>my Lab 탈퇴</Title></center>
