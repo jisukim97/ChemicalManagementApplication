@@ -1,7 +1,6 @@
 package com.team.chemical.entity;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,64 +11,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="schedule")
+@Table(name="illnessalarm")
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class Schedule {
-
-    /**
-     * 
-     */
+public class IllnessAlarm {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-
-    /**
-     * 
-     */
-	@Column
-    private LocalDate date;
-
-    /**
-     * 
-     */
-	@Column
-    private LocalTime startTime;
-
-    /**
-     * 
-     */
-	@Column
-    private LocalTime endTime;
-
-    /**
-     * 
-     */
-    @ManyToOne
-    @JoinColumn(name = "apparatus_id")
-    @JsonBackReference("apparatusSchedule")
-    private Apparatus apparatus;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
-    private User reservation;
-
+	@JoinColumn(name="stock_id")
+    private Stock stock;
+	
+	@Column
+	private LocalDate deleteDate;
+	
+	@Column
+	private boolean alreadyChecked;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((stock == null) ? 0 : stock.hashCode());
 		return result;
 	}
 
@@ -81,15 +54,12 @@ public class Schedule {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Schedule other = (Schedule) obj;
-		if (id == null) {
-			if (other.id != null)
+		IllnessAlarm other = (IllnessAlarm) obj;
+		if (stock == null) {
+			if (other.stock != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!stock.equals(other.stock))
 			return false;
 		return true;
 	}
-    
-    
 }
-    
