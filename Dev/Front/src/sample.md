@@ -437,6 +437,11 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+## 알람 발생시키기
+* /alarmtest
+* GET
+* 없음
+* 없음
 
 ----
 ----
@@ -490,7 +495,7 @@ getLab().id -> 랩아이디
     "inventories" : [해당 유저의 lab에 저장 된 보관장소 inventory들의 정보 리스트]
 }
 ## 화학약품을 보관장소에 보관(확정)
-* /chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
+* /chemical/{userId}/{chemicalId}/{inventoryId}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
 * POST
 * {
     "nickname" : 닉네임,

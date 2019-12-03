@@ -19,7 +19,7 @@ class Header extends Component {
     }
 
     toHome = () => {
-        history.push('/home/' + getUser().userID)
+        history.push('/')
     }
 
     render() {
@@ -27,7 +27,7 @@ class Header extends Component {
             <div className='Header'>
                 {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
                 <div className="left-box">
-                    <b className='logo'><Link to='/main' id='color'>SYLVY</Link></b>
+                    <b className='logo'><Link to='/mylab' id='color'>SYLVY</Link></b>
                 </div>
 
                 {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}

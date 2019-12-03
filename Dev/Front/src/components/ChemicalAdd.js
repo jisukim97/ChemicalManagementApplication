@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Button, Input,Form, Select } from 'antd';
+import { Modal, Button, Input,Form, Select, message } from 'antd';
 
 import ChemicalInfo from './ChemicalInfo';
 import SelectInventory from './SelectInventory';
+import { serverUrl } from '../setting';
+import { getUser } from '../authentication';
 
 const { Search } = Input;
 
@@ -54,6 +56,34 @@ class ChemicalAdd extends Component {
 
     search = (chemicalName) => {
         //여기에 fetch 들어가기
+        const url = serverUrl + '/chemical/info/' + getUser().id
+        fetch(url, { // uri 넣어주기
+            method: 'POST', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify({
+                name : chemicalName
+            }) //여기에다가 body 넣어주기
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                message.error('This is an error message');
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            console.log(23123)
+            console.log(response)
+            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+            //여기서 response라는걸 제대로 쓸 수 있음
+            this.setState({
+                chemical : response.chemical
+            },  () => {
+                this.getInventorySuggestList()
+            })
+        })
+
+/*
         console.log(chemicalName)
         var chemical = {
             id: 30,
@@ -82,11 +112,35 @@ class ChemicalAdd extends Component {
 
         //그다음 장소 추천 받아오기
         this.getInventorySuggestList()
+        */
     }
 
     getInventorySuggestList = () => {
         //여기서 장소 추천을 받아준다
         //여기서 fetch
+        const url = serverUrl + '/chemical/' + getUser().id + '/' + this.state.chemical.id
+        fetch(url, { // uri 넣어주기
+            method: 'GET', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+            //여기서 response라는걸 제대로 쓸 수 있음
+            console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
+            //예를들면
+            this.setState({
+                suggest : response.suggest,
+                notSuggest : response.notSuggest
+            })
+        })
+
+        /*
         var suggest = [{
             id: "id3",
             name: "보관함1",
@@ -142,6 +196,7 @@ class ChemicalAdd extends Component {
             suggest: suggest,
             notSuggest: notSuggest
         })
+        */
 
     }
 
@@ -152,9 +207,28 @@ class ChemicalAdd extends Component {
         })
         console.log(inventoryId)
         //여기서 state에 대한것들 추가해주기
-        console.log(123123123)
-        console.log(this.state)
-        this.props.addChemical(this.state.chemical, inventoryId, this.state.number, this.state.expire)
+        var gram = this.state.number
+        if (this.state.unit === 'mL'){
+            gram *= this.state.chemical.density
+        }
+
+        //여기에 nickname체크 해주기
+        const nicknameUrl = serverUrl + '/chemical/nickname/' + getUser().id
+        fetch(nicknameUrl, { // uri 넣어주기
+            method: 'POST', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify({
+                nickname : this.state.nickname
+            }) //여기에다가 body 넣어주기
+        }).then(response => {
+            if( response.status === 200){
+                this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
+            } else {
+                message.error('닉네임이 겹칩니다')
+            }
+        })
+        
+
     }
 
 
@@ -245,7 +319,7 @@ class ChemicalAdd extends Component {
                             <Option value="g">g</Option>
                             <Option value="mL">mL</Option>
                         </Select>
-                        <Input placeholder="유효기간을 입력 해 주세요" onChange={this.setExpire} />
+                        <Input placeholder="유효기간을 입력 해 주세요(YYMMDD)" onChange={this.setExpire} />
 
 
                         {/* 장소 */}

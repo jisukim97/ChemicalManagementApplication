@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Select, Button, message } from 'antd';
 
 const { Option } = Select;
 
@@ -94,9 +94,19 @@ class StockButtons extends Component {
                 console.log('Received values of form: ', values);
                 // 값 : values.value.number
                 // 단위 : values.value.unit
-                this.props.changeVolume(values.value.number, values.value.unit)
+                const unit = values.value.unit
+                var change = values.value.number
+                if (unit ==='mL'){
+                    change *= this.props.stock.chemical.density
+                }
+                if (change > this.props.stock.volume){
+                     message.error('너무 많이 입력하셨습니다');
+                } else {
+                    this.props.changeVolume(change, unit);
+                }        
             }
         });
+
     };
 
     checkNumber = (rule, value, callback) => {

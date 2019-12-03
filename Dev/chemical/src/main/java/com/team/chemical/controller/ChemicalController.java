@@ -60,6 +60,7 @@ public class ChemicalController {
 			//화학약품 정보 받아오기
 			Chemical msdsInfo = msds.searchChemical(chemical.getName());
 			//약품이 없을 경우
+			System.out.println(msdsInfo);
 			if (msdsInfo==null) {
 				throw new Exception("cannot find chemical by name");
 			}
@@ -165,22 +166,20 @@ public class ChemicalController {
 	 * @param userId
 	 * @param chemicalId
 	 * @param inventoryId
-	 * @param put (YYMMDD)
 	 * @param expire (YYMMDD)
 	 * @param stock 
 	 * @param response
 	 * @return 해당 inventory에 저장된 stock들 리스트
 	 */
-	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}/{expire}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String addChemical(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable String inventoryId, 
-			@PathVariable String put, @PathVariable String expire, @RequestBody Stock stock, HttpServletResponse response) {
+			@PathVariable String expire, @RequestBody Stock stock, HttpServletResponse response) {
 		try {
 			Chemical chemical = chemicalRepository.findById(chemicalId).get();
 			
-			LocalDate putDate = ApparatusController.getDate(put);
 			LocalDate expireDate = ApparatusController.getDate(expire);
 			
-			stock.setPutDate(putDate);
+			stock.setPutDate(LocalDate.now());
 			stock.setExpireDate(expireDate);
 			stock.setChemical(chemical);
 			stock.setRemainingVolume(stock.getVolume());

@@ -16,6 +16,8 @@ public class Alarm {
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	IllnessAlarmRepository illnessAlarmRepository;
 	/**
 	 * 모든 유저에게 유효기간 알림 뿌려주기
 	 */
@@ -76,6 +78,8 @@ public class Alarm {
 		LocalDate today = LocalDate.now();
 		while(wholeUser.hasNext()) {
 			user = wholeUser.next();
+			if (user.getMyLab()==null || user.getMyLab().getInventories()==null)
+				continue;
 			for(Inventory inventory : user.getMyLab().getInventories()){
 				for (Stock stock : inventory.getStocks()) {
 					IllnessAlarm alarm = new IllnessAlarm();
@@ -84,6 +88,7 @@ public class Alarm {
 						continue;
 					} else {
 						alarm.setDeleteDate(today.isBefore(stock.getPutDate()) ? stock.getPutDate() : today);
+						alarm = illnessAlarmRepository.save(alarm);
 						user.getIllnessAlarm().add(alarm);
 					}
 				}

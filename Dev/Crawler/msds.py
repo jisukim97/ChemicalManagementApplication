@@ -142,8 +142,8 @@ def search(chemi):
     if flammability != 0:
         flammability = True
 
-    result = {'name': chemi, 'casNo': cas_num, 'formula': chemi_formula, 'status': constell, 'molecular': moral_mass,
-              'density': density, 'meltingPoint': mp[0], 'boilingPoint': bp[0], 'ph': acidity,
+    result = {'name': chemi, 'casNo': cas_num.strip(), 'formula': chemi_formula.strip(), 'status': constell.strip().lower(), 'molecularWeight': float(moral_mass),
+              'density': float(density), 'meltingPoint': float(mp[0]), 'boilingPoint': float(bp[0]), 'ph': float(acidity),
               "explosive": explosive, 'flammability': flammability, 'combustibility': combustilbilty,
               'photoReaction': light_sensitive, 'deliquescent': deliquescent, 'efforescene': efforescene,
               'alkaliMetal': alkali_metal, 'alkalineEarthMetal': alkaline_earth_metal, 'halogen': halogen}
