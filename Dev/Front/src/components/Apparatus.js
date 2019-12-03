@@ -3,6 +3,7 @@ import { Typography, Icon, Row, Col, Button, Modal, Divider, Table, Card, List, 
 import { Link } from "react-router-dom";
 import moment from 'moment';
 import { getUser, getLab } from '../authentication';
+import ApparatusReservation from './ApparatusReservation';
 
 
 const { Title } = Typography;
@@ -35,6 +36,11 @@ class Apparatus extends Component {
                     dataIndex: 'user',
                     key: 'user',
                 },
+                {
+                    title : 'Button',
+                    dataIndex : 'deleteButton',
+                    key : 'deleteButton'
+                }
             ],
             menu: apparatusId, // 처음들어오면 menu가 0임
             apparatusList : [],
@@ -99,7 +105,6 @@ class Apparatus extends Component {
     }
     handleOk_1 =e=> {
         console.log(e);
-        this.handleSubmit();
         this.setState({
             visible_1: false,
         })
@@ -113,9 +118,11 @@ class Apparatus extends Component {
 
     //'등록하기'버튼 입력받기?
     handleSubmit = e => {
+        console.log(1)
         console.log(e)
-        //e.preventDefault();
+        e.preventDefault();
         this.props.form.validateFields((err, values)=> {
+            console.log(err)
             if (!err) {
                 console.log(values)
                 fetch('http://13.124.122.246:8080/apparatus/'+getLab().id, {
@@ -129,55 +136,34 @@ class Apparatus extends Component {
                         // 오류 난 경우 처리 - 가 지금 안되는 중 ;;
                         console.log("기기 이름 중복") 
                         return 1
-                    }
+                    } 
                 }).then(response => {
                     if (response === 1){
                         console.log("here")
                     } else {
-                        this.state.apparatusList.push(response)
+                        console.log('newAPp')
+                        console.log(response)
+                        var newList = this.state.apparatusList
+                        newList.push(response.apparatus)
                         this.setState({
-                            apparatusList: this.state.apparatusList
+                            apparatusList: newList,
                         })
                     }
                 })
             }
         });
+        this.handleOk_1()
     };
 
-    // 기기 예약 등록 버튼
-    handleSubmit2 = e => {
-        console.log('a')
-        console.log(e)
-        //e.preventDefault();
-        this.props.form.validateFields((err, values)=> {
-            if (!err) {
-                console.log('내가 보고자 하는 밸류 여기')
-                console.log(values)
-                fetch('http://13.124.122.246:8080/schedule/'+getUser().id+'/'+this.state.menu+'/'+this.state.todayInfo, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(values) //여기에다가 body 넣어주기
-                }).then(response => {
-                    if (response.status === 200) {
-                        return response.json()
-                    } else {
-                        console.log("기기 예약 시간 중복") 
-                        return 1
-                    }
-                }).then(response => {
-                    if (response === 1){
-                        console.log("here")
-                    } else {
 
-                        this.setState({
-
-                        })
-    
-                    }
-                })
-            }
-        });
-    };
+    //기기예약 버튼 이후 예약 리스트 업데이트
+    plusReservation =(list)=> {
+        this.setState({
+            realReservationList : list
+        })
+        this.makeDataSource(list)
+        this.handleOk_2()
+    }
 
     //'예약하기'버튼에 대한 메소드
     showModal_2 =()=> {
@@ -315,6 +301,14 @@ class Apparatus extends Component {
         })
     }
 
+    //예약 삭제
+    deleteReservation = (event) => {
+        //console.log(this.props.value)
+        console.log(2)
+        const {param} = event.target.dataset;
+        console.log(param + "를 삭제 ")
+    }
+
     // DataSource형식으로 정제하는 함수
     makeDataSource=(list)=>{
         var newList = list;
@@ -331,6 +325,7 @@ class Apparatus extends Component {
                 var time = hh + ":" + mm
                 oneBlock['time'] = time;
                 oneBlock['user'] = ''
+                oneBlock['deleteButton'] = (<span></span>)
                 
                 result.push(oneBlock)
                 checker ++
@@ -345,6 +340,7 @@ class Apparatus extends Component {
             endHour = list[i].endTime['hour']
             endMinute = list[i].endTime['minute']
             reserver = list[i].reservation['name']
+            console.log("list[i].id : " + list[i].id)
 
             var checker2 = false;           
             var m2;
@@ -361,6 +357,9 @@ class Apparatus extends Component {
                     }
                     if (checker2) {
                         result[j]['user'] = reserver
+                        if (reserver===getUser().name){
+                            result[j]['deleteButton'] =  (<Button data-param={list[i].id} onClick={ this.deleteReservation()} >예약취소</Button>)
+                        }
                     }
                     checker++; j++
                     m = (!m)
@@ -422,7 +421,7 @@ class Apparatus extends Component {
     handleRemove_2 = () => {
         var newList = [];
         newList = this.state.apparatusList.filter(one => one.id != this.state.menu);
-        fetch('http://13.124.122.246:8080/apparatus/' + this.labId + '/' + this.state.menu, {
+        fetch('http://13.124.122.246:8080/apparatus/' + getLab().id + '/' + this.state.menu, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -510,7 +509,7 @@ class Apparatus extends Component {
                             </Form>
                         </Modal>
                         <p></p>
-                        <Button onClick={this.showModal_0} active> {/*기기 삭제 버튼*/}
+                        <Button onClick={this.showModal_0} > {/*기기 삭제 버튼*/}
                             기기 삭제
                         </Button>
                         <Modal
@@ -539,7 +538,7 @@ class Apparatus extends Component {
                                 <Table size='small' dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
                             <Row span={2}> 
-                                <Button onClick={this.showModal_2} active>
+                                <Button onClick={this.showModal_2} >
                                     예약 하기
                                     </Button>
                                 <Modal
@@ -559,27 +558,9 @@ class Apparatus extends Component {
                                 이렇게 두개를 잘 구분해서 써야 함!!
                                 원래처럼 () 써버리면 무한루프
                                 */}
-                                    <Form onSubmit={this.handleSubmit2} className="form">
-                                        <Form.Item>
-                                            {getFieldDecorator('name', {
-                                                rules: [{ required: true, message: '예약 시작 시간을 입력하세요. ' }],
-                                            })( 
-                                                <center><TimePicker defaultValue={moment('12:00', this.state.format)} format={this.state.foramt} /></center>
-                                            )}
-                                        </Form.Item>
-                                        <Form.Item>
-                                            {getFieldDecorator('name', {
-                                                rules: [{ required: true, message: '예약 끝 시간을 입력하세요. ' }],
-                                            })(
-                                                <center><TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.foramt} /></center>    
-                                            )}
-                                        </Form.Item>
-                                        <Form.Item>
-                                            <Button type="primary" htmlType="submit" className="button">
-                                                예약 하기
-                                            </Button>
-                                        </Form.Item>
-                                    </Form>
+
+                                    <ApparatusReservation  apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation}/>
+
                                     <center><p> 주의 사항 </p></center>
                                     <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                     <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
