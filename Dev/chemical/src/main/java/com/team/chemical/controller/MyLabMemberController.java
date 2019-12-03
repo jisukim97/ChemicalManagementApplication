@@ -96,6 +96,9 @@ public class MyLabMemberController {
 			Lab myLab = labRepository.findById(labId).get();
 			//user 찾아주고 가입일 설정
 			User newMember = userRepository.findById(userId).get();
+			if( newMember.getMyLab()!=null) {
+				throw new Exception("이미 가입되어 있음!");
+			}
 			newMember.setLabEnrollDate(LocalDate.now());
 			newMember = userRepository.save(newMember);
 			//lab의 members 컬렉션에 user 추가

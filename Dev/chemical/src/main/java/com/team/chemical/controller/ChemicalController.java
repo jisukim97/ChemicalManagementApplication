@@ -212,10 +212,10 @@ public class ChemicalController {
 	 * @return
 	 */
 	@RequestMapping(value="/inventory/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String makeInventory(@PathVariable int userId, Inventory inventory, HttpServletResponse response) {
+	String makeInventory(@PathVariable int userId, @RequestBody Inventory inventory, HttpServletResponse response) {
 		try {
 			int labId = userRepository.findById(userId).get().getMyLab().getId();
-			inventory.setId(""+labId+"A");
+			inventory.setId(""+labId+"A"+(int)(Math.random()*100));//TODO: 이름 판별법
 			Inventory savedInventory = inventoryRepository.save(inventory);
 			Lab lab = userRepository.findById(userId).get().getMyLab();
 			
@@ -318,6 +318,26 @@ public class ChemicalController {
 			return null;
 		}
 	}
+	
+	/**
+	 * 모든 inventory들 불러오기
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/chemical/{userId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getAllStocks(@PathVariable int userId, HttpServletResponse response) {
+		try {
+			User user = userRepository.findById(userId).get();
+			Map<String, Object> result = new HashMap<>();
+			result.put("inventories", user.getMyLab().getInventories());
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 	
 }
 

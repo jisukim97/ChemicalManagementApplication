@@ -474,12 +474,13 @@ getLab().id -> 랩아이디
     "crash" : true / false (만약 같이 있으면 안되는게 존재할 경우),
     "crashWith" : stock정보 (crash가 true일 때 그 충돌을 발생시킨 원인 약품)
 }
+
 ## 화학약품 보관장소 추가 (inventory)
 * /inventory/{userId}
 * POST
 * {
     "name" : 보관장소 이름,
-    "temperate" : 실수,
+    "temperature" : 실수,
     "humidity" : -1(낮음) / 0(보통) / 1(높음),
     "illuminance" : boolean,
     "oximeter" : boolean,
@@ -517,3 +518,13 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+
+## 모든것들 불러오기
+* /chemical/{userId}
+* GET
+* 없음
+* {
+    "inventories" : [
+        인벤토리들 리스트
+    ]
+}
