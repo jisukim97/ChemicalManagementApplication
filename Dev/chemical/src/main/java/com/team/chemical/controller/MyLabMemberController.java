@@ -155,6 +155,9 @@ public class MyLabMemberController {
 	@RequestMapping(value="/lab/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	String makeLab(@RequestBody Lab lab, @PathVariable int userId, HttpServletResponse response) {
 		try {
+			if (labRepository.existsByName(lab.getName())) {
+				throw new Exception("랩 이름 겹침");
+			}
 			//lab 만들어주기
 			Lab savedLab = labRepository.save(lab);
 			//user 찾아주기

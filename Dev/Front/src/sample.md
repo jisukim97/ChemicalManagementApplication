@@ -35,7 +35,7 @@ import React, { Component } from 'react';
 import AnotherComponent from './AnotherComponent.js';
 
 class Sample extends Component {
-    
+
     state = {
         stateName : [1 ,2 ,3];
     }
@@ -63,7 +63,7 @@ class AnotherComponent extends Component {
     render() {
         return (
             <div>
-                {this.props.propsName[0]} 
+                {this.props.propsName[0]}
             </div>
         )
     }
@@ -101,7 +101,7 @@ render() {
 }
 ```
 
-# 표준 출력 
+# 표준 출력
 ```JSX
 console.log("Hello world!");
 ```
@@ -168,7 +168,7 @@ class Sample extends Component {
 
     state = {
         userId : 30,
-        labId : 3, 
+        labId : 3,
         chemicalList : [1, 2, 3]
     }
 
@@ -226,7 +226,7 @@ class Sample extends Component {
 }
 ```
 
-# 컴포넌트 여러개 반복시키기 
+# 컴포넌트 여러개 반복시키기
 ```JSX
 state = {
     array : [1, 2, 3]
@@ -248,9 +248,9 @@ render() {
 ----
 
 # 백엔드와 통신
-* 프론트엔드 --(요청)--> 백엔드 
+* 프론트엔드 --(요청)--> 백엔드
 * 프론트엔드 <--(응답)-- 백엔드
-* 이렇게 통신을 해야 한다 
+* 이렇게 통신을 해야 한다
 * 그렇다면 어떻게 요청? REST
 
 # REST
@@ -260,7 +260,7 @@ render() {
 * 따라서, 프론트엔드와 백엔드는 uri와 method를 서로 약속한뒤에 정보를 주고받으면 된다.
 
 # fetch
-* react에서 fetch를 이용해 요청 가능 
+* react에서 fetch를 이용해 요청 가능
 ```JSX
 fetch('uri', { // uri 넣어주기
     method: 'HTTPmethod', //'GET', 'POST', 'DELETE' 등등
@@ -280,7 +280,7 @@ fetch('uri', { // uri 넣어주기
     //예를들면
     this.setStatus({
         alarmList : response
-    }) 
+    })
     //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
 })
 ```
@@ -304,7 +304,7 @@ fetch('uri', { // uri 넣어주기
 }
 * {
     "user" : 유저 정보,
-    "lab" : lab 정보 
+    "lab" : lab 정보
 }
 ## 회원가입
 * /regist
@@ -313,7 +313,7 @@ fetch('uri', { // uri 넣어주기
     "email" : 이메일 주소,
     "password" : 비밀번호,
     "name" : 이름
-} 
+}
 ## 로그인 유저 정보 불러오기
 ```JSX
 import { getUser, getLab } from '../authentication';
@@ -339,7 +339,7 @@ getLab().id -> 랩아이디
 * {
     "lab" : lab 정보
 }
-## 초대할 멤버 검색 
+## 초대할 멤버 검색
 * /member/{email}
 * GET
 * {
@@ -348,7 +348,7 @@ getLab().id -> 랩아이디
 * {
     "member" : 찾은 멤버 정보
 }
-## 멤버 초대 
+## 멤버 초대
 * /lab/{labId}/{userId}
 * PUT
 * 없음
@@ -378,7 +378,7 @@ getLab().id -> 랩아이디
 
 
 # my Lab 사용 기기 관리 유스케이스
-## 기기 추가 
+## 기기 추가
 * /apparatus/{labId}
 * POST
 * {
@@ -391,7 +391,7 @@ getLab().id -> 랩아이디
 * /apparatus/{labId}/{apparatusId}
 * DELETE
 * 없음
-* 없음 
+* 없음
 ## 해당 날짜의 예약 리스트 받아오기
 * /schedule/{apparatusId}/{date}  <-여기서 date는 YYMMDD 6칸짜리로
 * GET
@@ -406,7 +406,7 @@ getLab().id -> 랩아이디
 * {
     "schedules" : [해당 날짜의 예약 정보 리스트]
 }
-## 예약 취소 
+## 예약 취소
 * /schedule/{apparatusId}/{scheduleId}
 * DELETE
 * 없음
@@ -446,7 +446,7 @@ getLab().id -> 랩아이디
 ----
 ----
 
-# 약품 추가 및 사용량 수정 유스케이스 
+# 약품 추가 및 사용량 수정 유스케이스
 ## 화학약품 msds 불러오기
 * /chemical/info/{userId}
 * POST
