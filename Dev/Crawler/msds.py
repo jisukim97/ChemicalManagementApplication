@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 def search(chemi):
     raw = requests.get("https://en.wikipedia.org/wiki/" + chemi)
