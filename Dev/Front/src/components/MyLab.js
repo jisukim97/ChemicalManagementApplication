@@ -6,10 +6,8 @@ import ChemicalAdd from './ChemicalAdd';
 import InventoryAdd from './InventoryAdd';
 import { history } from '../History';
 
-
 import { serverUrl } from '../setting'
 import { getUser, getLab } from '../authentication';
-
 
 const { Title } = Typography;
 
@@ -21,214 +19,6 @@ class MyLab extends Component {
 
     constructor(props) {
         super(props);
-        //state에는 
-        /*
-        let inventories = [
-            {
-                id: "id1",
-                name: "name1",
-                temperature : 27.5,
-                humidity : 0,
-                illuminance : false,
-                oximeter : true,
-                explosion : true,
-                stocks: [
-                    {
-                        id: 2,
-                        nickname: "nickname1",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 10,
-                            name : "name1",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11
-                        }
-                    },
-                    {
-                        id: 3,
-                        nickname: "nickname2",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 20,
-                            name : "name2",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11
-                                                }
-                    }
-                ]
-            },
-            {
-                id: "id2",
-                name: "name2",
-                temperature : 27.5,
-                humidity : 0,
-                illuminance : false,
-                oximeter : true,
-                explosion : true,
-                stocks: [
-                    {
-                        id: 2,
-                        nickname: "nickname3",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 30,
-                            name : "name3",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11                     
-                           }
-                    },
-                    {
-                        id: 3,
-                        nickname: "nickname4",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 40,
-                            name : "name4",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11                       
-                         }
-                    }
-                ]
-            },
-            {
-                id: "id3",
-                name: "name3",
-                temperature : 27.5,
-                humidity : 0,
-                illuminance : false,
-                oximeter : true,
-                explosion : true,
-                stocks: [
-                    {
-                        id: 2,
-                        nickname: "nickname5",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 50,
-                            name : "name5",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11                       
-                         }
-                    },
-                    {
-                        id: 3,
-                        nickname: "nickname6",
-                        putDate : Date.now(),
-                        expireDate : Date.now(),
-                        volume : 300,
-                        remainingVolume : 300,
-                        chemical: {
-                            id: 60,
-                            name : "name6",
-                            status : 1,
-                            meltingPoint : 20.0,
-                            boilingPoint : 30.0,
-                            deliquescent : false,
-                            efflorescence : false,
-                            photoReaction : false,
-                            flammability : false,
-                            ignitability : true,
-                            explosive : false,
-                            combustibility : true,
-                            pH : 7.0,
-                            classifiaction : 1,
-                            density : 3.5,
-                            casNo : "71-43-2",
-                            formula : "C6H6",
-                            molecularWeight : 78.11                       
-                         }
-                    }
-                ]
-            },
-        ]
-
-        */
-        // let firstInventoryId = inventories[0].id
 
         this.state = {
             inventories: [],//inventories, //인벤토리 배열 
@@ -307,24 +97,7 @@ class MyLab extends Component {
             //여기서 response라는걸 제대로 쓸 수 있음
             message.success('성공적으로 반영 되었습니다')
             this.getInventories()
-        })
-
-        /*
-
-        let inventories = this.state.inventories;
-        for (var i = 0; i < inventories.length; i++) {
-            for (var j = 0; j < inventories[i].stocks.length; j++) {
-                if (inventories[i].stocks[j].id === stockId) {
-                    if (unit === 'mL') {
-                        change *= inventories[i].stocks[j].chemical.density;
-                    }
-                    inventories[i].stocks[j].remainingVolume -= change;
-                    break;
-                }
-            }
-        }
-        this.setState({ inventories: inventories })
-        */
+        })   
     }
 
     //재고 삭제하기
@@ -348,19 +121,6 @@ class MyLab extends Component {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
         })
-
-
-        /*
-        let inventories = this.state.inventories;
-        for (var i = 0; i < inventories.length; i++) {
-            if (inventories[i].id === this.state.inventory) {
-                inventories[i].stocks = inventories[i].stocks.filter(stock => stock.id !== stockId)
-            }
-        }
-        this.setState({
-            inventories: inventories
-        })
-        */
     }
 
     //인벤토리 바꾸기
@@ -382,36 +142,6 @@ class MyLab extends Component {
             this.getInventories()
         })
         
-/*
-
-        let inventories = this.state.inventories;
-        let stock;
-        for (var i = 0; i < inventories.length; i++) {
-            if (inventories[i].id === this.state.inventory) { //현재 인벤토리에 있는것
-                for (var j = 0; j < inventories[i].stocks.length; j++) {
-                    if (inventories[i].stocks[j].id === stockId) {
-                        stock = inventories[i].stocks[j];
-                        inventories[i].stocks.splice(j, 1);
-                        break;
-                    }
-                }
-            }
-        }
-
-        console.log('here1')
-        console.log(newInventoryId)
-        for (var i = 0; i < inventories.length; i++) {
-            if (inventories[i].id === newInventoryId) {
-                console.log('here2')
-                inventories[i].stocks.push(stock)
-                break;
-            }
-        }
-
-        this.setState({
-            inventories: inventories
-        })
-        */
     }
 
     addChemical = (chemical, inventoryId, put, expire, nickname) => {
@@ -484,7 +214,7 @@ class MyLab extends Component {
                     this.state.isInventoryExist && 
                     <div>
                     <div><center> {/* 인벤토리 고르는 곳 */}
-                        <Radio.Group value={this.state.inventory} onChange={this.handleInventoryChange}>
+                        <Radio.Group value={this.state.inventory} onChange={this.handleInventoryChange} size="small" style={{margin : 10}}>
                             {
                                 this.state.inventories.map(inventory => {
                                     return (<Radio.Button value={inventory.id}>{inventory.name}</Radio.Button>)

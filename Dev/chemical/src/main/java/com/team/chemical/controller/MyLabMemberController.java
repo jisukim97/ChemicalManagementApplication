@@ -216,7 +216,9 @@ public class MyLabMemberController {
 			user.setMyLab(findedLab);
 			user.setLabEnrollDate(LocalDate.now());
 			userRepository.save(user);
-			return null;
+			Map<String, Object> result = new HashMap<>();
+			result.put("lab", findedLab);
+			return new ObjectMapper().writeValueAsString(result);
 		}catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
