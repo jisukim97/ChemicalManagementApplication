@@ -359,9 +359,10 @@ getLab().id -> 랩아이디
 * 없음
 * 없음
 ## 이미 만들어진 lab에 직접 가입
-* /lab/{labId}/{userId}
-* POST
+* /lab/{userId}
+* PUT
 * {
+    "name" : 이름
     "password" : 암호
 }
 * 없음
