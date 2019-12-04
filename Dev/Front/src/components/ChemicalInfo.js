@@ -1,29 +1,76 @@
 import React, { Component } from 'react';
 
-//약품 정보 중에서 약품 특성에 대한 박스
+import { Tabs, Descriptions } from 'antd';
+
+
 class ChemicalInfo extends Component {
+    
 
-    state = {
-    }
-
-    constructor(props) {
-        super(props);
-        
-        //this.state.chemical에는 화학약품에 대한 정보가 담겨 있음
-        this.state = {
-            chemical : this.props.chemical
-        }
+    callback = (key) => {
+        console.log(key);
     }
 
     render() {
+        const { TabPane } = Tabs;
+        const {chemical} = this.props;
 
+    /*
+{
+                        id: 30,
+                        name : "name6",
+                        casNo : 71-43-2,
+                        formula : C6H6,
+                        molecularWeight : 78.11,
+                        status : 1,
+
+                        meltingPoint : 20.0,
+                        boilingPoint : 30.0,
+                        pH : 7.0,
+                        density : 3.5,
+                        deliquescent : false,
+                        efflorescence : false,
+
+                        photoReaction : false,
+                        flammability : false,
+                        ignitability : true,
+                        explosive : false,
+                        combustibility : true,
+
+                        classifiaction : 1,
+                    }
+
+    */
         return (
-            <div style={{ margin: 10 }}>
-                <b>{this.state.chemical.name}</b> <br />
-                cas No : {this.state.chemical.casNo} <br />
-                formula : {this.state.chemical.formula} <br />
-                MW : {this.state.chemical.mw} <br />
-                mp/bp : {this.state.chemical.mp}/{this.state.chemical.bp} <br />
+            <div >
+                <Tabs defaultActiveKey="1" onChange={this.callback}>
+                    <TabPane tab="특성 1" key="1">
+                        <Descriptions bordered="true" size="small">
+                            <Descriptions.Item label="Name">{chemical.name}</Descriptions.Item>
+                            <Descriptions.Item label="CAS No.">{chemical.casNo}</Descriptions.Item>
+                            <Descriptions.Item label="Formula">{chemical.formula}</Descriptions.Item>
+                            <Descriptions.Item label="MW">{chemical.molecularWeight}</Descriptions.Item>
+                            <Descriptions.Item label="status">{chemical.status}</Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab="특성 2" key="2">
+                        <Descriptions bordered="true" size="small">
+                            <Descriptions.Item label="mp/bp">{chemical.meltingPoint}/{chemical.boilingPoint}</Descriptions.Item>
+                            <Descriptions.Item label="pH">{chemical.pH}</Descriptions.Item>
+                            <Descriptions.Item label="density">{chemical.density}</Descriptions.Item>
+                            <Descriptions.Item label="deliquescent">{chemical.deliquescent}</Descriptions.Item>
+                            <Descriptions.Item label="efflorescence">{chemical.efflorescence}</Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                    <TabPane tab="특성 3" key="3">
+                        <Descriptions bordered="true" size="small">
+                            <Descriptions.Item label="photoReaction">{chemical.photoReaction}</Descriptions.Item>
+                            <Descriptions.Item label="flammability">{chemical.flammability}</Descriptions.Item>
+                            <Descriptions.Item label="ignitability">{chemical.ignitability}</Descriptions.Item>
+                            <Descriptions.Item label="explosive">{chemical.explosive}</Descriptions.Item>
+                            <Descriptions.Item label="combustibility">{chemical.combustibility}</Descriptions.Item>
+                        </Descriptions>
+                    </TabPane>
+                </Tabs>
             </div>
         );
     }

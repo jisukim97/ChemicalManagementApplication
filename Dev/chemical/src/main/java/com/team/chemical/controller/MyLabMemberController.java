@@ -72,7 +72,7 @@ public class MyLabMemberController {
 			}
 			//필요없는 정보 다 없애주기
 			findedMember.setPassword(null);
-			findedMember.setAlarms(null);
+			//findedMember.setAlarms(null);
 			
 			Map<String, Object> result = new HashMap<>();
 			result.put("member", findedMember);
@@ -96,6 +96,9 @@ public class MyLabMemberController {
 			Lab myLab = labRepository.findById(labId).get();
 			//user 찾아주고 가입일 설정
 			User newMember = userRepository.findById(userId).get();
+			if( newMember.getMyLab()!=null) {
+				throw new Exception("이미 가입되어 있음!");
+			}
 			newMember.setLabEnrollDate(LocalDate.now());
 			newMember = userRepository.save(newMember);
 			//lab의 members 컬렉션에 user 추가
@@ -152,6 +155,9 @@ public class MyLabMemberController {
 	@RequestMapping(value="/lab/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	String makeLab(@RequestBody Lab lab, @PathVariable int userId, HttpServletResponse response) {
 		try {
+			if (labRepository.existsByName(lab.getName())) {
+				throw new Exception("랩 이름 겹침");
+			}
 			//lab 만들어주기
 			Lab savedLab = labRepository.save(lab);
 			//user 찾아주기
@@ -183,14 +189,22 @@ public class MyLabMemberController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/lab/{labId}/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
-	String joinLab(@RequestBody Lab lab, @PathVariable int labId, @PathVariable int userId, HttpServletResponse response) {
+	@RequestMapping(value="/lab/{userId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8")
+	String joinLab(@RequestBody Lab lab, @PathVariable int userId, HttpServletResponse response) {
 		try {
 			//랩 찾아오기
-			Lab findedLab = labRepository.findById(labId).get();
+			if (!labRepository.existsByName(lab.getName())) {
+				//400
+				//이름 못찾는경우
+				response.setStatus(400);
+				return null;
+			}
+			Lab findedLab = labRepository.findByName(lab.getName());
 			//비밀번호 판별
 			if (!findedLab.getPassword().equals(lab.getPassword())) {
-				throw new Exception("랩 비밀번호 틀림");
+				//비밀번호 틀릴 경우
+				response.setStatus(401);
+				return null;
 			}
 			//유저 찾아오기
 			User user = userRepository.findById(userId).get();

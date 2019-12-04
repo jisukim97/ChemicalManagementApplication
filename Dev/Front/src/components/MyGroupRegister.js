@@ -30,7 +30,7 @@ class MyGroupRegister extends Component {
           if (response.status === 200) {
             //가입이 성공적으로 수행 되었을 경우
             message.success('그룹의 맴버가 되신 것을 환영합니다!');
-            console.log(112233)
+            console.log(response + 11)
             localStorage.setItem('lab', JSON.stringify(response.lab));
             this.props.afterGroupGenerate(getUser().id);
           } 

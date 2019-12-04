@@ -47,7 +47,7 @@ class MyGroupWithdraw extends Component {
     }).then(response => {
       if (response.status === 200) {
         console.log(11112222)
-        localStorage.setItem('lab', null)
+        localStorage.removeItem('lab')
         this.props.afterGroupWithdraw()
 
       } else {

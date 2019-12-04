@@ -74,12 +74,26 @@ public class User {
      * 
      */
     @OneToMany
-    @JoinTable(name="user_stock",
+    @JoinTable(name="user_stock_date",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
     @OrderColumn(name = "list_idx")
-    private Set<Stock> alarms = new HashSet<>();
+    private Set<Stock> dateAlarm = new HashSet<>();
     
+    @OneToMany
+    @JoinTable(name="user_stock_volume",
+    		joinColumns=@JoinColumn(name="user_id"),
+    		inverseJoinColumns=@JoinColumn(name="stock_id"))
+    @OrderColumn(name = "list_idx")
+    private Set<Stock> volumeAlarm = new HashSet<>();
+
+    @OneToMany
+    @JoinTable(name="user_illnessalarm",
+    		joinColumns=@JoinColumn(name="user_id"),
+    		inverseJoinColumns=@JoinColumn(name="illnessalarm_id"))
+    @OrderColumn(name = "list_idx")
+    private Set<IllnessAlarm> illnessAlarm = new HashSet<>();
+   
     
 	@Override
 	public int hashCode() {
