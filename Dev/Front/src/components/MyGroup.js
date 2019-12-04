@@ -15,7 +15,61 @@ class MyGroup extends Component {
         this.state = {
             menu : 0
         }
-    }
+        members.push(a)
+      }
+
+      this.setState({
+        members: members
+
+      })
+      //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
+    })
+  }
+
+//그룹 생성하고 나서 정보 새로고침 해주
+  afterGroupGenerate = (id) => {
+    console.log(id)
+    this.setState( {
+      menu : 0,
+      labexists : id === null ? false : true
+    })
+    this.getGroupMembers()
+  }
+
+  afterGroupWithdraw = () => {
+    console.log(333)
+    this.setState( {
+      menu : 0,
+      labexists : false
+    })
+    //this.getGroupMembers()
+  }
+
+
+  firstButtonClick = () => {
+    this.setState( {
+      menu : 1
+    })
+  }
+
+  firstButtonClick2 = () => {
+    this.setState( {
+      menu : 1
+    })
+    this.getGroupMembers()
+  }
+
+  secondButtonClick = () => {
+    this.setState( {
+      menu : 2
+    })
+  }
+
+  thirdButtonClick = () => {
+    this.setState( {
+      menu : 3
+    })
+  }
 
     firstButtonClick = () => {
         this.setState( {
@@ -41,15 +95,31 @@ class MyGroup extends Component {
         })
     }
 
-    getContent = () => {
-        if (this.state.menu === 1){
-            return (<b>my Lab 생성 내용</b>)
-        } else if (this.state.menu === 2){
-            return (<b>멤버 초대 내용</b>)
-        } else if (this.state.menu === 3){
-            return (<b>Lab 가입 신청 내용</b>)
-        } else if (this.state.menu === 4){
-            return (<b>my Lab 탈퇴 내용</b>)
+      getContent = () => {
+        if (!this.state.labexists && this.state.menu === 1){
+          return (
+            <div>
+            <MyGroupGenerate afterGroupGenerate={this.afterGroupGenerate}/>
+            </div>
+          )
+        } else if (this.state.labexists && this.state.menu === 2){
+          return (
+            <div>
+            <MyGroupInvite />
+            </div>
+          )
+        } else if (!this.state.labexists && this.state.menu === 3){
+          return (
+            <div>
+            <MyGroupRegister enrollLab={this.enrollLab} afterGroupGenerate={this.afterGroupGenerate}/>
+            </div>
+          )
+        } else if (this.state.labexists && this.state.menu === 4){
+          return (
+            <div>
+            <MyGroupWithdraw afterGroupWithdraw={this.afterGroupWithdraw} count={this.state.members.length}/>
+            </div>
+          )
         } else {
             return (<b>member 리스트</b>)
         }
