@@ -53,11 +53,6 @@ class MyGroupWithdraw extends Component {
       } else {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
-<<<<<<< HEAD
-    }).then(response => {})
-  }
-
-=======
     }).then(response => {
       //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
       //여기서 response라는걸 제대로 쓸 수 있음
@@ -100,20 +95,14 @@ withdrawGroup =() => {
   })
 }
 
->>>>>>> 7d49be95747ba32a0804e0b6adec650ca3313a97
   render() {
     //const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
       <center><Title style={{marginBottom : 50}}>my Lab 탈퇴</Title></center>
 
-<<<<<<< HEAD
-      <br /><Text type="secondary">현재 속한 my Lab 이름 : {getLab().name} </Text>
-      <br /><Text type="secondary">현재 속한 my Lab 인원수 : {this.props.count} </Text>
-=======
       <br /><Text type="secondary">현재 속한 my Lab 이름 : {this.state.labName} </Text>
       <br /><Text type="secondary">현재 속한 my Lab 인원수 : {this.state.labMemberCount} </Text>
->>>>>>> 7d49be95747ba32a0804e0b6adec650ca3313a97
 
       <br />
 
@@ -123,11 +112,7 @@ withdrawGroup =() => {
       <Modal
       title="탈퇴하기"
       visible={this.state.visible}
-<<<<<<< HEAD
-      onOk={this.handleOk} 
-=======
       onOk={this.handleOk, this.withdrawGroup} 
->>>>>>> 7d49be95747ba32a0804e0b6adec650ca3313a97
       onCancel={this.handleCancel}
       >
       <p>{this.state.labName} 에서 정말 탈퇴 하시겠습니까?</p>
