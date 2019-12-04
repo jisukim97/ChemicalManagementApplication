@@ -15,7 +15,7 @@ class MyGroupInvite extends Component {
 
   state = { visible: false };
 
-  showModal = () => {
+  showModal = e => {
     this.setState({
       visible: true,
     });
@@ -138,7 +138,25 @@ class MyGroupInvite extends Component {
                         />,
                     )}
                 </Form.Item>
+<<<<<<< HEAD
                 */}
+=======
+
+                {/* 초대하기 버튼 */}
+
+                  <Button type="primary" onClick={this.show1Modal}>
+                  초대하기
+                  </Button>
+                  <Modal
+                  title="초대하기"
+                  visible={this.state.visible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                  >
+                  <p>님을 My Lab에 초대하시겠습니까?</p>
+                  </Modal>
+
+>>>>>>> 7d49be95747ba32a0804e0b6adec650ca3313a97
 
 
             </div>
