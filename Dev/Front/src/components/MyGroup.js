@@ -110,7 +110,7 @@ class MyGroup extends Component {
       menu : 0,
       labexists : false
     })
-    this.getGroupMembers()
+    //this.getGroupMembers()
   }
 
 

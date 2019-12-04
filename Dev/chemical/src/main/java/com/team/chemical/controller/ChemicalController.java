@@ -60,6 +60,7 @@ public class ChemicalController {
 			//화학약품 정보 받아오기
 			Chemical msdsInfo = msds.searchChemical(chemical.getName());
 			//약품이 없을 경우
+			System.out.println(msdsInfo);
 			if (msdsInfo==null) {
 				throw new Exception("cannot find chemical by name");
 			}
@@ -165,22 +166,20 @@ public class ChemicalController {
 	 * @param userId
 	 * @param chemicalId
 	 * @param inventoryId
-	 * @param put (YYMMDD)
 	 * @param expire (YYMMDD)
 	 * @param stock 
 	 * @param response
 	 * @return 해당 inventory에 저장된 stock들 리스트
 	 */
-	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
+	@RequestMapping(value="/chemical/{userId}/{chemicalId}/{inventoryId}/{expire}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
 	String addChemical(@PathVariable int userId, @PathVariable int chemicalId, @PathVariable String inventoryId, 
-			@PathVariable String put, @PathVariable String expire, @RequestBody Stock stock, HttpServletResponse response) {
+			@PathVariable String expire, @RequestBody Stock stock, HttpServletResponse response) {
 		try {
 			Chemical chemical = chemicalRepository.findById(chemicalId).get();
 			
-			LocalDate putDate = ApparatusController.getDate(put);
 			LocalDate expireDate = ApparatusController.getDate(expire);
 			
-			stock.setPutDate(putDate);
+			stock.setPutDate(LocalDate.now());
 			stock.setExpireDate(expireDate);
 			stock.setChemical(chemical);
 			stock.setRemainingVolume(stock.getVolume());
@@ -206,13 +205,16 @@ public class ChemicalController {
 
 	/**
 	 * 인벤토리 추가
+	 * TODO : 무슨 타입의 인벤토리인지 ABCDE
 	 * @param userId의 lab에 inventory 추가하기
 	 * @param inventory attribute들
 	 * @return
 	 */
 	@RequestMapping(value="/inventory/{userId}", method=RequestMethod.POST, produces="text/plain;charset=UTF-8") 
-	String makeInventory(@PathVariable int userId, Inventory inventory, HttpServletResponse response) {
+	String makeInventory(@PathVariable int userId, @RequestBody Inventory inventory, HttpServletResponse response) {
 		try {
+			int labId = userRepository.findById(userId).get().getMyLab().getId();
+			inventory.setId(""+labId+"A"+(int)(Math.random()*100));//TODO: 이름 판별법
 			Inventory savedInventory = inventoryRepository.save(inventory);
 			Lab lab = userRepository.findById(userId).get().getMyLab();
 			
@@ -315,6 +317,26 @@ public class ChemicalController {
 			return null;
 		}
 	}
+	
+	/**
+	 * 모든 inventory들 불러오기
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/chemical/{userId}", method=RequestMethod.GET, produces="text/plain;charset=UTF-8") 
+	String getAllStocks(@PathVariable int userId, HttpServletResponse response) {
+		try {
+			User user = userRepository.findById(userId).get();
+			Map<String, Object> result = new HashMap<>();
+			result.put("inventories", user.getMyLab().getInventories());
+			return new ObjectMapper().writeValueAsString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 	
 }
 

@@ -412,19 +412,37 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+## 기기 리스트 받아오기
+* /apparatus/{userId}
+* GET
+* 없음
+* {
+    "apparatuses" : [기기들 정보 리스트]
+}
 
 ----
 ----
 
 
 # 알람 유스케이스
+* 알람타입 1:유효기간, 2:재고소진, 3:질병
 ## 알람 받아오기
 * /alarm/{userId}
 * GET
 * 없음
 * {
-    "alarms" : [알람들이 발생한 stock들의 정보 리스트]
+    "alarms" : [{"alarmType" : 타입, "stock" : stock정보, "inventory" : 인벤토리들의 리스트, "left" : 남은날짜(일수) } 들의 리스트]
 }
+## 알람 삭제
+* /alarm/{userId}/{alarmType}/{stockId}
+* DELETE
+* 없음
+* 없음
+## 알람 발생시키기
+* /alarmtest
+* GET
+* 없음
+* 없음
 
 ----
 ----
@@ -462,12 +480,13 @@ getLab().id -> 랩아이디
     "crash" : true / false (만약 같이 있으면 안되는게 존재할 경우),
     "crashWith" : stock정보 (crash가 true일 때 그 충돌을 발생시킨 원인 약품)
 }
+
 ## 화학약품 보관장소 추가 (inventory)
 * /inventory/{userId}
 * POST
 * {
     "name" : 보관장소 이름,
-    "temperate" : 실수,
+    "temperature" : 실수,
     "humidity" : -1(낮음) / 0(보통) / 1(높음),
     "illuminance" : boolean,
     "oximeter" : boolean,
@@ -477,7 +496,7 @@ getLab().id -> 랩아이디
     "inventories" : [해당 유저의 lab에 저장 된 보관장소 inventory들의 정보 리스트]
 }
 ## 화학약품을 보관장소에 보관(확정)
-* /chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
+* /chemical/{userId}/{chemicalId}/{inventoryId}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
 * POST
 * {
     "nickname" : 닉네임,
@@ -505,3 +524,13 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
+
+## 모든것들 불러오기
+* /chemical/{userId}
+* GET
+* 없음
+* {
+    "inventories" : [
+        인벤토리들 리스트
+    ]
+}
