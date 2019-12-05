@@ -14,32 +14,6 @@ class ChemicalInfo extends Component {
         const { TabPane } = Tabs;
         const {chemical} = this.props;
 
-    /*
-{
-                        id: 30,
-                        name : "name6",
-                        casNo : 71-43-2,
-                        formula : C6H6,
-                        molecularWeight : 78.11,
-                        status : 1,
-
-                        meltingPoint : 20.0,
-                        boilingPoint : 30.0,
-                        pH : 7.0,
-                        density : 3.5,
-                        deliquescent : false,
-                        efflorescence : false,
-
-                        photoReaction : false,
-                        flammability : false,
-                        ignitability : true,
-                        explosive : false,
-                        combustibility : true,
-
-                        classifiaction : 1,
-                    }
-
-    */
         return (
             <div >
                 <Tabs defaultActiveKey="1" onChange={this.callback}>
