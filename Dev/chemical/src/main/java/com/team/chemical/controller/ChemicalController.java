@@ -2,6 +2,7 @@ package com.team.chemical.controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Chemical;
 import com.team.chemical.entity.ChemicalRepository;
+import com.team.chemical.entity.IllnessAlarm;
 import com.team.chemical.entity.Inventory;
 import com.team.chemical.entity.InventoryRepository;
 import com.team.chemical.entity.Lab;
@@ -316,13 +318,33 @@ public class ChemicalController {
 	String deleteChemical(@PathVariable int stockId, HttpServletResponse response) {
 		try {
 			Stock stock = stockRepository.findById(stockId).get();
+			
+			//해당 stock에 대한 알람 다 삭제
+			Iterator<User> allUser = userRepository.findAll().iterator();
+			User tempUser;
+			IllnessAlarm temp = new IllnessAlarm();
+			temp.setStock(stock);
+			while(allUser.hasNext()) {
+				tempUser = allUser.next();
+				if (tempUser.getDateAlarm().contains(stock)) {
+					tempUser.getDateAlarm().remove(stock);
+				}
+				if (tempUser.getVolumeAlarm().contains(stock)) {
+					tempUser.getVolumeAlarm().remove(stock);
+				}
+				if (tempUser.getIllnessAlarm().contains(temp)) {
+					tempUser.getIllnessAlarm().remove(temp);
+				}
+				userRepository.save(tempUser);
+			}
+			
+			
 			Inventory inventory = stock.getInventory();
 			//인벤토리에서 삭제
 			inventory.getStocks().remove(stock);
 			inventory = inventoryRepository.save(inventory);
 			//자기자체를 삭제
 			stockRepository.delete(stock);
-			//TODO : 알람 구현
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
