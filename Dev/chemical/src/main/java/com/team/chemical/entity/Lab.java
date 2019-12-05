@@ -82,8 +82,12 @@ public class Lab {
      * @return
      */
     public List<List<Inventory>> getSuggestList(Chemical chemical){
+    	//TODO : 추천 해주기
     	List<List<Inventory>> list = new LinkedList<>();
     	List<Inventory> temp = new LinkedList<>();
+    	for (Inventory inv : inventories) {
+    		temp.add(inv);
+    	}
     	list.add(temp);
     	list.add(temp);
     	
