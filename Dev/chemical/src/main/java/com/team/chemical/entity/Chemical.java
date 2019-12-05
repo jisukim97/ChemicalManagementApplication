@@ -141,7 +141,7 @@ public class Chemical {
 
     public boolean isCrash(Chemical newChemical) {
     	
-    	return false;
+    	return true;
     }
     
 	@Override

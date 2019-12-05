@@ -86,7 +86,7 @@ class Apparatus extends Component {
                         var todayInfo = yy + mm + dd;
                         var url = 'schedule/' + this.state.apparatusList[0].id + '/' + todayInfo
                         console.log(url)
-                        console.log(this.state.apparatus[0].id)
+                        //console.log(this.state.apparatus[0].id)
                         apparatusId = this.state.apparatus[0].id
                     }
                     else { var url = 'apparatus/' + getUser().id }

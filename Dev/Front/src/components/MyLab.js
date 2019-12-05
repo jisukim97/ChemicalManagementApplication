@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Typography, Radio, Button, message } from 'antd'
+import { List, Typography, Radio, Button, message, Modal } from 'antd'
 
 import Stock from './Stock';
 import ChemicalAdd from './ChemicalAdd';
@@ -10,6 +10,8 @@ import { serverUrl } from '../setting'
 import { getUser, getLab } from '../authentication';
 
 const { Title } = Typography;
+
+const { confirm } = Modal;
 
 //마이 랩
 class MyLab extends Component {
@@ -141,9 +143,10 @@ class MyLab extends Component {
         }).then(response => {
             this.getInventories()
         })
-        
     }
 
+
+    //추가 해주기
     addChemical = (chemical, inventoryId, put, expire, nickname) => {
         //chemical을 inventoryId에 추가
         //각각 validation check해 준 뒤에 추가
@@ -153,7 +156,7 @@ class MyLab extends Component {
 
         const url = serverUrl + '/chemical/' + getUser().id + '/' + chemical.id + '/' + inventoryId + '/' + expire
         const body = {
-            nickname : nickname,
+            nickname : nickname==='' ? null : nickname,
             volume : put
         }
         fetch(url, { // uri 넣어주기
@@ -168,10 +171,59 @@ class MyLab extends Component {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
         }).then(response => {
+            message.success('추가 성공')
             this.getInventories()
         })
         
     }
+/*
+    addChemical = (chemical, inventoryId, put, expire, nickname) => {
+        const url = serverUrl + '/chemical/' + getUser().id + '/' + chemical.id + '/' + inventoryId
+        fetch(url, { // uri 넣어주기
+            method: 'GET', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+        }).then(response => {
+            if( response.status === 200){
+                //이건 정상적으로 된 경우
+                    return response.json()
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        }).then(response => {
+            if (response.crash){
+                //안되는 경우
+                confirm({
+                    title: '약품이 해당 장소에 두었을 경우 다음 약품과 상호작용이 일어날 수 있습니다. 괜찮습니까?',
+                    content: response.crashWith.nickname + ' / ' + response.crashWith.chemical.name,
+                    onOk() {
+                        this.addChemicalTwo(chemical, inventoryId, put, expire, nickname);
+                    },
+                    onCancel() { },
+                });
+
+            } else {
+                //되는 경우
+                this.addChemicalTwo(chemical, inventoryId, put, expire, nickname);
+
+            }
+        })
+
+
+        confirm({
+            title: 'Do you want to delete these items?',
+            content: 'When clicked the OK button, this dialog will be closed after 1 second',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() { },
+        });
+        
+        
+    }
+
+*/
 
     addInventory = (name, temperature, humidity, illuminance, oximeter, explosion) => {
         console.log(name, temperature, humidity, illuminance, oximeter, explosion)

@@ -178,7 +178,20 @@ public class ChemicalController {
 			Chemical chemical = chemicalRepository.findById(chemicalId).get();
 			
 			LocalDate expireDate = ApparatusController.getDate(expire);
-			
+			if (stock.getNickname().equals("default")) {
+				//닉네임이 비어있을 경우
+				//오름차순으로 추가
+				Lab myLab = userRepository.findById(userId).get().getMyLab();
+				int count = 1;
+				for (Inventory inventory : myLab.getInventories()) {
+					for (Stock inventoryStock : inventory.getStocks()) {
+						if (inventoryStock.getChemical().getName().equals(chemical.getName())) {
+							count++;
+						}
+					}
+				}
+				stock.setNickname(chemical.getName()+count);
+			}
 			stock.setPutDate(LocalDate.now());
 			stock.setExpireDate(expireDate);
 			stock.setChemical(chemical);

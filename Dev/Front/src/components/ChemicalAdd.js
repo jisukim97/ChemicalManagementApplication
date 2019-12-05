@@ -23,7 +23,8 @@ class ChemicalAdd extends Component {
         selectedInventory: null,
         number:  0,
         unit: 'g',
-        expire : ''
+        expire : '',
+        nicknameCheck : true
     }
 
     constructor(props) {
@@ -44,8 +45,14 @@ class ChemicalAdd extends Component {
 
     nickNameChange = (e) => {
         this.setState({
-            nickname: e.target.value
+            nickname: e.target.value,
+            nicknameCheck : false
         })
+        if (e.target.value === ''){
+            this.setState({
+                nicknameCheck : true
+            })
+        }
     }
 
     setExpire = (e) => {
@@ -124,7 +131,14 @@ class ChemicalAdd extends Component {
             gram *= this.state.chemical.density
         }
 
+        if (this.state.nicknameCheck){
+            this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
+        } else {
+            message.error('별칭 중복확인 버튼을 눌러 주세요.')
+
+        }
         //여기에 nickname체크 해주기
+        /*
         const nicknameUrl = serverUrl + '/chemical/nickname/' + getUser().id
         fetch(nicknameUrl, { // uri 넣어주기
             method: 'POST', //'GET', 'POST', 'DELETE' 등등
@@ -137,6 +151,31 @@ class ChemicalAdd extends Component {
                 this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
             } else {
                 message.error('닉네임이 겹칩니다')
+            }
+        })
+        */
+    }
+
+    nicknameCheck = () => {
+        const nicknameUrl = serverUrl + '/chemical/nickname/' + getUser().id
+        fetch(nicknameUrl, { // uri 넣어주기
+            method: 'POST', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify({
+                nickname : this.state.nickname
+            }) //여기에다가 body 넣어주기
+        }).then(response => {
+            if( response.status === 200){
+                message.success('사용 가능한 별칭입니다')
+                this.setState({
+                    nicknameCheck : true
+                })
+                //this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
+            } else {
+                message.error('이미 존재하는 별칭입니다. 다시 한번 확인해주세요')
+                this.setState({
+                    nicknameCheck : false
+                })
             }
         })
     }
@@ -210,6 +249,7 @@ class ChemicalAdd extends Component {
                         {/* 별명 입력 창 */}
                         <div>
                             <Input placeholder="별칭을 입력 해 주세요" onChange={this.nickNameChange} />
+                            <Button onClick={this.nicknameCheck}>중복확인</Button>
                         </div>
 
                         {/* 처음 용량 & 유효기간 입력 */}
@@ -234,7 +274,7 @@ class ChemicalAdd extends Component {
 
                         {/* 장소 */}
                         <div>
-                            <SelectInventory suggest={this.state.suggest} notSuggest={this.state.notSuggest} selectInventory={this.selectInventory} />
+                            <SelectInventory suggest={this.state.suggest} notSuggest={this.state.notSuggest} selectInventory={this.selectInventory} chemical={this.state.chemical}/>
                         </div>
 
                     </Modal>
