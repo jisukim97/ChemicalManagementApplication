@@ -34,9 +34,6 @@ public class IllnessAlarm {
 	
 	@Column
 	private LocalDate deleteDate;
-	
-	@Column
-	private boolean alreadyChecked;
 
 	@Override
 	public int hashCode() {

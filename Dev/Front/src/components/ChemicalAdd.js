@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
-import { Modal, Button, Input,Form, Select, message } from 'antd';
+import { Modal, Button } from 'antd';
 
 import ChemicalInfo from './ChemicalInfo';
-import SelectInventory from './SelectInventory';
-import { serverUrl } from '../setting';
-import { getUser } from '../authentication';
-
-const { Search } = Input;
-
-
-const { Option } = Select;
 
 //화학 약품 하나에 대한 거 (my Lab 화면 중에)
 class ChemicalAdd extends Component {
 
     state = {
         visible: false,
-        chemical: {},
-        nickname: "default",
-        suggest: [],
-        notSuggest: [],
-        selectedInventory: null,
-        number:  0,
-        unit: 'g',
-        expire : ''
+        visible2: false,
+        information: '',
+        keyword: ''
     }
 
     constructor(props) {
@@ -36,151 +23,66 @@ class ChemicalAdd extends Component {
         });
     };
 
-    handleCancel = e => { //둘다 닫는다
+    handleOk = e => { //두번쩨걸 닫고 첫번째 창을 켠다
+        console.log(e);
         this.setState({
-            visible: false,
+            visible: true,
+            visible2: false,
         });
     };
 
-    nickNameChange = (e) => {
+    handleCancel = e => { //둘다 닫는다
+        console.log(e);
         this.setState({
-            nickname: e.target.value
-        })
-    }
-
-    setExpire = (e) => {
-        this.setState({
-            expire : e.target.value
-        })
-    }
-
-    search = (chemicalName) => {
-        //여기에 fetch 들어가기
-        const url = serverUrl + '/chemical/info/' + getUser().id
-        fetch(url, { // uri 넣어주기
-            method: 'POST', //'GET', 'POST', 'DELETE' 등등
-            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-            body: JSON.stringify({
-                name : chemicalName
-            }) //여기에다가 body 넣어주기
-        }).then(response => {
-            if( response.status === 200){
-                //이건 정상적으로 된 경우
-                response.json().then(response => {
-                    console.log(23123)
-                    console.log(response)
-                    //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-                    //여기서 response라는걸 제대로 쓸 수 있음
-                    this.setState({
-                        chemical : response.chemical
-                    },  () => {
-                        this.getInventorySuggestList()
-                    })
-                })
-            } else {
-                message.error('약품을 찾을 수 없습니다!');
-                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
-            }
-        })
-
-    }
-
-    getInventorySuggestList = () => {
-        //여기서 장소 추천을 받아준다
-        //여기서 fetch
-        const url = serverUrl + '/chemical/' + getUser().id + '/' + this.state.chemical.id
-        fetch(url, { // uri 넣어주기
-            method: 'GET', //'GET', 'POST', 'DELETE' 등등
-            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-        }).then(response => {
-            if( response.status === 200){
-                //이건 정상적으로 된 경우
-                    return response.json()
-            } else {
-                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
-            }
-        }).then(response => {
-            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-            //여기서 response라는걸 제대로 쓸 수 있음
-            console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-            //예를들면
-            this.setState({
-                suggest : response.suggest,
-                notSuggest : response.notSuggest
-            })
-        })
-
-    }
-
-    selectInventory = (inventoryId) => {
-        //여기서 fetch해줌
-        this.setState({
-            selectInventory: inventoryId
-        })
-        console.log(inventoryId)
-        //여기서 state에 대한것들 추가해주기
-        var gram = this.state.number
-        if (this.state.unit === 'mL'){
-            gram *= this.state.chemical.density
-        }
-
-        //여기에 nickname체크 해주기
-        const nicknameUrl = serverUrl + '/chemical/nickname/' + getUser().id
-        fetch(nicknameUrl, { // uri 넣어주기
-            method: 'POST', //'GET', 'POST', 'DELETE' 등등
-            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-            body: JSON.stringify({
-                nickname : this.state.nickname
-            }) //여기에다가 body 넣어주기
-        }).then(response => {
-            if( response.status === 200){
-                this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
-            } else {
-                message.error('닉네임이 겹칩니다')
-            }
-        })
-    }
-
-
-
-    handleNumberChange = e => {
-        const number = parseInt(e.target.value || 0, 10);
-        if (isNaN(number)) {
-            return;
-        }
-        if (!('value' in this.props)) {
-            this.setState({ number });
-        }
-        this.triggerChange({ number });
+            visible: false,
+            visible2: false,
+        });
     };
 
-    handleUnitChange = unit => {
-        if (!('value' in this.props)) {
-            this.setState({ unit });
-        }
-        this.triggerChange({ unit });
-    };
+    handleChange = (e) => {
+        this.setState({
+            keyword: e.target.value,
+        });
+    }
 
 
-    triggerChange = changedValue => {
-        // Should provide an event to pass value to Form.
-        const { onChange } = this.props;
-        if (onChange) {
-            onChange({
-                ...this.state,
-                ...changedValue,
-            });
-        }
-        console.log(this.state)
-    };
+    handleAdd = () => {
+        alert("약품을 추가합니다.");
+    }
 
+    handleNickname = () => {
+        alert("별칭을 설정합니다.");
+    }
+
+    handleChoosePlace = () => {
+        this.setState({
+            visible: false,
+            visible2: true,
+        })
+        alert("보관장소를 선택합니다.");
+    }
+
+    handleChooseChem = () => {
+        alert("시약을 선택합니다.");
+    }
 
     render() {
-        const { size } = this.props;
-        const { unit, number } = this.state;
+
+
+        const { keyword } = this.state;
+
+
+        const ChemicalAdd = ({ value, onChamge, onInsert }) => {
+            const handleKeyPress = (e) => {
+                if (e.key === 'Enter') {
+                    onInsert();
+                }
+            }
+        }
+
 
         return (
-
+            
             <span>
                 <center>
                     {/* 버튼 */}
@@ -189,53 +91,34 @@ class ChemicalAdd extends Component {
                     <Modal
                         title="약품 추가"
                         visible={this.state.visible}
-                        onOk={this.handleCancel}
                         onCancel={this.handleCancel} //둘다 닫는다
                     >
-                        {/* 검색 창 */}
-                        <div>
-                            <Search
-                                placeholder="약품 이름을 입력 해 주세요"
-                                enterButton="Search"
-                                size="middle"
-                                onSearch={value => this.search(value)}
-                            />
-                        </div>
-
                         {/* 정보 출력  */}
-                        <div>
-                            <ChemicalInfo chemical={this.state.chemical} />
-                        </div>
+                        <input
+                            placeholder="검색 할 이름을 입력하세요.."
+                            onChange={this.handleChange}
+                            value={keyword}
+                        /> <br />
+                        <br />
+                        <ChemicalInfo chemical={{ chemicalName: "added chemical" }} />
 
-                        {/* 별명 입력 창 */}
-                        <div>
-                            <Input placeholder="별칭을 입력 해 주세요" onChange={this.nickNameChange} />
-                        </div>
+                        <button onClick={this.handleChooseChem} >시약 선택</button><br />
+                        <input placeholder="별칭을 설정하세요" /> <button onClick={this.handleNickname}>별칭 설정</button><br />
 
-                        {/* 처음 용량 & 유효기간 입력 */}
-                        <Input
-                            type="text"
-                            size={size}
-                            value={number}
-                            onChange={this.handleNumberChange}
-                            style={{ width: '40%', marginRight: '3%' }}
-                        />
-                        <Select
-                            value={unit}
-                            size={size}
-                            style={{ width: '40%' }}
-                            onChange={this.handleUnitChange}
-                        >
-                            <Option value="g">g</Option>
-                            <Option value="mL">mL</Option>
-                        </Select>
-                        <Input placeholder="유효기간을 입력 해 주세요(YYMMDD)" onChange={this.setExpire} />
+                        <span>
+                            <Button onClick={this.handleChoosePlace} >보관 장소 선택</Button><br />
+
+                            <Modal title="장소 설정"
+
+                                visible={this.state.visible2}
+
+                                onOk={this.handleOk}>
+                                ok를 눌러서 창을 닫으세요
+                            </Modal>
 
 
-                        {/* 장소 */}
-                        <div>
-                            <SelectInventory suggest={this.state.suggest} notSuggest={this.state.notSuggest} selectInventory={this.selectInventory} />
-                        </div>
+                        </span>
+                        <button onClick={this.handleAdd} >추가하기</button><br />
 
                     </Modal>
                 </center>

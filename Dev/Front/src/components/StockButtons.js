@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button } from 'antd';
 
 const { Option } = Select;
 
@@ -83,47 +83,22 @@ class PriceInput extends React.Component {
 
 class StockButtons extends Component {
 
-    constructor(props){
-        super(props)
-    }
-
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                // 값 : values.value.number
-                // 단위 : values.value.unit
-                const unit = values.value.unit
-                var change = values.value.number
-                if (unit ==='mL'){
-                    change *= this.props.stock.chemical.density
-                }
-                if (change > this.props.stock.volume){
-                     message.error('너무 많이 입력하셨습니다');
-                } else {
-                    this.props.changeVolume(change, unit);
-                }        
             }
         });
-
     };
 
     checkNumber = (rule, value, callback) => {
         if (value.number > 0) {
             callback();
             return;
-        } 
-        if (this.props.remainingVolume < value.number){
-            callback('너무 큰 수를 입력하셨습니다!')
-            return;
         }
-        callback('0보다 큰 수를 입력 해 주세요!');
+        callback('Number must greater than zero!');
     };
-
-    clickDeleteButton = () => {
-        this.props.deleteStock();
-    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -132,7 +107,7 @@ class StockButtons extends Component {
 
             <Form layout="inline" onSubmit={this.handleSubmit}>
                 <Form.Item style={{marginRight : '1.5%'}}>
-                    {getFieldDecorator('value', {
+                    {getFieldDecorator('here2', {
                         initialValue: { number: 0, unit: 'g' },
                         rules: [{ validator: this.checkNumber }],
                     })(<PriceInput />)}
@@ -145,10 +120,10 @@ class StockButtons extends Component {
             </Form>
             <div style={{margin : 10}}>
                 <span style={{marginLeft : 10, marginRight : 10}}>
-                    <Button type="primary" onClick={this.clickDeleteButton}> 폐기하기 </Button>
+                    <Button type="primary"> 폐기하기 </Button>
                 </span>
                 <span style={{marginLeft : 10, marginRight : 10}}>
-                    <Button type="primary" onClick={this.props.showInventoryChangeButton}> 장소수정 </Button>
+                    <Button type="primary"> 장소수정 </Button>
                 </span>
             </div>
             </Fragment>

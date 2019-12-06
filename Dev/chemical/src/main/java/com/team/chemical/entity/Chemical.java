@@ -1,12 +1,17 @@
 package com.team.chemical.entity;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -40,7 +45,7 @@ public class Chemical {
      * 성상
      */
 	@Column
-    private String status;
+    private Integer status;
 
     /**
      * 녹는점
@@ -81,8 +86,8 @@ public class Chemical {
     /**
      * 발화성(산소농도)
      */
-    //@Column
-    //private Boolean ignitability;
+    @Column
+    private Boolean ignitability;
 
     /**
      * 폭발성
@@ -105,8 +110,8 @@ public class Chemical {
     /**
      * 식별체계
      */
-    //@Column
-    //private Integer classification;
+    @Column
+    private Integer classification;
     
     /**
      * 밀도
@@ -120,24 +125,15 @@ public class Chemical {
     @Column
     private String formula;
     
-    @Column
-    private float molecularWeight;
-    
-    @Column
-    private boolean alkaliMetal;
-    
-    @Column
-    private boolean alkalineEarthMetal;
-    
-    @Column
-    private boolean halogen;
-    
     /**
      * 질병
      */
-	@ManyToOne
-	@JoinColumn(name="illness_id")
-    private Illness illness;
+    @OneToMany
+    @JoinTable(name="chemical_illness",
+    		joinColumns=@JoinColumn(name="chemical_id"),
+    		inverseJoinColumns=@JoinColumn(name="illness_id"))
+    @OrderColumn(name = "list_idx")
+    private List<Illness> illness = new LinkedList<>();
 
     public boolean isCrash(Chemical newChemical) {
     	
