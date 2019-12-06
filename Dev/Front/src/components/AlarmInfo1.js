@@ -135,16 +135,10 @@ class AlarmInfo extends Component {
           </div>
         )
       }
-      else{
-        return(
-          <div>
-            
-          </div>
-        )
-      }
+     }
     }
 
-  }
+  
 
   render() {
 

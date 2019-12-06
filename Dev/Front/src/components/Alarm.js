@@ -116,7 +116,7 @@ class Alarm extends Component {
                         information: Qinformation,
                         alarm1Count: Qinformation.filter(value => value.alarmType === 1).length,
                         alarm2Count: Qinformation.filter(value => value.alarmType === 2).length,
-                        alarm3Count: Qinformation.filter(value => value.alarmType === 3).length
+                        alarm3Count: Qinformation.filter(value => value.alarmType === 3 && value.plag === 1).length
 
                     })
                 })
