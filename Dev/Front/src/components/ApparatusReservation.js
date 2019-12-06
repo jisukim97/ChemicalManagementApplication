@@ -54,8 +54,8 @@ class ApparatusReservation extends Component {
                 
                 var past = false; //지난 시간 예약 체커
                 var now = new Date();
-                if( startTime.substring(0,2)<now.getHours()) {past=true;}
-                if(startTime.substring(0,2) == now.getHours() && startTime.substring(2,4)<now.getMinutes()) {past=true}
+                if( startTime.substring(0,2)<now.getHours() && mm == (now.getMonth()+1) && dd == now.getDate()) {past=true;}
+                if(startTime.substring(0,2) == now.getHours() && startTime.substring(2,4)<now.getMinutes() && mm == (now.getMonth()+1) && dd == now.getDate()) {past=true}
 
                 if (startTime >= endTime) { message.error("끝 시간이 시작 시간보다 빠릅니다!") }
                 else if (past) { message.error("지난 시간은 예약할 수 없습니다.")}

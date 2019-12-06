@@ -264,7 +264,7 @@ shouldComponentUpdate(props) {
 
 //현재 페이지 내에서 파라미터만 변경되었을 경우
 componentWillReceiveProps(newProps) {
-    var today = this.state.todayDate;
+    var today = new Date();
     var yy = today.getFullYear();
     yy += ''
     yy = yy.substring(2, 4);
@@ -272,10 +272,12 @@ componentWillReceiveProps(newProps) {
     var dd = today.getDate()
     if (dd < 10) { dd = '0' + dd }
     var todayInfo = yy + mm + dd;
+    console.log(4567)
+    console.log(todayInfo)
     if (this.props.match.params !== newProps.match.params) {
         const { apparatusId } = this.props.match.params;
-
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + todayInfo, {
+        console.log(apparatusId)
+        fetch('http://13.124.122.246:8080/schedule/' + apparatusId + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -285,7 +287,7 @@ componentWillReceiveProps(newProps) {
                 // 오류 난 경우 처리 
             }
         }).then(response => {
-            var newList = []
+            var newList = []    
             if (response == undefined) {
                 this.makeDataSource([])
             }
@@ -293,7 +295,6 @@ componentWillReceiveProps(newProps) {
                 this.makeDataSource(response.schedules)
                 newList = response.schedules
             }
-
             this.setState({
                 menu: apparatusId,
                 realReservationList: newList
@@ -430,6 +431,7 @@ goToLeft = () => {
         var newList = list;
         var result = []
         var startHour, startMinute, endHour, endMinute, reserver;
+        var now = new Date();
         for (var h = 8, m = true; h <= 22 && m <= 30; h++) {
             var checker = 0;
 
@@ -479,7 +481,7 @@ goToLeft = () => {
                         var minute = m? 0:30 ;
                         result[j]['user'] = reserver
                         // 오늘의 지난시간 버튼 안생김
-                        if (h < this.state.todayDate.getHours()) { checker3 = false }
+                        if (h < this.state.todayDate.getHours() && (this.state.todayDate.getMonth()+1) == (now.getMonth()+1) && (this.state.todayDate.getDate()) == now.getDate()) { checker3 = false }
                         if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false ;}
                         
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
@@ -602,7 +604,7 @@ goToLeft = () => {
     clickApparatus = (event) => {
         const { param } = event.target.dataset;
 
-        var today = new Date(); //새로운 기기 누르면 어쨋거나 '오늘'기준으로 데이터 보여주기
+        var today = this.state.todayDate;
         var yy = today.getFullYear();
         yy += ''
         yy = yy.substring(2, 4);
@@ -611,6 +613,8 @@ goToLeft = () => {
         if (dd < 10) { dd = '0' + dd }
         var todayInfo = yy + mm + dd;
         console.log('apparatus id: ', param)
+        console.log(todayInfo)
+
         fetch('http://13.124.122.246:8080/schedule/' + param + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
