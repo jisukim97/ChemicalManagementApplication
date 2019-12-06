@@ -62,6 +62,8 @@ class ChemicalAdd extends Component {
     }
 
     search = (chemicalName) => {
+        chemicalName = chemicalName.replace(' ', '_')
+        console.log(chemicalName)
         //여기에 fetch 들어가기
         const url = serverUrl + '/chemical/info/' + getUser().id
         fetch(url, { // uri 넣어주기
