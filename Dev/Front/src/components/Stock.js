@@ -43,8 +43,7 @@ class Stock extends Component {
                         onCancel={this.handleOk}
                     >
                         {/* 정보 출력  */}
-                        <StockInfo stock={stock} changeVolume={this.props.changeVolume} deleteStock={this.props.deleteStock}
-                        changeInventory={this.props.changeInventory} />
+                        <StockInfo stock={stock} />
                     </Modal>
                 </center>
                 <center>

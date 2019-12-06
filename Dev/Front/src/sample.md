@@ -359,10 +359,9 @@ getLab().id -> 랩아이디
 * 없음
 * 없음
 ## 이미 만들어진 lab에 직접 가입
-* /lab/{userId}
-* PUT
+* /lab/{labId}/{userId}
+* POST
 * {
-    "name" : 이름
     "password" : 암호
 }
 * 없음
@@ -438,11 +437,6 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
-## 알람 발생시키기
-* /alarmtest
-* GET
-* 없음
-* 없음
 
 ----
 ----
@@ -480,13 +474,12 @@ getLab().id -> 랩아이디
     "crash" : true / false (만약 같이 있으면 안되는게 존재할 경우),
     "crashWith" : stock정보 (crash가 true일 때 그 충돌을 발생시킨 원인 약품)
 }
-
 ## 화학약품 보관장소 추가 (inventory)
 * /inventory/{userId}
 * POST
 * {
     "name" : 보관장소 이름,
-    "temperature" : 실수,
+    "temperate" : 실수,
     "humidity" : -1(낮음) / 0(보통) / 1(높음),
     "illuminance" : boolean,
     "oximeter" : boolean,
@@ -496,7 +489,7 @@ getLab().id -> 랩아이디
     "inventories" : [해당 유저의 lab에 저장 된 보관장소 inventory들의 정보 리스트]
 }
 ## 화학약품을 보관장소에 보관(확정)
-* /chemical/{userId}/{chemicalId}/{inventoryId}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
+* /chemical/{userId}/{chemicalId}/{inventoryId}/{put}/{expire} (여기서 put은 넣은날짜 YYMMDD expire는 유효기간 YYMMDD)
 * POST
 * {
     "nickname" : 닉네임,
@@ -524,13 +517,3 @@ getLab().id -> 랩아이디
 * DELETE
 * 없음
 * 없음
-
-## 모든것들 불러오기
-* /chemical/{userId}
-* GET
-* 없음
-* {
-    "inventories" : [
-        인벤토리들 리스트
-    ]
-}

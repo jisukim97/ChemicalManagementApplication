@@ -19,25 +19,22 @@ class Header extends Component {
     }
 
     toHome = () => {
-        history.push('/')
+        history.push('/home/' + getUser().userID)
     }
 
     render() {
         return (
             <div className='Header'>
                 {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
-                <span style={{textAlign : "left"}}>
-                    <b className='logo'><Link to='/mylab' id='color'>SYLVY</Link></b>
-                </span>
+                <div className="left-box">
+                    <b className='logo'><Link to='/main' id='color'>SYLVY</Link></b>
+                </div>
 
-                <span style={{margin : 50}}>
-                    {getUser().name}님 환영합니다! 
-                </span>
                 {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}
-                <span style={{textAlign : "right"}}>
+                <div className="right-box">
                     {/* 로그아웃 버튼 */}
                     <span id='margin'><Button type="danger" icon="poweroff" onClick={this.logOut} shape="circle" /></span>
-                </span>
+                </div>
                 
             </div>
         );
