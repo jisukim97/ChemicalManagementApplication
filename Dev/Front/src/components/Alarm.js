@@ -6,11 +6,10 @@ const { Title } = Typography;
 
 class Alarm extends Component {
 
-    state = {
-    }
-    
    constructor(props) {
         super(props);
+        
+        /*
         var information = [
             {
                 id: 0,
@@ -19,21 +18,17 @@ class Alarm extends Component {
                 alarmType : 1
               },
               {
-                id: 1,
-                name: 'Benzene',
-                date: '7',
-                alarmType : 1
-              },
-              {
                 id: 2,
                 name: 'Benzeqwene',
                 date: '10',
+                volume : 5,
                 alarmType : 1
               },
               {
                 id: 3,
                 name: 'Hexane',
                 place : '냉장고',
+                volume : 0,
                 alarmType : 2
               },
               {
@@ -43,99 +38,83 @@ class Alarm extends Component {
                  alarmType : 2
               },
               {
-                 id: 5,
-                 name: 'Benzeqwene',
-                 place : '가방',  
-                 alarmType : 2
-              },
-              {
                   id: 6,
                   name: 'Benzenecwqwsd',
                   use : '3개월',
                   disease : "간암",
                   alarmType : 3
                },
-               {
-                  id: 7,
-                  name: 'Benzeqweneefefccv',
-                  use : '6개월',  
-                  disease : "췌장암",
-                  alarmType : 3
-               }
-        ]
-        
-        fetch('http://13.124.122.246:8080/alarmtest', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        }).then(response=>{
-            if (response.status === 200) {
-                //이건 정상적으로 된 경우
-                
-                return response.json()
-            } else {
-                console.log(123)
-                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
-            }
-        })
+        ] 
+        */
         
         fetch('http://13.124.122.246:8080/alarm/' + getUser().id, {
             method: 'GET', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-           
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
-                return response.json()
-            } else {
-                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
-            }
-        }).then(response => {
-            
-            console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-            var list = response.alarms
-            var information = [] 
-            for (var i in list){
-                if (i.alarmType === 1) {
-                    var a = {
-                        alarmType: i.alarmType,
-                        id: i.stock.id,
-                        name: i.stock.chemical.name,
-                        date: i.left
+                console.log(33333333333)
+                response.json().then(response => {
+                    var list = response.alarms
+                    var Qinformation = []
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].alarmType === 1) {
+                            var a = {
+                                alarmType: list[i].alarmType,
+                                id: list[i].stock.id,
+                                name: list[i].stock.chemical.name,
+                                date: list[i].left
+                            }
+                            Qinformation.push(a)
+                        }
+                        else if (list[i].alarmType === 2) {
+                            var a = {
+                                alarmType: list[i].alarmType,
+                                id: list[i].stock.id,
+                                name: list[i].stock.chemical.name,
+                                place: list[i].inventory.name,
+                                volume: list[i].stock.remainingVolume
+                            }
+                            Qinformation.push(a)
+                        }
+                        else {
+                            if(list[i].stock.chemical.illness === null){
+                                var a = {
+                                    plag : 0,
+                                    alarmType: list[i].alarmType,
+                                    id: list[i].stock.id,
+                                    name: list[i].stock.chemical.name,
+                                }
+                            }
+                            else {
+                                var a = {
+                                    plag : 1,
+                                    alarmType: list[i].alarmType,
+                                    id: list[i].stock.id,
+                                    name: list[i].stock.chemical.name,
+                                    period: list[i].stock.chemical.illness.period,
+                                    disease: list[i].stock.chemical.illness.name
+                                }
+                            }
+                            Qinformation.push(a)
+                        }
                     }
-                    information.push(a)
-                }
-                else if(i.alarmType === 2){
-                    var a = {
-                        alarmType: i.alarmType,
-                        id: i.stock.id,
-                        name: i.stock.chemical.name,
-                        place: i.inventory.name, 
-                        volume: i.stock.volume
-                    }
-                    information.push(a)
-                }
-                else{
-                    var a = {
-                        alarmType: i.alarmType,
-                        id: i.stock.id,
-                        name: i.stock.chemical.name,
-                        period: i.stock.chemical.illness.period,
-                        disease: i.stock.chemical.illness.name
-                    }
-                    information.push(a)
-                }
-            }
-            this.state = {
-                type : 1,
-                information: information,
-                alarm1Count : information.filter( value => value.alarmType === 1).length,
-                alarm2Count : information.filter( value => value.alarmType === 2).length,
-                alarm3Count : information.filter( value => value.alarmType === 3).length
-                
-                }
-            //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
-        })
+                    console.log(Qinformation)
+                    this.state = {
+                        type: 1,
+                        information: Qinformation,
+                        alarm1Count: Qinformation.filter(value => value.alarmType === 1).length,
+                        alarm2Count: Qinformation.filter(value => value.alarmType === 2).length,
+                        alarm3Count: Qinformation.filter(value => value.alarmType === 3).length
 
+                    }
+
+
+                })
+            } else {
+                //가져올 알람이 없을 경우
+            }
+        })
     }
 
     handleRemove = (id, alarmType) => {

@@ -116,23 +116,32 @@ class AlarmInfo extends Component {
       }
     }
     else {
-      return (
+      if (this.props.info.plag === 1) {
+        return (
 
-        <div style={{ fontSize: 18 }}>
-          <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>를 사용한지 <b>{this.props.info.period}</b>이 지났습니다. <b>{this.props.info.disease}</b>의 위험이 있습니다.
+          <div style={{ fontSize: 18 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>를 사용한지 <b>{this.props.info.period}</b>이 지났습니다. <b>{this.props.info.disease}</b>의 위험이 있습니다.
               <Button icon="delete" onClick={this.handleRemove}></Button>
 
-          <Modal
-            title="약품 정보"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            {/* 정보 출력  */}
-          </Modal>
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+            </Modal>
 
-        </div>
-      )
+          </div>
+        )
+      }
+      else{
+        return(
+          <div>
+            
+          </div>
+        )
+      }
     }
 
   }
