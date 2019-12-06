@@ -6,6 +6,15 @@ const { Title } = Typography;
 
 class Alarm extends Component {
 
+    /** state 그냥 초기화를 여기서 시켜줬습니다..**/
+    state = {
+        type : 1,
+        information : [],
+        alarm1Count : 0,
+        alarm2Count : 0,
+        alarm3Count : 0
+    }
+
    constructor(props) {
         super(props);
         
@@ -100,19 +109,20 @@ class Alarm extends Component {
                         }
                     }
                     console.log(Qinformation)
-                    this.state = {
+                    console.log('filter test')
+                    console.log(Qinformation.filter(value => value.alarmType === 1).length)
+                    this.setState({
                         type: 1,
                         information: Qinformation,
                         alarm1Count: Qinformation.filter(value => value.alarmType === 1).length,
                         alarm2Count: Qinformation.filter(value => value.alarmType === 2).length,
                         alarm3Count: Qinformation.filter(value => value.alarmType === 3).length
 
-                    }
-
-
+                    })
                 })
             } else {
                 //가져올 알람이 없을 경우
+                
             }
         })
     }
