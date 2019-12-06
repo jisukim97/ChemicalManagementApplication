@@ -56,13 +56,13 @@ public class Stock {
      * 전체 부피
      */
 	@Column
-    private Float volume;
+    private float volume;
 
     /**
      * 남은 부피
      */
 	@Column
-    private Float remainingVolume;
+    private float remainingVolume;
 
     /**
      * 화학약품 (특성)

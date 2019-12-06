@@ -168,4 +168,26 @@ public class AlarmController {
 		}
 	}
 	
+	/**
+	 * userId에게 stockId의 volumeAlarm 발생시킴
+	 * @param userId
+	 * @param stockId
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/alarm/{userId}/{stockId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
+	String makeVolumeAlarm(@PathVariable int userId, @PathVariable int stockId, HttpServletResponse response) {
+		try {
+			User user = userRepository.findById(userId).get();
+			Stock stock = stockRepository.findById(stockId).get();
+			user.getVolumeAlarm().add(stock);
+			userRepository.save(user);
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
 }

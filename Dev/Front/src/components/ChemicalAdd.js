@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Input,Form, Select, message } from 'antd';
+import { Modal, Button, Input,Form, Select, message, InputNumber } from 'antd';
 
 import ChemicalInfo from './ChemicalInfo';
 import SelectInventory from './SelectInventory';
@@ -131,8 +131,28 @@ class ChemicalAdd extends Component {
             gram *= this.state.chemical.density
         }
 
+        //this.state.expire이 6글자여야 함
+        //TODO : expire 체크 
+
         if (this.state.nicknameCheck){
-            this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname)
+            //여기서 전체 inventory list중에서 inventoryId인걸 찾아줘야 함
+            var finish = false
+            for (var i=0; i<this.state.suggest.length; i++){
+                if (this.state.suggest[i].id === inventoryId){
+                    finish = true;
+                    this.handleCancel()
+                    this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname, this.state.suggest[i].name)
+                }
+            }
+            if (!finish){
+                for (var i=0; i<this.state.notSuggest.length; i++){
+                    if (this.state.notSuggest[i].id === inventoryId){
+                        this.handleCancel()
+                        this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname, this.state.notSuggest[i].name)
+
+                    }
+                }
+            }
         } else {
             message.error('별칭 중복확인 버튼을 눌러 주세요.')
 
@@ -183,7 +203,8 @@ class ChemicalAdd extends Component {
 
 
     handleNumberChange = e => {
-        const number = parseInt(e.target.value || 0, 10);
+        console.log(e)
+        const number = parseFloat(e).toFixed(2);
         if (isNaN(number)) {
             return;
         }
@@ -253,7 +274,7 @@ class ChemicalAdd extends Component {
                         </div>
 
                         {/* 처음 용량 & 유효기간 입력 */}
-                        <Input
+                        <InputNumber
                             type="text"
                             size={size}
                             value={number}

@@ -83,23 +83,50 @@ class MyLab extends Component {
     changeVolume = (stockId, change, unit) => {
         //여기서 fetch 해준다
         //volume 바꿔주는걸로
-        const url = serverUrl + '/chemical/' + getUser().id + '/' + stockId + '/' + change
+        const url = serverUrl + '/chemical/' + getUser().id + '/' + stockId 
+        fetch(url, { // uri 넣어주기
+            method: 'PUT', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            body: JSON.stringify({volume : change}) //여기에다가 body 넣어주기
+        }).then(response => {
+            if (response.status === 200) {
+                //이건 정상적으로 된 경우
+                response.json().then( response => {
+                    //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
+                    //여기서 response라는걸 제대로 쓸 수 있음
+                    var stock = response.stock
+                    //여기서 다썼거나, 조금남았으면 표시 후 알람 발생
+                    if (stock.remainingVolume === 0.0){
+                        //다씀
+                        message.warning('약품을 전부 사용했습니다!')
+                        this.makeVolumeAlarm(stockId)
+                    } else if (stock.remainingVolume / stock.volume <= 0.2){
+                        //쪼금남음
+                        message.warning('약품이 얼마 남지 않았습니다!')
+                        this.makeVolumeAlarm(stockId)
+                    } else {
+                        message.success('성공적으로 반영 되었습니다')
+                    }
+                    this.getInventories()
+                })
+            } else {
+                //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+            }
+        })
+    }
+
+    makeVolumeAlarm = (stockId) => {
+        const url = serverUrl + '/alarm/' + getUser().id + '/' + stockId;
         fetch(url, { // uri 넣어주기
             method: 'PUT', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
-            if (response.status === 200) {
+            if( response.status === 200){
                 //이건 정상적으로 된 경우
-                return response.json()
             } else {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
-        }).then(response => {
-            //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-            //여기서 response라는걸 제대로 쓸 수 있음
-            message.success('성공적으로 반영 되었습니다')
-            this.getInventories()
-        })   
+        })
     }
 
     //재고 삭제하기
@@ -112,7 +139,7 @@ class MyLab extends Component {
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
-                message.success('성공적으로 삭제 되었습니다')
+                message.success('성공적으로 페기 되었습니다!')
                 this.setState({
                     inventories : [],
                     isInventoryExist : false
@@ -147,13 +174,14 @@ class MyLab extends Component {
 
 
     //추가 해주기
-    addChemical = (chemical, inventoryId, put, expire, nickname) => {
+    addChemical = (chemical, inventoryId, put, expire, nickname, inventoryName) => {
         //chemical을 inventoryId에 추가
         //각각 validation check해 준 뒤에 추가
         console.log("추가")
         console.log(chemical, inventoryId, put, expire)
         //그리고 추가 해주기
 
+        console.log(nickname)
         const url = serverUrl + '/chemical/' + getUser().id + '/' + chemical.id + '/' + inventoryId + '/' + expire
         const body = {
             nickname : nickname==='' ? null : nickname,
@@ -171,7 +199,14 @@ class MyLab extends Component {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
         }).then(response => {
-            message.success('추가 성공')
+            var stocks = response.stocks
+            for (var i=0; i<stocks.length; i++){
+                if( stocks[i].chemical.id === chemical.id){
+                    const successMessage = '' + chemical.name +  ' / ' + stocks[i].nickname + '이 ' + inventoryName + '에 추가되었습니다!'
+                    message.success(successMessage)
+                    break;
+                }
+            }
             this.getInventories()
         })
         
@@ -243,13 +278,11 @@ class MyLab extends Component {
         }).then(response => {
             if( response.status === 200){
                 //이건 정상적으로 된 경우
-                    return response.json()
+                message.success('보관장소가 성공적으로 추가되었습니다!')
+                this.getInventories()    
             } else {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
-        }).then(response => {
-            console.log('success')
-            this.getInventories()
         })
         
     }

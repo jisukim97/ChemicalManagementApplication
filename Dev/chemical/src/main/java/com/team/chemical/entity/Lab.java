@@ -84,12 +84,77 @@ public class Lab {
     public List<List<Inventory>> getSuggestList(Chemical chemical){
     	//TODO : 추천 해주기
     	List<List<Inventory>> list = new LinkedList<>();
-    	List<Inventory> temp = new LinkedList<>();
-    	for (Inventory inv : inventories) {
-    		temp.add(inv);
+    	//list.get(0)은 추천해주는 것들의 List<Inventory>
+    	//list.get(1)은 추천하지 않는 것들의 List<Inventory>
+    	List<Inventory> suggest = new LinkedList<>();
+    	List<Inventory> notSuggest = new LinkedList<>();
+    	
+    	for (Inventory inventory : this.getInventories()) {
+    		boolean canSuggest = true;
+    		//각각 조건들을 체크해가며 조건 하나라도 실패하면 cansuggest가 false가 됨
+    		//성상 체크 
+    		if (chemical.getStatus().contains("liquid")) {
+    			//액체
+    			if (!(chemical.getMeltingPoint() <= inventory.getTemperature() &&
+    					inventory.getTemperature() <= chemical.getBoilingPoint())) {
+    				canSuggest = false;
+    			}
+    		} else if (chemical.getStatus().contains("gas")) {
+    			//기체
+    			if (!(chemical.getBoilingPoint() <= inventory.getTemperature())) {
+    				canSuggest = false;
+    			}
+    		} else {
+    			//고체
+    			if (!(inventory.getTemperature() <= chemical.getMeltingPoint())) {
+    				canSuggest = false;
+    			}
+    		}
+    		
+    		//조해성 체크
+    		if (chemical.isDeliquescent() && inventory.getHumidity()!=-1) {
+    			canSuggest = false;
+    		}
+    		
+    		//풍해성
+    		if (chemical.isEfflorescence() && inventory.getHumidity()!=1) {
+    			canSuggest = false;
+    		}
+    		
+    		//빛반응성
+    		if (chemical.isPhotoReaction() && inventory.isIlluminance()) {
+    			canSuggest = false;
+    		}
+    		
+    		//인화성
+    		if (chemical.isFlammability() && inventory.isOximeter()) {
+    			canSuggest = false;
+    		}
+    		
+    		//발화성 
+    		if (chemical.isIgnitability() && inventory.isOximeter()) {
+    			canSuggest = false;
+    		}
+    		
+    		//연소성
+    		if (chemical.isCombustibility() && !inventory.isExplosion()) {
+    			canSuggest = false;
+    		}
+    		
+    		//폭발
+    		if(chemical.isEfflorescence() && !inventory.isExplosion()) {
+    			canSuggest = false;
+    		}
+    		
+    		if (canSuggest) {
+    			suggest.add(inventory);
+    		} else {
+    			notSuggest.add(inventory);
+    		}
     	}
-    	list.add(temp);
-    	list.add(temp);
+    	
+    	list.add(suggest);
+    	list.add(notSuggest);
     	
     	return list;
     }

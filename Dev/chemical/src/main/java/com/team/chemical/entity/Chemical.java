@@ -46,61 +46,61 @@ public class Chemical {
      * 녹는점
      */
 	@Column
-    private Float meltingPoint;
+    private float meltingPoint;
 
     /**
      * 끓는점
      */
 	@Column
-    private Float boilingPoint;
+    private float boilingPoint;
 
     /**
      * 조해성(이게 true면 습도가 없어야 함)
      */
 	@Column
-    private Boolean deliquescent;
+    private boolean deliquescent;
 
     /**
      * 풍해성(이게 true면 습도가 높아야 함)
      */
 	@Column
-    private Boolean efflorescence;
+    private boolean efflorescence;
 
     /**
      * 광반응(이게 true면 조도가 없어야 함 )
      */
 	@Column
-    private Boolean photoReaction;
+    private boolean photoReaction;
 
     /**
      * 인화성(산소농도)
      */
 	@Column
-    private Boolean flammability;
+    private boolean flammability;
 
     /**
      * 발화성(산소농도)
      */
-    //@Column
-    //private Boolean ignitability;
+    @Column
+    private boolean ignitability;
 
     /**
      * 폭발성
      */
     @Column
-    private Boolean explosive;
+    private boolean explosive;
 
     /**
      * 연소성
      */
     @Column
-    private Boolean combustibility;
+    private boolean combustibility;
 
     /**
      * pH
      */
     @Column
-    private Float ph;
+    private float ph;
 
     /**
      * 식별체계
@@ -112,7 +112,7 @@ public class Chemical {
      * 밀도
      */
     @Column
-    private Float density;
+    private float density;
     
     @Column
     private String casNo;
@@ -140,8 +140,26 @@ public class Chemical {
     private Illness illness;
 
     public boolean isCrash(Chemical newChemical) {
+    	//이번 chemical이 newChemical과 충돌하는지?
+    	boolean isCrash = false;
     	
-    	return true;
+    	if ((this.isAlkaliMetal()||this.isAlkalineEarthMetal()) && newChemical.isHalogen()) {
+    		isCrash = true;
+    	}
+    	
+    	if (this.isHalogen() && (newChemical.isAlkaliMetal()||newChemical.isAlkalineEarthMetal())) {
+    		isCrash = true;
+    	}
+    	
+    	if (this.ph>=0 && newChemical.ph>=0) {
+    		double first = 7.0-this.ph;
+    		double second = 7.0-newChemical.ph;
+    		if (first * second < 0.0) {
+    			isCrash = true;
+    		}
+    	}
+    	
+    	return isCrash;
     }
     
 	@Override

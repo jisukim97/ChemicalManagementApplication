@@ -229,7 +229,23 @@ public class ChemicalController {
 	String makeInventory(@PathVariable int userId, @RequestBody Inventory inventory, HttpServletResponse response) {
 		try {
 			int labId = userRepository.findById(userId).get().getMyLab().getId();
-			inventory.setId(""+labId+"A"+(int)(Math.random()*100));//TODO: 이름 판별법
+			//아이디 양식은 랩아이디 + 인벤토리 타입 + 랜덤값
+			if (inventory.getTemperature() < -3.0) {
+				//냉동고
+				inventory.setId(labId + "A" + (int)(Math.random()*1000));
+			} else if (inventory.getTemperature() < 5.0) {
+				//냉장고 
+				inventory.setId(labId + "B" + (int)(Math.random()*1000));
+			} else if (inventory.getTemperature() < 28.0) {
+				//상온
+				inventory.setId(labId + "C" + (int)(Math.random()*1000));
+			} else if (inventory.getTemperature() < 45.0) {
+				//인큐베이터
+				inventory.setId(labId + "D" + (int)(Math.random()*1000));
+			} else {
+				//오븐
+				inventory.setId(labId + "E" + (int)(Math.random()*1000));
+			}
 			Inventory savedInventory = inventoryRepository.save(inventory);
 			Lab lab = userRepository.findById(userId).get().getMyLab();
 			
@@ -285,20 +301,18 @@ public class ChemicalController {
 
 	/**
 	 * quantity만큼 사용
+	 * "volume" : 쓴 용량 < 이걸 body에 담아 줘야 함
 	 * @param userId
 	 * @param stockId
 	 * @param quantity (부피)
 	 * @return 
 	 */
-	@RequestMapping(value="/chemical/{userId}/{stockId}/{quantity}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
-	String useChemical(@PathVariable int userId, @PathVariable int stockId, @PathVariable float quantity, HttpServletResponse response) {
+	@RequestMapping(value="/chemical/{userId}/{stockId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
+	String useChemical(@RequestBody Stock usedStock, @PathVariable int userId, @PathVariable int stockId, HttpServletResponse response) {
 		try {
 			Stock stock = stockRepository.findById(stockId).get();
-			stock.setRemainingVolume(stock.getRemainingVolume()-quantity);
+			stock.setRemainingVolume(stock.getRemainingVolume()-usedStock.getVolume());
 			stock = stockRepository.save(stock);
-			if ((stock.getRemainingVolume()/stock.getVolume())<0.2) {
-				//TODO : 알람 구현
-			}
 			Map<String, Object> result = new HashMap<>();
 			result.put("stock", stock);
 			return new ObjectMapper().writeValueAsString(result);
