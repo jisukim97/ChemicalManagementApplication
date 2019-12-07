@@ -206,31 +206,30 @@ class AlarmInfo extends Component {
       }
     }
     else {
-      if (this.props.info.plag === 1) {
-        return (
+     
+      return (
 
-          <div style={{ fontSize: 16 }}>
-            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
-            <br/> 사용한지 <b>{this.props.info.period}</b>이 지났습니다. 
-            <br/> <b>{this.props.info.disease}</b>의 위험이 있습니다.
-            <span style={{marginLeft : 10}}><Button icon="close" onClick={this.handleRemove}></Button></span>
+        <div style={{ fontSize: 16 }}>
+          <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+          <br /> 사용한지 <b>{this.props.info.period}</b>개월이 지났습니다.
+            <br /> 특수 건강진단을 받아야 합니다.
+            <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
 
-            <Modal
-              title="약품 정보"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              {/* 정보 출력  */}
-              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
-                changeInventory={this.changeInventory} />
-            </Modal>
+          <Modal
+            title="약품 정보"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            {/* 정보 출력  */}
+            <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+              changeInventory={this.changeInventory} />
+          </Modal>
 
-          </div>
-        )
-      }
-     }
+        </div>
+      )
     }
+  }
 
   
 

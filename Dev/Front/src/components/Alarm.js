@@ -72,7 +72,7 @@ class Alarm extends Component {
                                 id: list[i].stock.id,
                                 name: list[i].stock.chemical.name,
                                 date: list[i].left,
-                                stockInfo : list[i].stock
+                                stockInfo: list[i].stock
                             }
                             Qinformation.push(a)
                         }
@@ -83,31 +83,19 @@ class Alarm extends Component {
                                 name: list[i].stock.chemical.name,
                                 place: list[i].inventory.name,
                                 volume: list[i].stock.remainingVolume,
-                                stockInfo : list[i].stock
+                                stockInfo: list[i].stock
                             }
                             Qinformation.push(a)
                         }
                         else {
-                            if(list[i].stock.chemical.illness === null){
-                                var a = {
-                                    plag : 0,
-                                    alarmType: list[i].alarmType,
-                                    id: list[i].stock.id,
-                                    name: list[i].stock.chemical.name,
-                                    stockInfo : list[i].stock
-                                }
+                            var a = {
+                                alarmType: list[i].alarmType,
+                                id: list[i].stock.id,
+                                name: list[i].stock.chemical.name,
+                                period: list[i].left,
+                                stockInfo: list[i].stock
                             }
-                            else {
-                                var a = {
-                                    plag : 1,
-                                    alarmType: list[i].alarmType,
-                                    id: list[i].stock.id,
-                                    name: list[i].stock.chemical.name,
-                                    period: list[i].stock.chemical.illness.period,
-                                    disease: list[i].stock.chemical.illness.name,
-                                    stockInfo : list[i].stock
-                                }
-                            }
+
                             Qinformation.push(a)
                         }
                     }
