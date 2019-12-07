@@ -99,11 +99,11 @@ class MyLab extends Component {
                     if (stock.remainingVolume === 0.0){
                         //다씀
                         message.warning('약품을 전부 사용했습니다!')
-                        this.makeVolumeAlarm(stockId)
+                        //this.makeVolumeAlarm(stockId)
                     } else if (stock.remainingVolume / stock.volume <= 0.2){
                         //쪼금남음
                         message.warning('약품이 얼마 남지 않았습니다!')
-                        this.makeVolumeAlarm(stockId)
+                        //this.makeVolumeAlarm(stockId)
                     } else {
                         message.success('성공적으로 반영 되었습니다')
                     }

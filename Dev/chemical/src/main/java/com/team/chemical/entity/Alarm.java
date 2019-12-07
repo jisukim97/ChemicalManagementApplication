@@ -36,8 +36,10 @@ public class Alarm {
 				//이거에 대한 걸 모든 유저에 추가
 				Set<User> members = stock.getInventory().getLab().getMembers();
 				for (User member : members) {
-					member.getDateAlarm().add(stock);
-					userRepository.save(member);
+					if (!member.getDateAlarm().contains(stock)) {
+						member.getDateAlarm().add(stock);
+						userRepository.save(member);
+					}
 				}
 			}
 		}
