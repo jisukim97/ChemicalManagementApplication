@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.chemical.entity.Alarm;
 import com.team.chemical.entity.IllnessAlarm;
+import com.team.chemical.entity.Inventory;
 import com.team.chemical.entity.Stock;
 import com.team.chemical.entity.StockRepository;
 import com.team.chemical.entity.User;
@@ -29,10 +30,12 @@ import lombok.Data;
 class AlarmForm {
 	int alarmType;
 	Stock stock;
+	Inventory inventory;
 	long left;
-	AlarmForm(int alarmType, Stock stock){
+	AlarmForm(int alarmType, Stock stock, Inventory inventory){
 		this.alarmType = alarmType;
 		this.stock = stock;
+		this.inventory = inventory;
 		if (alarmType==1) {
 			LocalDate today = LocalDate.now();
 			stock.getExpireDate();
@@ -89,10 +92,10 @@ public class AlarmController {
 			//alarm들 리스트
 			List<AlarmForm> alarms = new LinkedList<>();
 			for (Stock stock : user.getDateAlarm()) {
-				alarms.add(new AlarmForm(1, stock));
+				alarms.add(new AlarmForm(1, stock, stock.getInventory()));
 			}
 			for (Stock stock : user.getVolumeAlarm()) {
-				alarms.add(new AlarmForm(2, stock));
+				alarms.add(new AlarmForm(2, stock, stock.getInventory()));
 			}
 			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
@@ -101,7 +104,7 @@ public class AlarmController {
 				if (illnessCheck.containsKey(illnessAlarm.getStock().getChemical().getName())) {
 					int illnessMonth = illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[illnessAlarm.isAlreadyChecked() ? 1 : 0];
 					if (illnessMonth > after) {
-						alarms.add(new AlarmForm(3, illnessAlarm.getStock()));
+						alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory()));
 					}
 				}
 			}
@@ -159,6 +162,28 @@ public class AlarmController {
 			userRepository.save(user);
 			return null;
 		} catch(Exception e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+	}
+	
+	/**
+	 * userId에게 stockId의 volumeAlarm 발생시킴
+	 * @param userId
+	 * @param stockId
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/alarm/{userId}/{stockId}", method=RequestMethod.PUT, produces="text/plain;charset=UTF-8") 
+	String makeVolumeAlarm(@PathVariable int userId, @PathVariable int stockId, HttpServletResponse response) {
+		try {
+			User user = userRepository.findById(userId).get();
+			Stock stock = stockRepository.findById(stockId).get();
+			user.getVolumeAlarm().add(stock);
+			userRepository.save(user);
+			return null;
+		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;

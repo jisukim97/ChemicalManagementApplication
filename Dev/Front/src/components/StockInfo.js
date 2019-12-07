@@ -25,6 +25,10 @@ class StockInfo extends Component {
         
     }
 
+    getDateToString( date ){
+        return (date.year + "/" + date.monthValue + "/" + date.dayOfMonth)
+    }
+
     //사용
     changeVolume = (change, unit) => {
         this.props.changeVolume(this.props.stock.id, change, unit);
@@ -164,8 +168,8 @@ class StockInfo extends Component {
                 {/* 재고 정보 */}
                 <div style={{ marginBottom: 20, marginTop: 20 }}>
                     <Descriptions bordered="true" size="small" >
-                        <Descriptions.Item label="약품 등록일">등록일 보여주기</Descriptions.Item>
-                        <Descriptions.Item label="약품 유효기간">유효기간 보여주기</Descriptions.Item>
+                        <Descriptions.Item label="약품 등록일">{this.getDateToString(stock.putDate)}</Descriptions.Item>
+                        <Descriptions.Item label="약품 유효기간">{this.getDateToString(stock.expireDate)}</Descriptions.Item>
                         <Descriptions.Item label="사용 후 남은 양">{stock.remainingVolume}/{stock.volume}</Descriptions.Item>
                     </Descriptions>
                 </div>

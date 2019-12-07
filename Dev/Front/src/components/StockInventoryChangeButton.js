@@ -9,7 +9,7 @@ class StockInventoryChangeButton extends Component {
         return(
             <Fragment>
                 <SelectInventory selectInventory={this.props.changeInventory} suggest={this.props.suggest}
-                notSuggest={this.props.notSuggest}/>
+                notSuggest={this.props.notSuggest} chemical={this.props.chemical}/>
                 <div>
                     <Button onClick={this.props.blindInventoryChangeButton} type="primary"> 취소 </Button>
                 </div>

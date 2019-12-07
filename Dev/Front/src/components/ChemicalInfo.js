@@ -10,6 +10,14 @@ class ChemicalInfo extends Component {
         console.log(key);
     }
 
+    getBooleanToString = (value) => {
+        if (value===true){
+            return "true";
+        } else {
+            return "false"
+        }
+    }
+
     render() {
         const { TabPane } = Tabs;
         const {chemical} = this.props;
@@ -28,20 +36,20 @@ class ChemicalInfo extends Component {
                     </TabPane>
                     <TabPane tab="특성 2" key="2">
                         <Descriptions bordered="true" size="small">
-                            <Descriptions.Item label="mp/bp">{chemical.meltingPoint}/{chemical.boilingPoint}</Descriptions.Item>
+                            <Descriptions.Item label="mp/bp">{chemical.meltingPoint} / {chemical.boilingPoint}</Descriptions.Item>
                             <Descriptions.Item label="pH">{chemical.pH}</Descriptions.Item>
                             <Descriptions.Item label="density">{chemical.density}</Descriptions.Item>
-                            <Descriptions.Item label="deliquescent">{chemical.deliquescent}</Descriptions.Item>
-                            <Descriptions.Item label="efflorescence">{chemical.efflorescence}</Descriptions.Item>
+                            <Descriptions.Item label="deliquescent">{this.getBooleanToString(chemical.deliquescent)}</Descriptions.Item>
+                            <Descriptions.Item label="efflorescence">{this.getBooleanToString(chemical.efflorescence)}</Descriptions.Item>
                         </Descriptions>
                     </TabPane>
                     <TabPane tab="특성 3" key="3">
                         <Descriptions bordered="true" size="small">
-                            <Descriptions.Item label="photoReaction">{chemical.photoReaction}</Descriptions.Item>
-                            <Descriptions.Item label="flammability">{chemical.flammability}</Descriptions.Item>
-                            <Descriptions.Item label="ignitability">{chemical.ignitability}</Descriptions.Item>
-                            <Descriptions.Item label="explosive">{chemical.explosive}</Descriptions.Item>
-                            <Descriptions.Item label="combustibility">{chemical.combustibility}</Descriptions.Item>
+                            <Descriptions.Item label="photoReaction">{this.getBooleanToString(chemical.photoReaction)}</Descriptions.Item>
+                            <Descriptions.Item label="flammability">{this.getBooleanToString(chemical.flammability)}</Descriptions.Item>
+                            <Descriptions.Item label="ignitability">{this.getBooleanToString(chemical.ignitability)}</Descriptions.Item>
+                            <Descriptions.Item label="explosive">{this.getBooleanToString(chemical.explosive)}</Descriptions.Item>
+                            <Descriptions.Item label="combustibility">{this.getBooleanToString(chemical.combustibility)}</Descriptions.Item>
                         </Descriptions>
                     </TabPane>
                 </Tabs>
