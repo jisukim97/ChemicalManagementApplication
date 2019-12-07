@@ -60,9 +60,9 @@ class MyGroupWithdraw extends Component {
     //const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
-      <center><Title style={{marginBottom : 50}}>my Lab 탈퇴</Title></center>
+      <center><Title style={{marginBottom : 30}}><font size='6' font color='black'>my Lab 탈퇴</font></Title></center>
 
-      <font size='3' font color='green'>현재 속한 my Lab 이름 :  </font><font size='4' font color='black'> {getLab().name} </font>
+      <font size='4' font color='green'>현재 속한 my Lab 이름 :  </font><font size='4' font color='black'> {getLab().name} </font>
       <br /><font size='3' font color='green'>현재 속한 my Lab 인원수 :  </font><font size='4' font color='black'> {this.props.count} </font>
 
       <br />

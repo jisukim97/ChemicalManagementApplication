@@ -50,7 +50,6 @@ class AlarmInfo extends Component {
     }).then(response => {
       if (response.status === 200) {
         //이건 정상적으로 된 경우
-        return response.json()
       } else {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
@@ -142,10 +141,10 @@ class AlarmInfo extends Component {
     if (info.alarmType === 1) {
       return (
 
-        <div style={{ fontSize: 18 }}>
-          <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>
-          의 유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
-          <Button icon="delete" onClick={this.handleRemove}></Button>
+        <div style={{ fontSize: 16 }}>
+          <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+          <br/>유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
+          <span style={{marginLeft : 10}}><Button icon="close" onClick={this.handleRemove}></Button></span>
           
           <Modal
             title="약품 정보"
@@ -164,9 +163,11 @@ class AlarmInfo extends Component {
       if (this.props.info.volume === 0) {
         return (
 
-          <div style={{ fontSize: 18 }}>
-            <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>의 양이 얼마남지 않았습니다.
-                <Button icon="delete" onClick={this.handleRemove}></Button>
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br/>장소 : <b>{this.props.info.place}</b>
+            <br/>양이 얼마 남지 않았습니다.
+            <span style={{marginLeft : 10}}>  <Button icon="close" onClick={this.handleRemove}></Button></span>
 
             <Modal
               title="약품 정보"
@@ -184,9 +185,11 @@ class AlarmInfo extends Component {
       else{
         return (
 
-          <div style={{ fontSize: 18 }}>
-            <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>이 전부 소진되었습니다.
-                <Button icon="delete" onClick={this.handleRemove}></Button>
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br/>장소 : <b>{this.props.info.place}</b>
+            <br/>전부 소진되었습니다.
+            <span style={{marginLeft : 10}}>   <Button icon="close" onClick={this.handleRemove}></Button></span>
 
             <Modal
               title="약품 정보"
@@ -206,9 +209,11 @@ class AlarmInfo extends Component {
       if (this.props.info.plag === 1) {
         return (
 
-          <div style={{ fontSize: 18 }}>
-            <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>를 사용한지 <b>{this.props.info.period}</b>이 지났습니다. <b>{this.props.info.disease}</b>의 위험이 있습니다.
-              <Button icon="delete" onClick={this.handleRemove}></Button>
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br/> 사용한지 <b>{this.props.info.period}</b>이 지났습니다. 
+            <br/> <b>{this.props.info.disease}</b>의 위험이 있습니다.
+            <span style={{marginLeft : 10}}><Button icon="close" onClick={this.handleRemove}></Button></span>
 
             <Modal
               title="약품 정보"

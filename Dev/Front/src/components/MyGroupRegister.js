@@ -68,7 +68,7 @@ class MyGroupRegister extends Component {
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Group Name"
+              placeholder="Lab Name"
             />,
           )}
         </Form.Item>
@@ -86,7 +86,7 @@ class MyGroupRegister extends Component {
             ],
           })(<Input.Password
             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder="Group Password" />)}
+            placeholder="Lab Password" />)}
         </Form.Item>
 
         {/* 가입 버튼 */}

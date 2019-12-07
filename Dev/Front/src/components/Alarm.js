@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Row, Col, Button, Card, List } from 'antd'
+import { Typography, Row, Col, Button, Card, List, Badge, Icon } from 'antd'
 import AlarmInfoList from './AlarmInfoList';
 import { getUser, getLab } from '../authentication';
 const { Title } = Typography;
@@ -185,18 +185,30 @@ class Alarm extends Component {
                 
                 <Row style={{marginBottom : 30}}>
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm1Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large"/><br/>
-                        유효기간 {this.state.alarm1Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'>유효기간</font>
+                        </div> 
                     </center></Col>
 
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm2Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeTwo} style={{ fontSize: '25px' }} size="large"/><br/>
-                        재고소진 {this.state.alarm2Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'>재고소진</font>
+                        </div> 
                     </center></Col>
 
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm3Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeThree} style={{ fontSize: '25px' }} size="large"/><br/>
-                        의심질병 {this.state.alarm3Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'> 의심질병</font>
+                        </div> 
                     </center></Col>
                 </Row>
 
