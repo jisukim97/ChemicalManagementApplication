@@ -58,7 +58,7 @@ class ApparatusReservation extends Component {
                 if(startTime.substring(0,2) == now.getHours() && startTime.substring(2,4)<now.getMinutes() && mm == (now.getMonth()+1) && dd == now.getDate()) {past=true}
 
                 if (startTime >= endTime) { message.error("끝 시간이 시작 시간보다 빠릅니다!") }
-                else if (past) { message.error("지난 시간은 예약할 수 없습니다.")}
+                else if (past) { message.error("지난 시간은 예약할 수 없습니다!")}
                 else if (getLab() === null) {
                     message.error("가입된 lab이 없습니다!")
                     history.push('/mygroup')
