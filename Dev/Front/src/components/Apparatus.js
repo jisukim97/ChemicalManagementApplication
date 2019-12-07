@@ -36,7 +36,7 @@ class Apparatus extends Component {
                     dataIndex: 'user',
                     key: 'user',
                 },{
-                    title:'Button',
+                    title:'Delete Button',
                     dataIndex: "deleteButton",
                     key: 'deleteButton'
                 }
