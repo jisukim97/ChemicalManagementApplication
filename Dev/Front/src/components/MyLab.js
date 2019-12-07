@@ -209,6 +209,8 @@ class MyLab extends Component {
                 }
             }
             this.getInventories()
+            //window.location.reload();
+
         })
         
     }
