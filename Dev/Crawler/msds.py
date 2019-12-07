@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+
+
 def search(chemi):
     raw= requests.get("https://en.wikipedia.org/wiki/"+chemi)
 
@@ -15,7 +17,7 @@ moral_mass = 0
 density = 0
 mp=[0]
 bp=[0]
-chemi_formula=""
+chemi_formula= ""
 
 explosive = False #폭발성
 flammability = False #인화성
@@ -55,8 +57,14 @@ for i in range(len(info)):
         text = info[i+1].text.replace(',','')
         p = re.compile(r"[-+]?\d*\.\d+|\d+")
         density = p.findall(text)
-        if len(density)>0 : density=density[0]
-        else : density = 0
+        if len(density)>0 :
+            if len(density) > 0:
+                if chemi.lower() == 'bromine':
+                    density = density[1]
+                else:
+                    density = density[0]
+            else:
+                density = 0
     elif 'Melting point' in info[i].text:
         text = info[i+1].text.replace(',','')
         p = re.compile(r"[-+]?\d*\.\d+|\d+")
