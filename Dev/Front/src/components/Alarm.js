@@ -6,7 +6,6 @@ const { Title } = Typography;
 
 class Alarm extends Component {
 
-    /** state 그냥 초기화를 여기서 시켜줬습니다..**/
     state = {
         type : 1,
         information : [],
@@ -72,7 +71,8 @@ class Alarm extends Component {
                                 alarmType: list[i].alarmType,
                                 id: list[i].stock.id,
                                 name: list[i].stock.chemical.name,
-                                date: list[i].left
+                                date: list[i].left,
+                                stockInfo : list[i].stock
                             }
                             Qinformation.push(a)
                         }
@@ -82,7 +82,8 @@ class Alarm extends Component {
                                 id: list[i].stock.id,
                                 name: list[i].stock.chemical.name,
                                 place: list[i].inventory.name,
-                                volume: list[i].stock.remainingVolume
+                                volume: list[i].stock.remainingVolume,
+                                stockInfo : list[i].stock
                             }
                             Qinformation.push(a)
                         }
@@ -93,6 +94,7 @@ class Alarm extends Component {
                                     alarmType: list[i].alarmType,
                                     id: list[i].stock.id,
                                     name: list[i].stock.chemical.name,
+                                    stockInfo : list[i].stock
                                 }
                             }
                             else {
@@ -102,7 +104,8 @@ class Alarm extends Component {
                                     id: list[i].stock.id,
                                     name: list[i].stock.chemical.name,
                                     period: list[i].stock.chemical.illness.period,
-                                    disease: list[i].stock.chemical.illness.name
+                                    disease: list[i].stock.chemical.illness.name,
+                                    stockInfo : list[i].stock
                                 }
                             }
                             Qinformation.push(a)
@@ -141,7 +144,7 @@ class Alarm extends Component {
         else if (alarmType===3){
             type3Count -= 1;
         }
-        const new_information = information.filter(info => info.id !==id )
+        const new_information = information.filter(info => !((info.id===id)&&(info.alarmType===alarmType) ))
         this.setState({
             information : new_information,
             alarm1Count : type1Count,
