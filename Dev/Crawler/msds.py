@@ -14,8 +14,8 @@ def search(chemi):
     constell=0
     moral_mass = 0
     density = 0
-    mp=[0]
-    bp=[0]
+    mp=0
+    bp=0
     chemi_formula= ""
 
     explosive = False #폭발성
@@ -54,31 +54,27 @@ def search(chemi):
             constell = info[i + 1].text
         elif 'Density' in info[i].text:
             text = info[i+1].text.replace(',','')
-            p = re.compile(r"[-+]?\d*\.\d+|\d+")
+            p = re.compile(r"-?\d*\.\d+|\d+")
             density = p.findall(text)
-            if len(density)>0 :
-                if len(density) > 0:
-                    if chemi.lower() == 'bromine':
-                        density = density[1]
-                    else:
-                        density = density[0]
-                else:
-                    density = 0
+            if len(density) > 0:
+                density = density[0]
+            else:
+                density = 0
         elif 'Melting point' in info[i].text:
             text = info[i+1].text.replace(',','')
-            p = re.compile(r"[-+]?\d*\.\d+|\d+")
+            p = re.compile(r"-?\d*\.\d+|\d+")
             mp = p.findall(text)
             if len(mp)>0 : mp=mp[0]
             else : mp = 0
         elif 'Boiling point' in info[i].text:
             text = info[i+1].text.replace(',','')
-            p = re.compile(r"[-+]?\d*\.\d+|\d+")
+            p = re.compile(r"-?\d*\.\d+|\d+")
             bp = p.findall(text)
             if len(bp)>0 : bp=bp[0]
             else : bp = 0
         elif 'Acidity' in info[i].text:
             text = info[i+1].text.replace(',','')
-            p = re.compile(r"[-+]?\d*\.\d+|\d+")
+            p = re.compile(r"-?\d*\.\d+|\d+")
             acidity = p.findall(text)[0]
             if len(acidity)>0 : acidity=acidity
             else : acidity = 0
@@ -127,24 +123,40 @@ def search(chemi):
                 constell = tmp[0]
                 constell = constell.split("<")[0]
             elif 'Density' in one :
-                p = re.compile(r"[-+]?\d*\.\d+|\d+")
+                p = re.compile(r"-?\d*\.\d+|\d+")
                 density = p.findall(one)
-                if len(density) > 0 : density = density[0]
-                else : density = 0
+                if len(density) > 0:
+                    if len(density) > 0:
+                        if chemi.lower() == 'bromine':
+                            density = density[1]
+                        else:
+                            density = density[0]
+                    else:
+                        density = 0
             elif 'Melting point' in one:
-                p = re.compile(r"[-+]?\d*\.\d+|\d+")
+                p = re.compile(r"-?\d*\.\d+|\d+")
                 mp = p.findall(one)
-                if len(mp) > 1 : mp = mp[1]
-                elif len(mp) == 1 : mp = mp[0]
+                if len(mp) >= 1 :
+                    if chemi.lower() == 'bromine' or chemi.lower() == 'oxygen':
+                        mp = mp[2]
+                    else:
+                        mp = mp[1]
+                elif len(mp) == 1: mp = mp[0]
                 else : mp = 0
             elif 'Boiling point' in one:
-                p = re.compile(r"[-+]?\d*\.\d+|\d+")
+                p = re.compile(r"-?\d*\.\d+|\d+")
                 bp = p.findall(one)
-                if len(bp) > 1 : bp = bp[1]
-                elif len(bp) == 1 : bp = bp[0]
-                else : bp = 0
+                if len(bp) >= 1:
+                    if chemi.lower() == 'bromine' or chemi.lower() == 'oxygen':
+                        bp = bp[2]
+                    else:
+                        bp = bp[1]
+                elif len(bp) == 1:
+                    bp = bp[0]
+                else:
+                    bp = 0
             elif 'Acidity' in one:
-                p = re.compile(r"[-+]?\d*\.\d+|\d+")
+                p = re.compile(r"[+-]?\d*\.\d+|\d+")
                 acidity = p.findall(one)
                 if len(acidity) > 1 : acidity = acidity[0]
                 else : acidity = 0
@@ -155,7 +167,13 @@ def search(chemi):
                     flammability = True
                 if "GHS03" in one:
                     combustilbilty = True
+    mp = float(mp)
+    bp = float(bp)
 
+    if mp > bp and bp!=0:
+        mp -= 2*mp
+    elif mp < bp and mp != 5.53 and mp != 16 and mp <50:
+        mp -= 2*mp
 
     if explosive != 0 :
         explosive = True
