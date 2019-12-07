@@ -111,6 +111,7 @@ class MyLab extends Component {
                 })
             } else {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+                this.getInventories()
             }
         })
     }

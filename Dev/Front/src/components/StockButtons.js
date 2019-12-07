@@ -102,8 +102,8 @@ class StockButtons extends Component {
                 }
                 console.log(change)
                 console.log(this.props.stock.volume)
-                console.log(change > this.props.stock.volume)
-                if (change > this.props.stock.volume){
+                console.log(change > this.props.stock.remainingVolume)
+                if (change > this.props.stock.remainingVolume){
                      message.error('잘못된 사용량을 입력하셨습니다');
                 } else {
                     this.props.changeVolume(change, unit);
