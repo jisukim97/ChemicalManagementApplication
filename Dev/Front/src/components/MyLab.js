@@ -140,7 +140,7 @@ class MyLab extends Component {
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
-                message.success('성공적으로 페기 되었습니다!')
+                message.success('성공적으로 폐기 되었습니다!')
                 this.setState({
                     inventories : [],
                     isInventoryExist : false
@@ -297,7 +297,9 @@ class MyLab extends Component {
             <div>
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
                 <br />
+
                 <center><Title style={{ marginBottom: 50 }}>My Lab</Title></center>
+
                 {
                     this.state.isInventoryExist && 
                     <div>
