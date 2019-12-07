@@ -36,15 +36,16 @@ class MyGroupGenerate extends Component {
           if (response.status === 200) {
             //그룹 생성이 성공적으로 수행 되었을 경우
             message.success('그룹이 생성되었습니다!');
-            return response.json()
+            response.json().then(response => {
+              console.log(555)
+              localStorage.setItem('lab', JSON.stringify(response.lab));
+              this.props.afterGroupGenerate(getLab().id);
+
+            })
           }
           else {
-            message.warning('같은 그룹 이름을 사용하는 그룹이 이미 존재합니다!');
+            message.warning('중복된 my Lab 이름이 존재합니다!');
           }
-        }).then(response => {
-          console.log(response)
-          localStorage.setItem('lab', JSON.stringify(response.lab));
-          this.props.afterGroupGenerate(getLab().id);
 
         })
       } else {

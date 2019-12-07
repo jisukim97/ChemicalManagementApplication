@@ -52,7 +52,7 @@ class MyGroupInvite extends Component {
         return response.json()
       } else {
         console.log('fetch error')
-        message.warning('해당 이메일을 가진 사용자가 존재하지 않습니다 !');
+        message.warning('해당 이메일을 가진 맴버가 존재하지 않습니다!');
       }
     }).then(response => {
 
@@ -67,12 +67,11 @@ class MyGroupInvite extends Component {
       }).then(response => {
         if (response.status === 200) {
           //이건 정상적으로 된 경우
-          console.log(0)
-          console.log(response)
+          message.success('성공적으로 초대되었습니다!');
           return response.json()
         } else {
           console.log('fetch error')
-          message.warning('해당 사용자는 이미 속해있는 Lab이 있습니다!');
+          message.warning('해당 맴버는 이미 속해있는 Lab이 있습니다!');
         }
       }).then(response => {
 

@@ -62,9 +62,10 @@ class MyGroupWithdraw extends Component {
       <div style={{ margin: '10px 0' }}>
       <center><Title style={{marginBottom : 50}}>my Lab 탈퇴</Title></center>
 
-      <br /><Text type="secondary">현재 속한 my Lab 이름 : {getLab().name} </Text>
-      <br /><Text type="secondary">현재 속한 my Lab 인원수 : {this.props.count} </Text>
+      <font size='3' font color='green'>현재 속한 my Lab 이름 :  </font><font size='4' font color='black'> {getLab().name} </font>
+      <br /><font size='3' font color='green'>현재 속한 my Lab 인원수 :  </font><font size='4' font color='black'> {this.props.count} </font>
 
+      <br />
       <br />
 
       <Button type="primary" onClick={this.showModal}>
@@ -76,8 +77,8 @@ class MyGroupWithdraw extends Component {
       onOk={this.handleOk} 
       onCancel={this.handleCancel}
       >
-      <p>{this.state.labName} 에서 정말 탈퇴 하시겠습니까?</p>
-      <p>(탈퇴시, 기기 예약, 알림 등의 정보가 모두 삭제 됩니다.)</p>
+      <p>정말 탈퇴 하시겠습니까?</p>
+      <p>(탈퇴시 기기 예약, 알림 등의 정보가 모두 삭제 됩니다.)</p>
 
       </Modal>
 

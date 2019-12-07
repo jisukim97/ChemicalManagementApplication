@@ -29,14 +29,15 @@ class MyGroupRegister extends Component {
         }).then(response => {
           if (response.status === 200) {
             //가입이 성공적으로 수행 되었을 경우
-            message.success('그룹의 맴버가 되신 것을 환영합니다!');
-            console.log(response + 11)
-            localStorage.setItem('lab', JSON.stringify(response.lab));
-            this.props.afterGroupGenerate(getUser().id);
+            message.success('Lab의 맴버가 되신 것을 환영합니다!');
+            response.json().then(response => {
+              localStorage.setItem('lab', JSON.stringify(response.lab));
+              this.props.afterGroupGenerate(getUser().id);
+            })
           } 
           else if (response.status === 400) {
             //그룹 이름이 없을 경우
-            message.warning('그룹 이름이 존재하지 않습니다!');
+            message.warning('해당 이름을 가진 Lab이 존재하지 않습니다!');
           }
           else {
             //패스워드가 틀릴 경우
