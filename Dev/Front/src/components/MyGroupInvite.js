@@ -63,7 +63,7 @@ class MyGroupInvite extends Component {
               message.success('성공적으로 초대되었습니다!');
             } else {
               console.log('fetch error')
-              message.warning('해당 맴버는 이미 속해있는 Lab이 있습니다!');
+              message.warning('해당 멤버는 이미 속해있는 Lab이 있습니다!');
             }
           }).then(response => {
 
@@ -72,7 +72,7 @@ class MyGroupInvite extends Component {
         })
       } else {
         console.log('fetch error')
-        message.warning('해당 이메일을 가진 맴버가 존재하지 않습니다!');
+        message.warning('해당 이메일을 가진 멤버가 존재하지 않습니다!');
       }
     }).then(response => { })
   }
@@ -93,7 +93,7 @@ class MyGroupInvite extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
-        <center><Title style={{ marginBottom: 30 }}><font size='6' font color='black'>Member 초대</font></Title></center>
+        <center><Title style={{ marginBottom: 30 }}><font size='6' font color='black'>멤버 초대</font></Title></center>
 
         <Form onSubmit={this.handleSubmit} className="form">
           {/* 이메일 폼*/}

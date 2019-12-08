@@ -139,28 +139,51 @@ class AlarmInfo extends Component {
   getMessage = () => {
     const { info, onRemove } = this.props;
     if (info.alarmType === 1) {
-      return (
+      if (this.props.info.date >= 0) {
+        return (
 
-        <div style={{ fontSize: 16 }}>
-          <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
-          <br/>유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
-          <span style={{marginLeft : 10}}><Button icon="close" onClick={this.handleRemove}></Button></span>
-          
-          <Modal
-            title="약품 정보"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            {/* 정보 출력  */}
-            <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
-              changeInventory={this.changeInventory} />
-          </Modal>
-        </div>
-      )
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br />유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
+          <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
+
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
+            </Modal>
+          </div>
+        )
+      }
+      else {
+        return (
+
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br />유효기간이 지났습니다.
+            <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
+
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
+            </Modal>
+          </div>
+        )
+      }
     }
     else if (info.alarmType === 2) {
-      if (this.props.info.volume === 0) {
+      if (this.props.info.volume !== 0) {
         return (
 
           <div style={{ fontSize: 16 }}>

@@ -87,7 +87,7 @@ class MyGroupGenerate extends Component {
       })(
         <Input
         //prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        placeholder="Lab Name"
+        placeholder="my Lab Name"
         />,
       )}
       </Form.Item>
@@ -106,7 +106,7 @@ class MyGroupGenerate extends Component {
         ],
       })(<Input.Password
         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        placeholder="Lab Password" />)}
+        placeholder="my Lab Password" />)}
         </Form.Item>
 
         {/* 비밀번호2 */}
@@ -123,7 +123,7 @@ class MyGroupGenerate extends Component {
           ],
         })(<Input.Password
           prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          placeholder="Confirm Lab Password"
+          placeholder="Confirm my Lab Password"
           onBlur={this.handleConfirmBlur} />)}
           </Form.Item>
 

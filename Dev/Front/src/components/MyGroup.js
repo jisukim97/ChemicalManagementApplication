@@ -95,7 +95,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 1
     })
-    message.warning('이미 가입된 Lab이 있습니다!')
+    message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
@@ -115,7 +115,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 3
     })
-    message.warning('이미 가입된 Lab이 있습니다!')
+    message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
@@ -186,7 +186,7 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
@@ -195,7 +195,7 @@ class MyGroup extends Component {
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
                 <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
               </Row>
 
@@ -214,7 +214,7 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
@@ -223,7 +223,7 @@ class MyGroup extends Component {
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
                 <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
               </Row>
 
