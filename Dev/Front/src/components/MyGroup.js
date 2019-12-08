@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Row, Col, Button, Card, message } from 'antd'
+import { Typography, Row, Col, Button, Card, Icon,  message } from 'antd'
 
 import MyGroupGenerate from './MyGroupGenerate';
 import MyGroupInvite from './MyGroupInvite';
@@ -186,17 +186,17 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
+              <center><Title style={{ marginBottom: 35, fontSize:29 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick}>my Lab 생성</Button></center></Col>
-                <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.firstButtonClick}>my Lab 생성<Icon type="contacts"style={{size: 4}} /></Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.secondButtonClick} >멤버 초대 <Icon type="user-add" style={{size: 3}} /></Button></center></Col>
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
-                <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{size: 3}}  /></Button></center></Col>
               </Row>
 
               {/* 내용 */}
@@ -214,17 +214,17 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
+              <center><Title style={{ marginBottom: 50, fontSize:29 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.firstButtonClick2}>my Lab 생성</Button></center></Col>
-                <Col span={12}><center><Button type="primary" onClick={this.secondButtonClick} >멤버 초대</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.firstButtonClick2}>my Lab 생성<Icon type="contacts"style={{size: 4}} /></Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.secondButtonClick} >멤버 초대<Icon type="user-add" style={{size: 3}} /></Button></center></Col>
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
-                <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{size: 3}}/></Button></center></Col>
               </Row>
 
               {/* 내용 */}

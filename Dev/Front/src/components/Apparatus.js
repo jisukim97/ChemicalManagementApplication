@@ -663,7 +663,7 @@ class Apparatus extends Component {
         return (
             <div>
                 <br />
-                <center><Title style={{ marginBottom: 35, fontSize: 29, marginTop: 15 }}>Apparatus</Title></center>
+                <center><Title style={{ marginBottom: 35, fontSize: 29}}>Apparatus</Title></center>
 
                 <Row >
                     <Col span={5} style={{ marginLeft: 1 }}>
