@@ -668,15 +668,14 @@ class Apparatus extends Component {
                 <div style={{ paddingTop: 20 }}>
 
                     <Row >
-                        <Col span={5} style={{ marginLeft: 10 }}>
-                            <br></br>
+                        <Col span={5} style={{ marginLeft: 1 }}>
                             <List
                                 size="small"
                                 grid={{ gutter: 16, column: 1 }}
                                 dataSource={this.state.apparatusList}
                                 renderItem={item => (
                                     <List.Item>
-                                        <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{ height: 27, width: 87, fontSize: 12 }} id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                        <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{ height: 27, width: 80, fontSize: 12 }} id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
                                     </List.Item>
                                 )}
                             />
@@ -734,7 +733,7 @@ class Apparatus extends Component {
 
                             </Modal>
                         </Col>
-                        <Col span={17} style={{ marginLeft: 10, marginRight:10 }}>
+                        <Col span={17} style={{ marginLeft: 16 }}>
                             {/* 기기들 상세 창 */}
                             <Card>
                                 <Row span={1} >
