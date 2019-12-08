@@ -91,9 +91,11 @@ class MyGroupRegister extends Component {
 
         {/* 가입 버튼 */}
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="button">
+          <center>
+          <Button type="primary" htmlType="submit" className="button" style={{width: 80}}>
             가입 신청
           </Button>
+          </center>
         </Form.Item>
       </Form>
     );
