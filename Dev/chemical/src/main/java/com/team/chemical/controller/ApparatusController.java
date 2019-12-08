@@ -3,7 +3,6 @@ package com.team.chemical.controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -104,21 +103,6 @@ public class ApparatusController {
 		}
 	}
 	
-	/**
-	 * 해당 날짜의 예약 불러오기
-	 * @param apparatus 기기
-	 * @param date 날짜
-	 * @return List of schedules
-	 */
-	private List<Schedule> getSchedulesAtDate(Apparatus apparatus, LocalDate date){
-		List<Schedule> scheduleList = new LinkedList<>();
-		for (Schedule schedule : apparatus.getSchedules()) {
-			if (schedule.getDate().isEqual(date)) {
-				scheduleList.add(schedule);
-			}
-		}
-		return scheduleList;
-	}
 	
 	/**
 	 * 해당 기기의 해당 날짜의 리스트 받아오기
@@ -130,12 +114,12 @@ public class ApparatusController {
 	String getSchedules(@PathVariable int apparatusId, @PathVariable String date, HttpServletResponse response) {
 		try {
 			//날짜 파싱
-			LocalDate reservDate = getDate(date);
+			LocalDate reservDate = Apparatus.getDate(date);
 			//기기 읽어오기
 			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
 			//해당 날짜의 예약 리스트 불러오기
 			Map<String, Object> result = new HashMap<>();
-			result.put("schedules", getSchedulesAtDate(apparatus, reservDate));
+			result.put("schedules", Apparatus.getSchedulesAtDate(apparatus, reservDate));
 			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,23 +143,28 @@ public class ApparatusController {
 			User findedUser = userRepository.findById(userId).get();
 			
 			//예약 시간 파싱
-			LocalDate reservDate = getDate(date);
-			LocalTime reservStartTime = getTime(startTime);
-			LocalTime reservEndTime = getTime(endTime);
+			LocalDate reservDate = Apparatus.getDate(date);
+			LocalTime reservStartTime = Apparatus.getTime(startTime);
+			LocalTime reservEndTime = Apparatus.getTime(endTime);
 			
 			//겹치는 시간 있는거 찾기
 			Apparatus apparatus = apparatusRepository.findById(apparatusId).get();
+			/*
 			for (Schedule alreadyReservated : apparatus.getSchedules()) {
 				if (alreadyReservated.getDate().isEqual(reservDate)) {
 					if ((alreadyReservated.getStartTime().isBefore(reservStartTime)&&reservEndTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거시작 < 새거끝 < 원래끝
 							|| (alreadyReservated.getStartTime().isBefore(reservStartTime)&&reservStartTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거시작 < 원래끝
 							|| (alreadyReservated.getStartTime().isBefore(reservEndTime)&&reservEndTime.isBefore(alreadyReservated.getEndTime())) //원래시작 < 새거끝 < 원래끝
 							|| (reservStartTime.isBefore(alreadyReservated.getStartTime())&&alreadyReservated.getStartTime().isBefore(reservStartTime))//새거시작 < 원래시작 < 새거끝
-							|| (reservStartTime.isBefore(alreadyReservated.getEndTime())&&alreadyReservated.getEndTime().isBefore(reservEndTime)) /*새거시작 < 원래끝 < 새거끝*/ ) {
+							|| (reservStartTime.isBefore(alreadyReservated.getEndTime())&&alreadyReservated.getEndTime().isBefore(reservEndTime)) //새거시작 < 원래끝 < 새거끝 ) 
+							{
 						throw new Exception("시간 겹침");
 					}
 				}
 			}
+			*/
+			Apparatus.isConflictTime(apparatus, reservDate, reservStartTime, reservEndTime);
+			
 			//여기까지 오면 시간 안겹침
 			Schedule newSchedule = new Schedule();
 			newSchedule.setDate(reservDate);
@@ -195,7 +184,7 @@ public class ApparatusController {
 			
 			//성공적으로 등록된 해당 날짜의 스케줄 리턴
 			Map<String, Object> result = new HashMap<>();
-			result.put("schedules", getSchedulesAtDate(apparatus, reservDate));
+			result.put("schedules", Apparatus.getSchedulesAtDate(apparatus, reservDate));
 			return new ObjectMapper().writeValueAsString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -232,32 +221,6 @@ public class ApparatusController {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
-	}
-	
-	
-	 /**
-	  * 
-	  * @param date YYMMDD형식을 LocalDate로
-	  * @return LocalDate
-	  */
-	public static LocalDate getDate(String date) {
-		int year = Integer.parseInt(date.substring(0, 2)) + 2000;
-		int month = Integer.parseInt(date.substring(2, 4));
-		int day = Integer.parseInt(date.substring(4));
-		LocalDate localDate = LocalDate.of(year, month, day);
-		return localDate;
-	}
-	
-	 /**
-	  * 
-	  * @param time HHMM형식을 LocalTime으로
-	  * @return LocalTime
-	  */
-	public static LocalTime getTime(String time) {
-		int hour = Integer.parseInt(time.substring(0, 2));
-		int min = Integer.parseInt(time.substring(2));
-		LocalTime localTime = LocalTime.of(hour, min);
-		return localTime;
 	}
 	
 }

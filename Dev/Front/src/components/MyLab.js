@@ -352,8 +352,13 @@ class MyLab extends Component {
                 {
                     !this.state.isInventoryExist  &&
                     <div>
-                        아무것도 없음!
-                        <InventoryAdd addInventory={this.addInventory} />
+                        <br/>
+                        <br/>
+                        <br/>
+                        <center>보관장소가 없습니다! 추가 해 주세요!</center>
+                        <br/>
+                        <br/>
+                        <center> <InventoryAdd addInventory={this.addInventory} /></center>
                     </div>
                 }
 

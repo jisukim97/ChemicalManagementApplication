@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.chemical.entity.Apparatus;
 import com.team.chemical.entity.Chemical;
 import com.team.chemical.entity.ChemicalRepository;
 import com.team.chemical.entity.IllnessAlarm;
@@ -179,8 +180,8 @@ public class ChemicalController {
 		try {
 			Chemical chemical = chemicalRepository.findById(chemicalId).get();
 			
-			LocalDate expireDate = ApparatusController.getDate(expire);
-			if (stock.getNickname().equals("default")) { //여기서 오류남@@@@@@@@@@@@@@
+			LocalDate expireDate = Apparatus.getDate(expire);
+			if (stock.getNickname().equals("default")) { 
 				//닉네임이 비어있을 경우
 				//오름차순으로 추가
 				Lab myLab = userRepository.findById(userId).get().getMyLab();
@@ -232,22 +233,7 @@ public class ChemicalController {
 		try {
 			int labId = userRepository.findById(userId).get().getMyLab().getId();
 			//아이디 양식은 랩아이디 + 인벤토리 타입 + 랜덤값
-			if (inventory.getTemperature() < -3.0) {
-				//냉동고
-				inventory.setId(labId + "A" + (int)(Math.random()*1000));
-			} else if (inventory.getTemperature() < 5.0) {
-				//냉장고 
-				inventory.setId(labId + "B" + (int)(Math.random()*1000));
-			} else if (inventory.getTemperature() < 28.0) {
-				//상온
-				inventory.setId(labId + "C" + (int)(Math.random()*1000));
-			} else if (inventory.getTemperature() < 45.0) {
-				//인큐베이터
-				inventory.setId(labId + "D" + (int)(Math.random()*1000));
-			} else {
-				//오븐
-				inventory.setId(labId + "E" + (int)(Math.random()*1000));
-			}
+			inventory.makeId(labId);
 			Inventory savedInventory = inventoryRepository.save(inventory);
 			Lab lab = userRepository.findById(userId).get().getMyLab();
 			

@@ -108,5 +108,25 @@ public class Inventory {
 			return false;
 		return true;
 	}
+	
+	public void makeId(int labId) {
+		if (this.temperature < -3.0) {
+			//냉동고
+			this.id = (labId + "A" + (int)(Math.random()*1000));
+		} else if (this.temperature < 5.0) {
+			//냉장고 
+			this.id = (labId + "B" + (int)(Math.random()*1000));
+		} else if (this.temperature < 28.0) {
+			//상온
+			this.id = (labId + "C" + (int)(Math.random()*1000));
+		} else if (this.temperature < 45.0) {
+			//인큐베이터
+			this.id = (labId + "D" + (int)(Math.random()*1000));
+		} else {
+			//오븐
+			this.id = (labId + "E" + (int)(Math.random()*1000));
+		}
+
+	}
 
 }
