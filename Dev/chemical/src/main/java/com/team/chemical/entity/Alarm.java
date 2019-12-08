@@ -58,7 +58,7 @@ public class Alarm {
 							//user = userRepository.save(user);
 						}
 						//만약 유효기간 지난거면 안됨
-						if (stock.getExpireDate().isAfter(today)) {
+						if (stock.getExpireDate().isBefore(today)) {
 							stock.setRemainingVolume(0.0f);
 							stockRepository.save(stock);
 						}
@@ -132,6 +132,19 @@ public class Alarm {
 				continue;
 			for(Inventory inventory : user.getMyLab().getInventories()){
 				for (Stock stock : inventory.getStocks()) {
+					for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
+						if (illnessAlarm.getStock().getId() == stock.getId()) {
+							continue;
+						}
+					}
+					IllnessAlarm alarm = new IllnessAlarm();
+					alarm.setStock(stock);
+					today = LocalDate.now().minusYears(5); //이부분 가짜
+					alarm.setDeleteDate(today); //이부분도 가짜
+					//alarm.setDeleteDate(today.isBefore(stock.getPutDate()) ? stock.getPutDate() : today);
+					alarm = illnessAlarmRepository.save(alarm);
+					user.getIllnessAlarm().add(alarm);
+/*
 					IllnessAlarm alarm = new IllnessAlarm();
 					alarm.setStock(stock);
 					if (user.getIllnessAlarm().contains(alarm)) {
@@ -141,6 +154,7 @@ public class Alarm {
 						alarm = illnessAlarmRepository.save(alarm);
 						user.getIllnessAlarm().add(alarm);
 					}
+					*/
 				}
 			}
 			userRepository.save(user);

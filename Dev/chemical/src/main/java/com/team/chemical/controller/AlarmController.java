@@ -112,13 +112,13 @@ public class AlarmController {
 					stock = stockRepository.findById(stock.getId()).get();
 					alarms.add(new AlarmForm(1, stock, stock.getInventory()));
 					//stockRepository.save(stock);
+					System.out.println("유효기간 성공 : " + stock.getId());
+
 				} catch (Exception e) {
 					System.out.println("유효기간 알람");
 					System.out.println("Error stock : " + stock.getId());
 					e.printStackTrace();
-				} finally {
-					System.out.println("유효기간 성공 : " + stock.getId());
-				}
+				} 
 			}
 			
 			
@@ -128,30 +128,33 @@ public class AlarmController {
 					stock = stockRepository.findById(stock.getId()).get();
 					alarms.add(new AlarmForm(2, stock, stock.getInventory()));
 					//stockRepository.save(stock);
+					System.out.println("다쓴거 성공 : " + stock.getId());
+
 				} catch (Exception e) {
 					System.out.println("다쓴거 알람 ");
 					System.out.println("Error stock : " + stock.getId());
 					e.printStackTrace();
-				} finally {
-					System.out.println("다쓴거 성공 : " + stock.getId());
 				}
+				
 			}
 	
 			user = userRepository.findById(userId).get();
 			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
 				// 몇달 지났는지? -> 이것도 left에 담아 보내줌
-				//System.out.println("getDeleteDate : " + illnessAlarm.getDeleteDate() + " / today : " + today);
 				long after = ChronoUnit.MONTHS.between(illnessAlarm.getDeleteDate(), today);
 				String chemName = illnessAlarm.getStock().getChemical().getName().toLowerCase();
-				//System.out.println(chemName);
 				if (illnessCheck.containsKey(chemName)) {
-
 					int illnessMonth = illnessCheck.get(chemName)[illnessAlarm.isAlreadyChecked() ? 1 : 0];
-
-					//System.out.println("after : " + after + " / illnessMonth : " + illnessMonth);
 					if (illnessMonth < after) {
-						alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory(), after));
+						try {
+							alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory(), after));
+							System.out.println("질병 성공 : " + illnessAlarm.getId());
+						} catch (Exception e) {
+							System.out.println("질병 알람 ");
+							System.out.println("Error illnessAlarm : " + illnessAlarm.getId());
+							e.printStackTrace();
+						} 
 					}
 				}
 			}

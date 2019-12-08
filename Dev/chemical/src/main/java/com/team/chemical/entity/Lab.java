@@ -93,13 +93,14 @@ public class Lab {
     		boolean canSuggest = true;
     		//각각 조건들을 체크해가며 조건 하나라도 실패하면 cansuggest가 false가 됨
     		//성상 체크 
-    		if (chemical.getStatus().contains("liquid")) {
+    		String statusName = chemical.getStatus().toLowerCase();
+    		if (statusName.contains("liquid") || statusName.contains("solution")) {
     			//액체
     			if (!(chemical.getMeltingPoint() <= inventory.getTemperature() &&
     					inventory.getTemperature() <= chemical.getBoilingPoint())) {
     				canSuggest = false;
     			}
-    		} else if (chemical.getStatus().contains("gas")) {
+    		} else if (statusName.contains("gas")) {
     			//기체
     			if (!(chemical.getBoilingPoint() <= inventory.getTemperature())) {
     				canSuggest = false;
