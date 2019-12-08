@@ -3,21 +3,23 @@ import { Typography, Row, Col, Button, Card, List, Badge, Icon } from 'antd'
 import AlarmInfoList from './AlarmInfoList';
 import { getUser, getLab } from '../authentication';
 import { serverUrl } from '../setting'
+import MenuTitle from './MenuTitle';
+
 const { Title } = Typography;
 
 class Alarm extends Component {
 
     state = {
-        type : 1,
-        information : [],
-        alarm1Count : 0,
-        alarm2Count : 0,
-        alarm3Count : 0
+        type: 1,
+        information: [],
+        alarm1Count: 0,
+        alarm2Count: 0,
+        alarm3Count: 0
     }
 
-   constructor(props) {
+    constructor(props) {
         super(props);
-        
+
         /*
         var information = [
             {
@@ -55,7 +57,7 @@ class Alarm extends Component {
                },
         ] 
         */
-        
+
         fetch(serverUrl + '/alarm/' + getUser().id, {
             method: 'GET', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
@@ -115,7 +117,7 @@ class Alarm extends Component {
                 })
             } else {
                 //가져올 알람이 없을 경우
-                
+
             }
         })
     }
@@ -125,86 +127,88 @@ class Alarm extends Component {
         var type1Count = this.state.alarm1Count;
         var type2Count = this.state.alarm2Count;
         var type3Count = this.state.alarm3Count;
-        if (alarmType===1){
+        if (alarmType === 1) {
             type1Count -= 1;
         }
-        else if (alarmType===2){
+        else if (alarmType === 2) {
             type2Count -= 1;
         }
-        else if (alarmType===3){
+        else if (alarmType === 3) {
             type3Count -= 1;
         }
-        const new_information = information.filter(info => !((info.id===id)&&(info.alarmType===alarmType) ))
+        const new_information = information.filter(info => !((info.id === id) && (info.alarmType === alarmType)))
         this.setState({
-            information : new_information,
-            alarm1Count : type1Count,
-            alarm2Count : type2Count,
-            alarm3Count : type3Count
+            information: new_information,
+            alarm1Count: type1Count,
+            alarm2Count: type2Count,
+            alarm3Count: type3Count
         })
     }
 
 
-    
+
     makeTypeOne = () => {
-        this.setState({type : 1})
+        this.setState({ type: 1 })
     }
 
     makeTypeTwo = () => {
-        this.setState({type : 2})
+        this.setState({ type: 2 })
     }
 
     makeTypeThree = () => {
-        this.setState({type : 3})
+        this.setState({ type: 3 })
     }
 
-    function = (value) =>{
-        return value.alarmType 
+    function = (value) => {
+        return value.alarmType
     }
-    
+
     getContent = () => {
-        return (<div><AlarmInfoList data={this.state.information.filter( value => value.alarmType === this.state.type )} onRemove={this.handleRemove}/></div>)
+        return (<div><AlarmInfoList data={this.state.information.filter(value => value.alarmType === this.state.type)} onRemove={this.handleRemove} /></div>)
     }
 
 
     render() {
-       
+
         return (
             <div>
-                <br />
-                <center><Title style={{ marginBottom: 35, fontSize:29 }}>Alarm</Title></center>
-                
-                <Row style={{marginBottom : 30}}>
-                    <Col span={8}><center>
-                        <Badge count={this.state.alarm1Count}>
-                        <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large"/><br/>
-                        </Badge>
-                        <div>
-                        <font size='2' font color='green'>유효기간</font>
-                        </div> 
-                    </center></Col>
+                <div style={{ paddingTop: 20 }}>
 
-                    <Col span={8}><center>
-                        <Badge count={this.state.alarm2Count}>
-                        <Button Button shape="circle" icon="bell" onClick={this.makeTypeTwo} style={{ fontSize: '25px' }} size="large"/><br/>
-                        </Badge>
-                        <div>
-                        <font size='2' font color='green'>재고소진</font>
-                        </div> 
-                    </center></Col>
+                    <MenuTitle title="Alarm" />
 
-                    <Col span={8}><center>
-                        <Badge count={this.state.alarm3Count}>
-                        <Button Button shape="circle" icon="bell" onClick={this.makeTypeThree} style={{ fontSize: '25px' }} size="large"/><br/>
-                        </Badge>
-                        <div>
-                        <font size='2' font color='green'> 의심질병</font>
-                        </div> 
-                    </center></Col>
-                </Row>
+                    <Row style={{ marginBottom: 30 }}>
+                        <Col span={8}><center>
+                            <Badge count={this.state.alarm1Count}>
+                                <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large" /><br />
+                            </Badge>
+                            <div>
+                                <font size='2' font color='green'>유효기간</font>
+                            </div>
+                        </center></Col>
 
-                <Card style={{margin : 10}}>
-                    {this.getContent()}
-                </Card>
+                        <Col span={8}><center>
+                            <Badge count={this.state.alarm2Count}>
+                                <Button Button shape="circle" icon="bell" onClick={this.makeTypeTwo} style={{ fontSize: '25px' }} size="large" /><br />
+                            </Badge>
+                            <div>
+                                <font size='2' font color='green'>재고소진</font>
+                            </div>
+                        </center></Col>
+
+                        <Col span={8}><center>
+                            <Badge count={this.state.alarm3Count}>
+                                <Button Button shape="circle" icon="bell" onClick={this.makeTypeThree} style={{ fontSize: '25px' }} size="large" /><br />
+                            </Badge>
+                            <div>
+                                <font size='2' font color='green'> 의심질병</font>
+                            </div>
+                        </center></Col>
+                    </Row>
+
+                    <Card style={{ margin: 10 }}>
+                        {this.getContent()}
+                    </Card>
+                </div>
             </div>
         );
     }

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message, Icon } from 'antd'
 import { history } from '../History';
 import { Link } from "react-router-dom";
-import { serverUrl } from '../setting'
+import { serverUrl } from '../setting'
+import MenuTitle from './MenuTitle';
+
 
 import { getUser, getLab } from '../authentication';
 import moment from 'moment';
@@ -43,7 +45,7 @@ class Apparatus extends Component {
                     align: 'center',
                     ellipsis: true,
                     width: "23",
-                }, 
+                },
                 {
                     title: 'delete',
                     dataIndex: "deleteButton",
@@ -51,7 +53,7 @@ class Apparatus extends Component {
                     align: 'center',
                     ellipsis: true,
                     width: "7",
-                    
+
                 }
 
             ],
@@ -70,7 +72,7 @@ class Apparatus extends Component {
     // 그래서 그냥 state에다 변수이름과 타입정도만 미리 다 알려주고 난 후에 fetch된 실제 결과를 setState 해주기
     // 그런데 constructor에서는 setState 할 수 없으니까 componentDidMount를 써줌
     componentDidMount() {
-        fetch(serverUrl+ '/apparatus/' + getUser().id, {
+        fetch(serverUrl + '/apparatus/' + getUser().id, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
@@ -109,7 +111,7 @@ class Apparatus extends Component {
                 }
                 else { var url = 'apparatus/' + getUser().id }
 
-                fetch(serverUrl+'/'+ url, {
+                fetch(serverUrl + '/' + url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
                 }).then(response => {
@@ -192,7 +194,7 @@ class Apparatus extends Component {
                 console.log(values)
                 console.log(getLab().id)
                 try {
-                    fetch(serverUrl+'/apparatus/' + getLab().id, {
+                    fetch(serverUrl + '/apparatus/' + getLab().id, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(values)
@@ -293,7 +295,7 @@ class Apparatus extends Component {
         if (this.props.match.params !== newProps.match.params) {
             const { apparatusId } = this.props.match.params;
             console.log(apparatusId)
-            fetch(serverUrl+'/schedule/' + apparatusId + '/' + todayInfo, {
+            fetch(serverUrl + '/schedule/' + apparatusId + '/' + todayInfo, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
@@ -337,7 +339,7 @@ class Apparatus extends Component {
         if (dd < 10) { dd = '0' + dd }
         var newdayInfo = yy + mm + dd;
 
-        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
+        fetch(serverUrl + '/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -373,7 +375,7 @@ class Apparatus extends Component {
         if (dd < 10) { dd = '0' + dd }
         var newdayInfo = yy + mm + dd;
 
-        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
+        fetch(serverUrl + '/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
@@ -423,7 +425,7 @@ class Apparatus extends Component {
                 newList[i].deleteButton = ''
             }
         }
-        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + param, {
+        fetch(serverUrl + '/schedule/' + this.state.menu + '/' + param, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -459,7 +461,7 @@ class Apparatus extends Component {
                 var time = hh + ":" + mm
                 oneBlock['time'] = time;
                 oneBlock['user'] = (<font color="white">none</font>)
-                oneBlock['deleteButton'] =  (<font color="white">none</font>)
+                oneBlock['deleteButton'] = (<font color="white">none</font>)
                 oneBlock['id'] = 0
 
                 result.push(oneBlock)
@@ -570,7 +572,7 @@ class Apparatus extends Component {
             history.push('/mygroup')
         }
         else {
-            fetch(serverUrl+'/apparatus/' + getLab().id + '/' + this.state.menu, {
+            fetch(serverUrl + '/apparatus/' + getLab().id + '/' + this.state.menu, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
@@ -632,7 +634,7 @@ class Apparatus extends Component {
         console.log('apparatus id: ', param)
         console.log(todayInfo)
 
-        fetch(serverUrl+'/schedule/' + param + '/' + todayInfo, {
+        fetch(serverUrl + '/schedule/' + param + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -662,118 +664,118 @@ class Apparatus extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <br />
-                <center><Title style={{ marginBottom: 35, fontSize: 29}}>Apparatus</Title></center>
+                <MenuTitle title="Apparatus" />
+                <div style={{ paddingTop: 20 }}>
 
-                <Row >
-                    <Col span={5} style={{ marginLeft: 15 }}>
-                        <List
-                            size ="small"
-                            grid={{ gutter: 16, column: 1}}
-                            dataSource={this.state.apparatusList}
-                            renderItem={item => (
-                                <List.Item>
-                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 85, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
-                                </List.Item>
-                            )}
-                        />
-                        <center>
-                        <br></br>
-                        <Button type="primary" ghost  onClick={this.showModal_1} style={{ width:75, height: 30, fontSize: 11}}>
-                        기기 등록
+                    <Row >
+                        <Col span={5} style={{ marginLeft: 1 }}>
+                            <List
+                                size="small"
+                                grid={{ gutter: 16, column: 1 }}
+                                dataSource={this.state.apparatusList}
+                                renderItem={item => (
+                                    <List.Item>
+                                        <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{ height: 27, width: 80, fontSize: 12 }} id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                    </List.Item>
+                                )}
+                            />
+                            <center>
+                                <br></br>
+                                <Button type="primary" ghost onClick={this.showModal_1} style={{ width: 75, height: 30, fontSize: 11 }}>
+                                    기기 등록
                         </Button> </center>
-                        <Modal
-                            size="small"
-                            title="new Apparatus 등록 하기"
-                            visible={this.state.visible_1}
+                            <Modal
+                                size="small"
+                                title="new Apparatus 등록 하기"
+                                visible={this.state.visible_1}
 
-                            onOk={this.handleOk_1}
-                            onCancel={this.handleCancel_1}
+                                onOk={this.handleOk_1}
+                                onCancel={this.handleCancel_1}
 
-                        >
-                            <Form onSubmit={this.handleSubmit} className="form">
-                                <Form.Item>
-                                    <center>
-                                        {getFieldDecorator('name', {
-                                            rules: [{ required: true, message: '등록할 기기 이름을 입력하세요. ' }],
-                                        })(
-                                            <Input placeholder="new apparatue name?" style={{width: 200}} />
-                                        )}
-                                    </center>
-                                </Form.Item>
-                                <Form.Item>
-                                    <center>
-                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, fontSize: 12}}>
-                                        <center>등록 하기</center>
-                                        </Button>
-                                    </center>
-                                </Form.Item>
-                            </Form>
-                        </Modal>
-                        <p></p>
-                        <center>
-                        <Button type="primary" ghost  onClick={this.showModal_0} style={{height: 30, width: 75, fontSize: 11}} > {/*기기 삭제 버튼*/}
-                        기기 삭제
+                            >
+                                <Form onSubmit={this.handleSubmit} className="form">
+                                    <Form.Item>
+                                        <center>
+                                            {getFieldDecorator('name', {
+                                                rules: [{ required: true, message: '등록할 기기 이름을 입력하세요. ' }],
+                                            })(
+                                                <Input placeholder="new apparatue name?" style={{ width: 200 }} />
+                                            )}
+                                        </center>
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <center>
+                                            <Button type="primary" htmlType="submit" className="button" style={{ height: 35, width: 80, fontSize: 12 }}>
+                                                <center>등록 하기</center>
+                                            </Button>
+                                        </center>
+                                    </Form.Item>
+                                </Form>
+                            </Modal>
+                            <p></p>
+                            <center>
+                                <Button type="primary" ghost onClick={this.showModal_0} style={{ height: 30, width: 75, fontSize: 11 }} > {/*기기 삭제 버튼*/}
+                                    기기 삭제
                         </Button>
-                        </center>
-                        <Modal
-                            size="small"
-                            title="Apparatus 삭제 하기"
-                            visible={this.state.visible_0}
-                            onOk={this.handleOk_0}
-                            onCancel={this.handleCancel_0}
-                        >
-                            <p> <center> <Icon type="hdd"  style={{size: 4}} />     해당 기기를 삭제하시겠습니까? </center> </p>
-                            <br></br>
-                            <center><p> <font style={{size: 13, fontWeight: "bold"}} > {this.getApparNameNow()} </font> </p></center>
-                            <p></p>
-                            <p></p>
+                            </center>
+                            <Modal
+                                size="small"
+                                title="Apparatus 삭제 하기"
+                                visible={this.state.visible_0}
+                                onOk={this.handleOk_0}
+                                onCancel={this.handleCancel_0}
+                            >
+                                <p> <center> <Icon type="hdd" style={{ size: 4 }} />     해당 기기를 삭제하시겠습니까? </center> </p>
+                                <br></br>
+                                <center><p> <font style={{ size: 13, fontWeight: "bold" }} > {this.getApparNameNow()} </font> </p></center>
+                                <p></p>
+                                <p></p>
 
-                        </Modal>
-                    </Col>
-                    <Col span={17} style= {{ marginLeft : 16}}>
-                        {/* 기기들 상세 창 */}
-                        <Card>
-                            <Row span={1} >
-                                <center>
-                                    <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
-                                    {this.makeMonth()}월 {this.makeDate()}일
+                            </Modal>
+                        </Col>
+                        <Col span={17} style={{ marginLeft: 16 }}>
+                            {/* 기기들 상세 창 */}
+                            <Card>
+                                <Row span={1} >
+                                    <center>
+                                        <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
+                                        {this.makeMonth()}월 {this.makeDate()}일
                                     <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
-                                </center>
-                            </Row>
-                            <Row span={18}>
-                                {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table width = "100" size='small' tableLayout ="fixed"  locale={{emptyText:'   '}} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
-                            </Row>
-                            <Row span={2} style= {{fontSize: 10}}>
-                                {(!this.checkReservationDate()) &&
-                                    <div>
-                                    <center>      
-                                    <Button onClick={this.showModal_2} style={{fontSize: 12}}>
-                                                예약 하기
-                                    </Button></center>  
-                                        <Modal
-                                            size = "small"
-                                            title= "Apparatus 예약 하기"
-                                            visible={this.state.visible_2}
-                                            onOk={this.handleOk_2}
-                                            onCancel={this.handleCancel_2}
-                                        >
-                                            <p><Icon type="check-circle" theme="filled" style={{size: 4}} />   <font style={{fontWeight: "bold"}}> 예약할 기기: {this.getApparNameNow()} </font> </p>
-                                            <p><Icon type="check-circle" theme="filled" style={{size: 4}} />   <font style={{fontWeight: "bold"}}>  예약자: {getUser().name}</font> </p>
-                                            <p><Icon type="clock-circle"  style={{size: 4}}/> <font style={{fontWeight: "bold"}}> 예약할 날짜: {this.state.todayDate.getMonth()+1} 월  {this.state.todayDate.getDate()} 일 </font></p>
-                                            <p><Icon type="clock-circle"  style={{size: 4}}/>  <font style={{fontWeight: "bold"}}>예약할 시간: </font> </p>
+                                    </center>
+                                </Row>
+                                <Row span={18}>
+                                    {/*시간과 예약현황을 표로 나타내기*/}
+                                    <Table width="100" size='small' tableLayout="fixed" locale={{ emptyText: '   ' }} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
+                                </Row>
+                                <Row span={2} style={{ fontSize: 10 }}>
+                                    {(!this.checkReservationDate()) &&
+                                        <div>
+                                            <center>
+                                                <Button onClick={this.showModal_2} style={{ fontSize: 12 }}>
+                                                    예약 하기
+                                    </Button></center>
+                                            <Modal
+                                                size="small"
+                                                title="Apparatus 예약 하기"
+                                                visible={this.state.visible_2}
+                                                onOk={this.handleOk_2}
+                                                onCancel={this.handleCancel_2}
+                                            >
+                                                <p><Icon type="check-circle" theme="filled" style={{ size: 4 }} />   <font style={{ fontWeight: "bold" }}> 예약할 기기: {this.getApparNameNow()} </font> </p>
+                                                <p><Icon type="check-circle" theme="filled" style={{ size: 4 }} />   <font style={{ fontWeight: "bold" }}>  예약자: {getUser().name}</font> </p>
+                                                <p><Icon type="clock-circle" style={{ size: 4 }} /> <font style={{ fontWeight: "bold" }}> 예약할 날짜: {this.state.todayDate.getMonth() + 1} 월  {this.state.todayDate.getDate()} 일 </font></p>
+                                                <p><Icon type="clock-circle" style={{ size: 4 }} />  <font style={{ fontWeight: "bold" }}>예약할 시간: </font> </p>
 
-                                            <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
-                                            <p> -------------------------------------------------------------------</p>
-                                            <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
-                                            <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
-                                            <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
-                                            <p> -------------------------------------------------------------------</p>
-                                            
-                                        </Modal>
-                                    </div>}
-                                {/* <Divider type="vertical" />
+                                                <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
+                                                <p> ---------------------------------------------------------</p>
+                                                <center><p> <Icon type="alert" theme="filled" sytle={{ size: 5 }} />  주의 사항  <Icon theme="filled" type="alert" sytle={{ size: 5 }} /> </p></center>
+                                                <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
+                                                <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
+                                                <p> ---------------------------------------------------------</p>
+
+                                            </Modal>
+                                        </div>}
+                                    {/* <Divider type="vertical" />
                             {(this.checkMyReservation()) && (
                                 <div>
                                     <Button onClick={this.showModal_3} >
@@ -792,11 +794,11 @@ class Apparatus extends Component {
                                     </Modal>
                                 </div>)
                             } */}
-                            </Row>
-                        </Card>
-                    </Col>
-                </Row>
-
+                                </Row>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
 
             </div>
         );

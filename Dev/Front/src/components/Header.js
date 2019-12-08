@@ -38,7 +38,7 @@ class Header extends Component {
 
         return (
             <div style={{
-                height: this.props.height, display: 'block', background: 'rgb(35, 41, 48)', textAlign: 'left',
+                height: this.props.height, display: 'block', background: '#4B589F', textAlign: 'left',
                  display: 'table', width: this.props.width, padding: 10, paddingLeft: 20
             }}>
                 <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
