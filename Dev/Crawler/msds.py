@@ -50,6 +50,7 @@ def search(chemi):
         elif 'Molar mass' in info[i].text:
             moral_mass_or = info[i + 1].text
             moral_mass = moral_mass_or.split('g')[0]
+            moral_mass = float(moral_mass)
         elif 'Appearance' in info[i].text:
             constell = info[i + 1].text
         elif 'Density' in info[i].text:
@@ -116,16 +117,13 @@ def search(chemi):
             elif 'Standard atomic weight' in one:
                 p = re.compile(r"-?\d*\.\d+|\d+")
                 tmp = p.findall(one)
-                print(tmp)
                 moral_mass = tmp[2]
-                print("molar",moral_mass)
+                moral_mass = float(moral_mass)
             elif 'Phase' in one:
                 p = re.compile(">(.*?)</a")
                 tmp = p.findall(one)
-                print(tmp)
                 constell = tmp[-1]
                 constell = constell.split(">")[-1]
-                print("constell", constell)
             elif 'Density' in one :
                 p = re.compile(r"-?\d*\.\d+|\d+")
                 density = p.findall(one)

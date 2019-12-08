@@ -32,7 +32,7 @@ class Apparatus extends Component {
                     key: 'time',
                     align: 'center',
                     ellipsis: true,
-                    width: 10,
+                    width: "5",
 
                 },
                 {
@@ -41,7 +41,7 @@ class Apparatus extends Component {
                     key: 'user',
                     align: 'center',
                     ellipsis: true,
-                    width: 20,
+                    width: "23",
                 }, 
                 {
                     title: 'delete',
@@ -49,7 +49,7 @@ class Apparatus extends Component {
                     key: 'deleteButton',
                     align: 'center',
                     ellipsis: true,
-                    width: 10,
+                    width: "7",
                     
                 }
 
@@ -499,14 +499,14 @@ class Apparatus extends Component {
                         if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false; }
 
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
-                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} style={{ fontSize: 5, height:5, width:4}}> X </Button>)
+                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
                         }
-                        else { result[j]['deleteButton']= "   "  }
+                        else { result[j]['deleteButton']= <td><font color="white">none</font></td>  }
                         result[j]['id'] = list[i].id
                     }
                     else {
-                        result[j]['user']= "  "
-                        result[j]['deleteButton']= "   "
+                        result[j]['user']= <td><font color="white">none</font></td>
+                        result[j]['deleteButton']= <td><font color="white">none</font></td>
                     }
                     checker++; j++
                     m = (!m)
@@ -666,7 +666,7 @@ class Apparatus extends Component {
         return (
             <div>
                 <br />
-                <center><Title style={{ marginBottom: 35, fontSize: 35, marginTop: 20 }}>Apparatus</Title></center>
+                <center><Title style={{ marginBottom: 35, fontSize: 35, marginTop: 15 }}>Apparatus</Title></center>
 
                 <Row >
                     <Col span={5} style={{ marginLeft: 1 }}>
@@ -746,7 +746,7 @@ class Apparatus extends Component {
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table size='small' indentSize = "5" tableLayout ="fixed" bordered="true" defaultExpandAllRows="true" dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
+                                <Table width = "100" size='small' tableLayout ="fixed" bordered="true" locale={{emptyText:'   '}} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
                             <Row span={2} style= {{fontSize: 10}}>
                                 {(!this.checkReservationDate()) &&
