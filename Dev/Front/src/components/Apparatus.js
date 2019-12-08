@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Icon, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
+import { Typography, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message, Icon } from 'antd'
 import { history } from '../History';
 import { Link } from "react-router-dom";
 import { serverUrl } from '../setting'
@@ -502,13 +502,8 @@ class Apparatus extends Component {
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
                             result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
                         }
-                        // else { result[j]['deleteButton']= <td><font>none</font></td>  }
                         result[j]['id'] = list[i].id
                     }
-                    // else {
-                    //     result[j]['user']= <td><font >none</font></td>
-                    //     result[j]['deleteButton']= <td><font >none</font></td>
-                    // }
                     checker++; j++
                     m = (!m)
                 }
@@ -727,9 +722,9 @@ class Apparatus extends Component {
                             onOk={this.handleOk_0}
                             onCancel={this.handleCancel_0}
                         >
-                            <p> <center> 해당 기기를 삭제하시겠습니까? </center> </p>
-                            <p></p> <p></p>
-                            <center><p>* 선택한 기기: {this.getApparNameNow()} </p></center>
+                            <p> <center> <Icon type="hdd"  style={{size: 4}} />     해당 기기를 삭제하시겠습니까? </center> </p>
+                            <br></br>
+                            <center><p> <font style={{size: 13, fontWeight: "bold"}} > {this.getApparNameNow()} </font> </p></center>
                             <p></p>
                             <p></p>
 
@@ -758,14 +753,15 @@ class Apparatus extends Component {
                                     </Button></center>  
                                         <Modal
                                             size = "small"
-                                            title=" Apparatus 예약 하기"
+                                            title= "Apparatus 예약 하기"
                                             visible={this.state.visible_2}
                                             onOk={this.handleOk_2}
                                             onCancel={this.handleCancel_2}
                                         >
-                                            <p>* 예약할 기기: {this.getApparNameNow()} </p>
-                                            <p>* 예약자: {getUser().name}</p>
-                                            <p>* 예약할 시간: </p>
+                                            <p><Icon type="check-circle" theme="filled" style={{size: 4}} />   <font style={{fontWeight: "bold"}}> 예약할 기기: {this.getApparNameNow()} </font> </p>
+                                            <p><Icon type="check-circle" theme="filled" style={{size: 4}} />   <font style={{fontWeight: "bold"}}>  예약자: {getUser().name}</font> </p>
+                                            <p><Icon type="clock-circle"  style={{size: 4}}/> <font style={{fontWeight: "bold"}}> 예약할 날짜: {this.state.todayDate.getMonth()+1} 월  {this.state.todayDate.getDate()} 일 </font></p>
+                                            <p><Icon type="clock-circle"  style={{size: 4}}/>  <font style={{fontWeight: "bold"}}>예약할 시간: </font> </p>
 
                                             {/*</Modal><Form onSubmit={this.handleSubmit2()} className="form">
                             원래 이렇게 돼있었는데 
@@ -777,10 +773,9 @@ class Apparatus extends Component {
                                             {/*예약 폼은 따로 파일 뺌*/}
                                             <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
 
-                                            <center><p> 주의 사항 </p></center>
+                                            <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                             <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
-
                                         </Modal>
                                     </div>}
                                 {/* <Divider type="vertical" />

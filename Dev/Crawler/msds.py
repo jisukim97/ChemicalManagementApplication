@@ -86,8 +86,6 @@ def search(chemi):
                     explosive = True
                 if "02" in one.attrs['title']:
                     flammability = True
-                if "03" in one.attrs['title']:
-                    combustilbilty = True
 
     content = html.select("div#mw-normal-catlinks a")
     for x in range(len(content)):
@@ -139,7 +137,7 @@ def search(chemi):
                 p = re.compile(r"-?\d*\.\d+|\d+")
                 mp = p.findall(one)
                 if len(mp) >= 1 :
-                    if chemi.lower() == 'bromine' or chemi.lower() == 'oxygen':
+                    if 'bromine' in chemi.lower()  or  'oxygen' in chemi.lower() :
                         mp = mp[2]
                     else:
                         mp = mp[1]
@@ -149,7 +147,7 @@ def search(chemi):
                 p = re.compile(r"-?\d*\.\d+|\d+")
                 bp = p.findall(one)
                 if len(bp) >= 1:
-                    if chemi.lower() == 'bromine' or chemi.lower() == 'oxygen':
+                    if 'bromine' in chemi.lower()  or 'oxygen' in chemi.lower():
                         bp = bp[2]
                     else:
                         bp = bp[1]
@@ -167,8 +165,7 @@ def search(chemi):
                     explosive = True
                 if "GHS02" in one:
                     flammability = True
-                if "GHS03" in one:
-                    combustilbilty = True
+
     mp = float(mp)
     bp = float(bp)
 
@@ -176,6 +173,8 @@ def search(chemi):
         mp -= 2*mp
     elif mp < bp and mp != 5.53 and mp != 16 and mp <50:
         mp -= 2*mp
+    if 'gas' in constell.lower() :
+        bp-= 2*bp
 
     if explosive != 0 :
         explosive = True
@@ -183,7 +182,7 @@ def search(chemi):
         flammability = True
 
     result = {'name':name, 'casNo':cas_num, 'formula':chemi_formula, 'status': constell, 'molecularWeight': moral_mass, 'density':density, 'meltingPoint': mp, 'boilingPoint': bp, 'ph': acidity,
-                  "explosive": explosive, 'flammability': flammability, 'combustibility': combustilbilty, 'photoReaction' : light_sensitive, 'deliquescent': deliquescent, 'efforescene':efforescene,
+                  "explosive": explosive, 'flammability': flammability, 'photoReaction' : light_sensitive, 'deliquescent': deliquescent, 'efforescene':efforescene,
                   'alkaliMetal': alkali_metal, 'alkalineEarthMetal': alkaline_earth_metal, 'halogen': halogen }
 
     return result
