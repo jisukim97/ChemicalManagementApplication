@@ -666,14 +666,14 @@ class Apparatus extends Component {
                 <center><Title style={{ marginBottom: 35, fontSize: 29}}>Apparatus</Title></center>
 
                 <Row >
-                    <Col span={5} style={{ marginLeft: 1 }}>
+                    <Col span={5} style={{ marginLeft: 15 }}>
                         <List
                             size ="small"
                             grid={{ gutter: 16, column: 1}}
                             dataSource={this.state.apparatusList}
                             renderItem={item => (
                                 <List.Item>
-                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 80, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 85, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
                                 </List.Item>
                             )}
                         />
@@ -765,11 +765,11 @@ class Apparatus extends Component {
                                             <p><Icon type="clock-circle"  style={{size: 4}}/>  <font style={{fontWeight: "bold"}}>예약할 시간: </font> </p>
 
                                             <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
-                                            <p> ---------------------------------------------------------</p>
+                                            <p> -------------------------------------------------------------------</p>
                                             <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                             <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
-                                            <p> ---------------------------------------------------------</p>
+                                            <p> -------------------------------------------------------------------</p>
                                             
                                         </Modal>
                                     </div>}
