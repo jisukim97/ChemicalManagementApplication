@@ -12,14 +12,46 @@ import MyGroup from './MyGroup';
 
 class Main extends Component {
 
+
+    constructor(props) {
+        super(props);
+        this.state = { width: 0, height: 0 };
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    }
+
+
     render() {
+
+        const header = 60;
+        const menubar = 70;
+        const body = this.state.height - header - menubar
+
+        const heights = {
+            header: header,
+            menubar: menubar,
+            body: body
+        }
+
         return (
             <div>
                 {/* 헤더 */}
-                <Header />
+                <Header height={heights.header} width={this.state.width} />
 
                 {/* 바디 */}
-                <div style={{ height : 550 }}>
+                <div style={{ overflowX: 'auto', height: heights.body, padding: 10 }}>
                     <Switch>
                         <Route path='/mylab' component={MyLab} />
                         <Route path='/apparatus/:apparatusId' component={Apparatus} />
@@ -29,7 +61,9 @@ class Main extends Component {
                 </div>
 
                 {/* 메뉴바 */}
-                <MenuBar />
+                <div style={{ marginTop: 10 }}>
+                    <MenuBar />
+                </div>
             </div>
         );
     }

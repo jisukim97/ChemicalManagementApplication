@@ -44,31 +44,31 @@ public class Inventory {
      * 보관함 온도
      */
 	@Column
-    private Float temperature;
+    private float temperature;
 
     /**
      * 보관함 습도 -1 / 0 / 1
      */
 	@Column
-    private Integer humidity;
+    private int humidity;
 
     /**
      * 보관함 조도
      */
 	@Column
-    private Boolean illuminance;
+    private boolean illuminance;
 
     /**
      * 보관함 산소 농도 
      */
 	@Column
-    private Boolean oximeter;
+    private boolean oximeter;
 
     /**
      * 보관함 폭발 방지 
      */
 	@Column
-    private Boolean explosion;
+    private boolean explosion;
 
     /**
      * 보관함에 저장 되어 있는 약품들(재고들)

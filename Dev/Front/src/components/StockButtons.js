@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button, message, InputNumber } from 'antd';
 
 const { Option } = Select;
 
@@ -26,7 +26,8 @@ class PriceInput extends React.Component {
     }
 
     handleNumberChange = e => {
-        const number = parseInt(e.target.value || 0, 10);
+        //const number = parseInt(e.target.value || 0, 10);
+        const number = parseFloat(e).toFixed(2)
         if (isNaN(number)) {
             return;
         }
@@ -59,7 +60,7 @@ class PriceInput extends React.Component {
         const { unit, number } = this.state;
         return (
             <Fragment>
-                    <Input
+                    <InputNumber
                         type="text"
                         size={size}
                         value={number}
@@ -99,8 +100,11 @@ class StockButtons extends Component {
                 if (unit ==='mL'){
                     change *= this.props.stock.chemical.density
                 }
-                if (change > this.props.stock.volume){
-                     message.error('너무 많이 입력하셨습니다');
+                console.log(change)
+                console.log(this.props.stock.volume)
+                console.log(change > this.props.stock.remainingVolume)
+                if (change > this.props.stock.remainingVolume){
+                     message.error('잘못된 사용량을 입력하셨습니다');
                 } else {
                     this.props.changeVolume(change, unit);
                 }        

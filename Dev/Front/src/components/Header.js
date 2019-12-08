@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Table } from 'antd';
 import { Link } from "react-router-dom";
 import { history } from '../History';
 import { logout, getUser } from '../authentication';
 
 import './Header.css';
 import './Box.css';
+import { blockStatement } from '@babel/types';
 
 class Header extends Component {
 
@@ -23,22 +24,40 @@ class Header extends Component {
     }
 
     render() {
-        return (
-            <div className='Header'>
-                {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
-                <span style={{textAlign : "left"}}>
-                    <b className='logo'><Link to='/mylab' id='color'>SYLVY</Link></b>
-                </span>
+        /**
+         *     line-height: 60px;
+    display: block;
+    text-align: left;
+    background: #2DB400;
+    padding-left : 30px;
+    padding-right : 30px;
+    color: white;
 
-                <span style={{margin : 50}}>
-                    {getUser().name}님 환영합니다! 
-                </span>
-                {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}
-                <span style={{textAlign : "right"}}>
-                    {/* 로그아웃 버튼 */}
-                    <span id='margin'><Button type="danger" icon="poweroff" onClick={this.logOut} shape="circle" /></span>
-                </span>
-                
+         */
+
+
+        return (
+            <div style={{
+                height: this.props.height, display: 'block', background: '#2DB400', textAlign: 'left',
+                color: 'white', display: 'table', width: this.props.width, padding: 10, paddingLeft: 20
+            }}>
+                <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+                    {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
+                    <div style={{display: 'inline', textAlign: 'left' }}>
+                        <b style={{ fontSize: 25 }}><Link to='/mylab' id='color'>SYLVY</Link></b>
+                    </div>
+
+                    {/* 로그인된 사용자 */}
+                    <div style={{display: 'inline', textAlign : 'middle' }}>
+                        {getUser().name}님 환영합니다!
+                    </div>
+
+                    {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}
+                    <div style={{display: 'inline', float : 'right', margihTop: 30 }}>
+                        {/* 로그아웃 버튼 */}
+                        <Button type="danger" icon="poweroff" onClick={this.logOut} shape="circle" />
+                    </div>
+                </div>
             </div>
         );
     }

@@ -32,12 +32,14 @@ public class Alarm {
 			//stock은 모든 stock들 다
 			stock = wholeStock.next();
 			//만약 유효기간 지난거면 (2주 이하로 남아있으면)
-			if (stock.getExpireDate().plusWeeks(2).isEqual(today) || stock.getExpireDate().plusWeeks(2).isAfter(today)) {
+			if (stock.getExpireDate().plusWeeks(2).isEqual(today) || today.plusWeeks(2).isAfter(stock.getExpireDate())) {
 				//이거에 대한 걸 모든 유저에 추가
 				Set<User> members = stock.getInventory().getLab().getMembers();
 				for (User member : members) {
-					member.getDateAlarm().add(stock);
-					userRepository.save(member);
+					if (!member.getDateAlarm().contains(stock)) {
+						member.getDateAlarm().add(stock);
+						userRepository.save(member);
+					}
 				}
 			}
 		}

@@ -34,7 +34,7 @@ public class Illness {
      * 
      */
 	@Column
-    private Integer period;
+    private int period;
 
 	@Override
 	public int hashCode() {

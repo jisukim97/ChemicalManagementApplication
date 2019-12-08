@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Row, Col, Button, Card } from 'antd'
+import { Typography, Row, Col, Button, Card, message } from 'antd'
 
 import MyGroupGenerate from './MyGroupGenerate';
 import MyGroupInvite from './MyGroupInvite';
@@ -25,32 +25,8 @@ class MyGroup extends Component {
       labexists: getLab() === null ? false : true,
       // false 도 테스트해보기
       // 속한 lab이 없을 때, labid = 0
-      members : [
-        {
-          id : 0, 
-          name : "정영모"
-        },
-        {
-          id : 1,
-          name : "이한빈"
-        },
-        {
-          id : 2,
-          name : "김지수"
-        },
-        {
-          id : 3,
-          name : "이은무"
-        },
-        {
-          id : 4,
-          name : "문혁주"
-        },
-        {
-          id : 5,
-          name : "강주영"
-        }
-      ]
+      members : []
+      
 
     }
     if (getLab() !== null) {
@@ -124,6 +100,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 1
     })
+    message.warning('Lab에 이미 가입이 되어있습니다!')
     this.getGroupMembers()
   }
 
@@ -143,6 +120,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 3
     })
+    message.warning('Lab에 이미 가입이 되어있습니다!')
     this.getGroupMembers()
   }
 
