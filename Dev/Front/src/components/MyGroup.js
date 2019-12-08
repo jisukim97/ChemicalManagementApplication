@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Row, Col, Button, Card, Icon,  message } from 'antd'
+import { Typography, Row, Col, Button, Card, Icon, message } from 'antd'
 
 import MyGroupGenerate from './MyGroupGenerate';
 import MyGroupInvite from './MyGroupInvite';
@@ -7,6 +7,7 @@ import MyGroupRegister from './MyGroupRegister';
 import MyGroupWithdraw from './MyGroupWithdraw';
 import MyGroupMember from './MyGroupMember';
 import NoGroup from './NoGroup';
+import MenuTitle from './MenuTitle';
 
 import { history } from '../History';
 import { getUser, getLab } from '../authentication';
@@ -16,7 +17,7 @@ const { Title } = Typography;
 
 class MyGroup extends Component {
 
-  
+
 
   constructor(props) {
     super(props);
@@ -25,8 +26,8 @@ class MyGroup extends Component {
       labexists: getLab() === null ? false : true,
       // false 도 테스트해보기
       // 속한 lab이 없을 때, labid = 0
-      members : []
-      
+      members: []
+
 
     }
     if (getLab() !== null) {
@@ -65,63 +66,63 @@ class MyGroup extends Component {
     }).then(response => { })
   }
 
-//그룹 생성하고 나서 정보 새로고침 해주
+  //그룹 생성하고 나서 정보 새로고침 해주
   afterGroupGenerate = (id) => {
     console.log(id)
-    this.setState( {
-      menu : 0,
-      labexists : id === null ? false : true
+    this.setState({
+      menu: 0,
+      labexists: id === null ? false : true
     })
     this.getGroupMembers()
   }
 
   afterGroupWithdraw = () => {
     console.log(333)
-    this.setState( {
-      menu : 0,
-      labexists : false
+    this.setState({
+      menu: 0,
+      labexists: false
     })
     //this.getGroupMembers()
   }
 
 
   firstButtonClick = () => {
-    this.setState( {
-      menu : 1
+    this.setState({
+      menu: 1
     })
   }
 
   firstButtonClick2 = () => {
-    this.setState( {
-      menu : 1
+    this.setState({
+      menu: 1
     })
     message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
   secondButtonClick = () => {
-    this.setState( {
-      menu : 2
+    this.setState({
+      menu: 2
     })
   }
 
   thirdButtonClick = () => {
-    this.setState( {
-      menu : 3
+    this.setState({
+      menu: 3
     })
   }
 
   thirdButtonClick2 = () => {
-    this.setState( {
-      menu : 3
+    this.setState({
+      menu: 3
     })
     message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
   fourthButtonClick = () => {
-    this.setState( {
-      menu : 4
+    this.setState({
+      menu: 4
     })
     if (getLab() !== null) {
       this.getGroupMembers()
@@ -129,115 +130,123 @@ class MyGroup extends Component {
   }
 
   enrollLab = (id) => {
-    this.setState({labId : id,
-      labexists : true})
-    }
-
-    withdrawLab = () => {
-      this.setState({labId : 0,
-        labexists : false})
+    this.setState({
+      labId: id,
+      labexists: true
+    })
   }
 
-      getContent = () => {
-        if (!this.state.labexists && this.state.menu === 1){
-          return (
-            <div>
-            <MyGroupGenerate afterGroupGenerate={this.afterGroupGenerate}/>
-            </div>
-          )
-        } else if (this.state.labexists && this.state.menu === 2){
-          return (
-            <div>
-            <MyGroupInvite />
-            </div>
-          )
-        } else if (!this.state.labexists && this.state.menu === 3){
-          return (
-            <div>
-            <MyGroupRegister enrollLab={this.enrollLab} afterGroupGenerate={this.afterGroupGenerate}/>
-            </div>
-          )
-        } else if (this.state.labexists && this.state.menu === 4){
-          return (
-            <div>
-            <MyGroupWithdraw afterGroupWithdraw={this.afterGroupWithdraw} count={this.state.members.length}/>
-            </div>
-          )
-        } else {
-          if (this.state.labexists) {
-            return (
-              <div>
-              <MyGroupMember members={this.state.members}/>
-              </div>
-            )
-          }
-          else {
-            return(
-              <div>
-              <NoGroup />
-              </div>
-            )
-          }
-        }
+  withdrawLab = () => {
+    this.setState({
+      labId: 0,
+      labexists: false
+    })
+  }
+
+  getContent = () => {
+    if (!this.state.labexists && this.state.menu === 1) {
+      return (
+        <div>
+          <MyGroupGenerate afterGroupGenerate={this.afterGroupGenerate} />
+        </div>
+      )
+    } else if (this.state.labexists && this.state.menu === 2) {
+      return (
+        <div>
+          <MyGroupInvite />
+        </div>
+      )
+    } else if (!this.state.labexists && this.state.menu === 3) {
+      return (
+        <div>
+          <MyGroupRegister enrollLab={this.enrollLab} afterGroupGenerate={this.afterGroupGenerate} />
+        </div>
+      )
+    } else if (this.state.labexists && this.state.menu === 4) {
+      return (
+        <div>
+          <MyGroupWithdraw afterGroupWithdraw={this.afterGroupWithdraw} count={this.state.members.length} />
+        </div>
+      )
+    } else {
+      if (this.state.labexists) {
+        return (
+          <div>
+            <MyGroupMember members={this.state.members} />
+          </div>
+        )
       }
-
-      render() {
-        if (getLab() === null) {
-          return (
-            <div>
-              <br />
-              <center><Title style={{ marginBottom: 35, fontSize:29 }}>my Lab</Title></center>
-
-              {/* 버튼 4개 */}
-              <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.firstButtonClick}>my Lab 생성<Icon type="contacts"style={{size: 4}} /></Button></center></Col>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.secondButtonClick} >멤버 초대 <Icon type="user-add" style={{size: 3}} /></Button></center></Col>
-              </Row>
-
-              <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{size: 3}}  /></Button></center></Col>
-              </Row>
-
-              {/* 내용 */}
-              <div>
-                <Card style={{ margin: 20 }}>
-                  {this.getContent()}
-                </Card>
-              </div>
-
-            </div>
-
-          );
-        }
-        else{
-          return (
-            <div>
-              <br />
-              <center><Title style={{ marginBottom: 50, fontSize:29 }}>my Lab</Title></center>
-
-              {/* 버튼 4개 */}
-              <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.firstButtonClick2}>my Lab 생성<Icon type="contacts"style={{size: 4}} /></Button></center></Col>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.secondButtonClick} >멤버 초대<Icon type="user-add" style={{size: 3}} /></Button></center></Col>
-              </Row>
-
-              <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
-                <Col span={12}><center><Button style= {{width: 140}} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{size: 3}}/></Button></center></Col>
-              </Row>
-
-              {/* 내용 */}
-              <div>
-                <Card style={{ margin: 20 }}>
-                  {this.getContent()}
-                </Card>
-              </div>
-
-            </div>
-          );
-        }
+      else {
+        return (
+          <div>
+            <NoGroup />
+          </div>
+        )
       }
     }
+  }
 
-    export default MyGroup;
+  render() {
+    if (getLab() === null) {
+      return (
+        <div>
+
+          <MenuTitle title="my Lab" />
+          <div style={{ paddingTop: 20 }}>
+
+            {/* 버튼 4개 */}
+            <Row style={{ margin: 20 }}>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.firstButtonClick}>my Lab 생성<Icon type="contacts" style={{ size: 4 }} /></Button></center></Col>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.secondButtonClick} >멤버 초대 <Icon type="user-add" style={{ size: 3 }} /></Button></center></Col>
+            </Row>
+
+            <Row style={{ margin: 20 }}>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{ size: 3 }} /></Button></center></Col>
+            </Row>
+
+            {/* 내용 */}
+            <div>
+              <Card style={{ margin: 20 }}>
+                {this.getContent()}
+              </Card>
+            </div>
+
+          </div>
+        </div>
+
+      );
+    }
+    else {
+      return (
+        <div>
+
+          <MenuTitle title="my Lab" />
+          <div style={{ paddingTop: 20 }}>
+
+            {/* 버튼 4개 */}
+            <Row style={{ margin: 20 }}>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.firstButtonClick2}>my Lab 생성<Icon type="contacts" style={{ size: 4 }} /></Button></center></Col>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.secondButtonClick} >멤버 초대<Icon type="user-add" style={{ size: 3 }} /></Button></center></Col>
+            </Row>
+
+            <Row style={{ margin: 20 }}>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
+              <Col span={12}><center><Button style={{ width: 140 }} type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴<Icon type="rocket" style={{ size: 3 }} /></Button></center></Col>
+            </Row>
+
+            {/* 내용 */}
+            <div>
+              <Card style={{ margin: 20 }}>
+                {this.getContent()}
+              </Card>
+            </div>
+          </div>
+
+        </div>
+      );
+    }
+  }
+}
+
+export default MyGroup;

@@ -5,6 +5,7 @@ import Stock from './Stock';
 import ChemicalAdd from './ChemicalAdd';
 import InventoryAdd from './InventoryAdd';
 import { history } from '../History';
+import MenuTitle from './MenuTitle';
 
 import { serverUrl } from '../setting'
 import { getUser, getLab } from '../authentication';
@@ -309,13 +310,11 @@ class MyLab extends Component {
 
             <div>
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
-                <br />
-
-                <center><Title style={{ marginBottom: 35, fontSize : 29 }}>My Lab</Title></center>
+                <MenuTitle title="my Lab" />
 
                 {
                     this.state.isInventoryExist && 
-                    <div>
+                    <div style={{paddingTop : 20}}>
                     <div><center> {/* 인벤토리 고르는 곳 */}
                         <Radio.Group value={this.state.inventory} onChange={this.handleInventoryChange} size="small" style={{margin : 10}}>
                             {

@@ -30,6 +30,7 @@ class Stock extends Component {
     render() {
         const {stock} = this.props; //stock을 props로 넣어 주어야 함
 
+        //고체는 gold, 액체는 experiment, 기체는 cloud
         return (
             <span>
                 <center>

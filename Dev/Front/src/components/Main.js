@@ -51,7 +51,7 @@ class Main extends Component {
                 <Header height={heights.header} width={this.state.width} />
 
                 {/* 바디 background : 'rgb(35, 41, 48)' */}
-                <div style={{ overflowX: 'auto', height: heights.body,  background : 'white', paddingTop : 10, paddingBottom : 10 }}>
+                <div style={{ overflowX: 'auto', height: heights.body,  background : '#F2F2F2'}}>
                     <Switch>
                         <Route path='/mylab' component={MyLab} />
                         <Route path='/apparatus/:apparatusId' component={Apparatus} />

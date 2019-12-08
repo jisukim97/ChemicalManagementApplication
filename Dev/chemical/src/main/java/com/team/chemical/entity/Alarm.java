@@ -139,9 +139,9 @@ public class Alarm {
 					}
 					IllnessAlarm alarm = new IllnessAlarm();
 					alarm.setStock(stock);
-					today = LocalDate.now().minusYears(5); //이부분 가짜
-					alarm.setDeleteDate(today); //이부분도 가짜
-					//alarm.setDeleteDate(today.isBefore(stock.getPutDate()) ? stock.getPutDate() : today);
+					//today = LocalDate.now().minusYears(5); //이부분 가짜
+					//alarm.setDeleteDate(today); //이부분도 가짜
+					alarm.setDeleteDate(today.isBefore(stock.getPutDate()) ? stock.getPutDate() : today);
 					alarm = illnessAlarmRepository.save(alarm);
 					user.getIllnessAlarm().add(alarm);
 /*
