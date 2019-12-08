@@ -15,7 +15,7 @@ class MyGroupWithdraw extends Component {
     return (
       <div>
         <center>
-      <font size='2' font color='green'>현재 속해있는 my Lab이 없습니다!</font></center>
+      <font size='2' >현재 속해있는 my Lab이 없습니다!</font></center>
       </div>
     );
   }

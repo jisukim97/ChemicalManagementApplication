@@ -62,9 +62,9 @@ class MyGroupWithdraw extends Component {
       <div style={{ margin: '10px 0' }}>
       <center><Icon type="rocket"   style={{ fontSize: 33 }}  /><Title style={{marginBottom : 30}}><font size='4' font color='black'>my Lab 탈퇴</font></Title></center>
 
-      <font size='3' font color='green'>현재 속한 my Lab 이름 :  
+      <font size='3' >현재 속한 my Lab 이름 :  
       </font><font size='3' font color='black'> {getLab().name} </font>
-      <br /><br/><font size='3' font color='green'>현재 속한 my Lab 인원 수 :  
+      <br /><br/><font size='3' >현재 속한 my Lab 인원 수 :  
       </font><font size='3' font color='black'> {this.props.count}명 </font>
 
       <br />

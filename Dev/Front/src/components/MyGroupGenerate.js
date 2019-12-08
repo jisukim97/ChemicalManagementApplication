@@ -76,7 +76,7 @@ class MyGroupGenerate extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-      <center><font size='4' font color='green'>my Lab 생성<span> </span> <Icon type="contacts"style={{size: 4}} /></font></center><br/>
+      <center><font size='4' >my Lab 생성<span> </span> <Icon type="contacts"style={{size: 4}} /></font></center><br/>
       <Form onSubmit={this.handleSubmit} className="form">
 
       {/* 그룹 이름 */}

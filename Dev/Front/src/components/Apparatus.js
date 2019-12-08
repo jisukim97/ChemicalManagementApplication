@@ -767,12 +767,12 @@ class Apparatus extends Component {
                                                 <p><Icon type="clock-circle" style={{ size: 4 }} /> <font style={{ fontWeight: "bold" }}> 예약할 날짜: {this.state.todayDate.getMonth() + 1} 월  {this.state.todayDate.getDate()} 일 </font></p>
                                                 <p><Icon type="clock-circle" style={{ size: 4 }} />  <font style={{ fontWeight: "bold" }}>예약할 시간: </font> </p>
 
-                                                <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
-                                                <p> ---------------------------------------------------------</p>
+                                                <center><ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} /></center>
+                                                <center> ------------------------------------------------</center>
                                                 <center><p> <Icon type="alert" theme="filled" sytle={{ size: 5 }} />  주의 사항  <Icon theme="filled" type="alert" sytle={{ size: 5 }} /> </p></center>
                                                 <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                                 <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
-                                                <p> ---------------------------------------------------------</p>
+                                                <center> ------------------------------------------------</center>
 
                                             </Modal>
                                         </div>}

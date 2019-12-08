@@ -31,11 +31,15 @@ class Stock extends Component {
         const {stock} = this.props; //stock을 props로 넣어 주어야 함
 
         //고체는 gold, 액체는 experiment, 기체는 cloud
+
+        const status = stock.chemical.status.toLowerCase()
+
+        const iconType = (status.match("liquid") || status.match("solution")) ? "experiment" : status.match("gas") ? "cloud" : "gold"
         return (
             <span>
                 <center>
                     {/* 버튼 */}
-                    <Button Button icon="fire" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" />
+                    <Button Button icon={iconType} onClick={this.showModal} style={{ fontSize: '25px' }} size="large" shape="circle" />
                     {/* 뜨는 창 */}
                     <Modal
                         title={stock.nickname+" 약품 정보"}

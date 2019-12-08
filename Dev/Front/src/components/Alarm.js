@@ -181,7 +181,7 @@ class Alarm extends Component {
                                 <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large" /><br />
                             </Badge>
                             <div>
-                                <font size='2' font color='green'>유효기간</font>
+                                <font size='2' >유효기간</font>
                             </div>
                         </center></Col>
 
@@ -190,7 +190,7 @@ class Alarm extends Component {
                                 <Button Button shape="circle" icon="bell" onClick={this.makeTypeTwo} style={{ fontSize: '25px' }} size="large" /><br />
                             </Badge>
                             <div>
-                                <font size='2' font color='green'>재고소진</font>
+                                <font size='2' >재고소진</font>
                             </div>
                         </center></Col>
 
@@ -199,7 +199,7 @@ class Alarm extends Component {
                                 <Button Button shape="circle" icon="bell" onClick={this.makeTypeThree} style={{ fontSize: '25px' }} size="large" /><br />
                             </Badge>
                             <div>
-                                <font size='2' font color='green'> 의심질병</font>
+                                <font size='2' > 의심질병</font>
                             </div>
                         </center></Col>
                     </Row>
