@@ -61,7 +61,7 @@ class Main extends Component {
                 </div>
 
                 {/* 메뉴바 */}
-                <div style={{borderTop : 'solid 15px', borderBottom : 'solid 15px',borderColor : 'rgb(35, 41, 48)', background: 'rgb(35, 41, 48)'}}>
+                <div style={{borderTop : 'solid 15px', borderBottom : 'solid 16px',borderColor : 'rgb(35, 41, 48)', background: 'rgb(35, 41, 48)'}}>
                     <MenuBar />
                 </div>
             </div>
