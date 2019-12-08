@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Icon, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
 import { history } from '../History';
 import { Link } from "react-router-dom";
+import { serverUrl } from '../setting'
 
 import { getUser, getLab } from '../authentication';
 import moment from 'moment';
@@ -69,7 +70,7 @@ class Apparatus extends Component {
     // 그래서 그냥 state에다 변수이름과 타입정도만 미리 다 알려주고 난 후에 fetch된 실제 결과를 setState 해주기
     // 그런데 constructor에서는 setState 할 수 없으니까 componentDidMount를 써줌
     componentDidMount() {
-        fetch('http://13.124.122.246:8080/apparatus/' + getUser().id, {
+        fetch(serverUrl+ '/apparatus/' + getUser().id, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
@@ -108,7 +109,7 @@ class Apparatus extends Component {
                 }
                 else { var url = 'apparatus/' + getUser().id }
 
-                fetch('http://13.124.122.246:8080/' + url, {
+                fetch(serverUrl+'/'+ url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
                 }).then(response => {
@@ -190,7 +191,7 @@ class Apparatus extends Component {
             if (!err) {
                 console.log(values)
                 try {
-                    fetch('http://13.124.122.246:8080/apparatus/' + getLab().id, {
+                    fetch(serverUrl+'/apparatus/' + getLab().id, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(values)
@@ -291,7 +292,7 @@ class Apparatus extends Component {
         if (this.props.match.params !== newProps.match.params) {
             const { apparatusId } = this.props.match.params;
             console.log(apparatusId)
-            fetch('http://13.124.122.246:8080/schedule/' + apparatusId + '/' + todayInfo, {
+            fetch(serverUrl+'/schedule/' + apparatusId + '/' + todayInfo, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
@@ -335,7 +336,7 @@ class Apparatus extends Component {
         if (dd < 10) { dd = '0' + dd }
         var newdayInfo = yy + mm + dd;
 
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -371,7 +372,7 @@ class Apparatus extends Component {
         if (dd < 10) { dd = '0' + dd }
         var newdayInfo = yy + mm + dd;
 
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
@@ -421,7 +422,7 @@ class Apparatus extends Component {
                 newList[i].deleteButton = ''
             }
         }
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + param, {
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + param, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -573,7 +574,7 @@ class Apparatus extends Component {
             history.push('/mygroup')
         }
         else {
-            fetch('http://13.124.122.246:8080/apparatus/' + getLab().id + '/' + this.state.menu, {
+            fetch(serverUrl+'/apparatus/' + getLab().id + '/' + this.state.menu, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
@@ -635,7 +636,7 @@ class Apparatus extends Component {
         console.log('apparatus id: ', param)
         console.log(todayInfo)
 
-        fetch('http://13.124.122.246:8080/schedule/' + param + '/' + todayInfo, {
+        fetch(serverUrl+'/schedule/' + param + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -706,7 +707,7 @@ class Apparatus extends Component {
                                 </Form.Item>
                                 <Form.Item>
                                     <center>
-                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, font: 0.5}}>
+                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, fontSize: 12}}>
                                         <center>등록 하기</center>
                                         </Button>
                                     </center>
@@ -746,7 +747,7 @@ class Apparatus extends Component {
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table width = "100" size='small' tableLayout ="fixed" bordered="true" locale={{emptyText:'   '}} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
+                                <Table width = "100" size='small' tableLayout ="fixed"  locale={{emptyText:'   '}} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
                             <Row span={2} style= {{fontSize: 10}}>
                                 {(!this.checkReservationDate()) &&
