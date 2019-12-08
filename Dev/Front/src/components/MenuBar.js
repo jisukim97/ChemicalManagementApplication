@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 
 class MenuBar extends Component {
 
+    constructor(props){
+        super(props)
+        console.log(window.location.href)
+    }
+
+
     render() {
+        //const currentUrl = this.props.location.pathname
+
         return (
             <div>
                 <Row>
@@ -12,7 +20,7 @@ class MenuBar extends Component {
                         <Link to="/mylab">
                             <center >
                                 <span style={{ color: 'white' }}>
-                                    <Icon type="experiment" theme="filled" style={{ fontSize: '32px' }} /><br />
+                                    <Icon type="experiment" theme="filled" style={{ fontSize: '32px'}} /><br />
                                     Chemicals
                                 </span>
                             </center>
