@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Icon, Row, Col, Button, Modal, Divider, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
+import { Typography, Icon, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
 import { history } from '../History';
 import { Link } from "react-router-dom";
 
@@ -31,26 +31,25 @@ class Apparatus extends Component {
                     dataIndex: 'time',
                     key: 'time',
                     align: 'center',
-                    elipsis: true,
+                    ellipsis: true,
                     width: 10,
+
                 },
                 {
                     title: 'User',
                     dataIndex: 'user',
                     key: 'user',
                     align: 'center',
-                    elipsis: true,
+                    ellipsis: true,
                     width: 20,
-                    defaultFilteredValue: " ",
                 }, 
                 {
                     title: 'delete',
                     dataIndex: "deleteButton",
                     key: 'deleteButton',
                     align: 'center',
-                    elipsis: true,
+                    ellipsis: true,
                     width: 10,
-                    defaultFilteredValue: " ",
                     
                 }
 
@@ -500,10 +499,14 @@ class Apparatus extends Component {
                         if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false; }
 
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
-                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
+                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} style={{ fontSize: 5, height:5, width:4}}> X </Button>)
                         }
-                        else { result[j]['deleteButton']= "  " }
+                        else { result[j]['deleteButton']= "   "  }
                         result[j]['id'] = list[i].id
+                    }
+                    else {
+                        result[j]['user']= "  "
+                        result[j]['deleteButton']= "   "
                     }
                     checker++; j++
                     m = (!m)
@@ -666,21 +669,21 @@ class Apparatus extends Component {
                 <center><Title style={{ marginBottom: 35, fontSize: 35, marginTop: 20 }}>Apparatus</Title></center>
 
                 <Row >
-                    <Col span={6} style={{ margin: 10 }}>
+                    <Col span={5} style={{ marginLeft: 1 }}>
                         <List
                             size ="small"
                             grid={{ gutter: 16, column: 1}}
                             dataSource={this.state.apparatusList}
                             renderItem={item => (
                                 <List.Item>
-                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 86, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 80, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
                                 </List.Item>
                             )}
                         />
                         <center>
                         <br></br>
-                        <Button type="primary" ghost  onClick={this.showModal_1} style={{height: 30, width: 75, fontSize: 12}}>
-                            기기 등록
+                        <Button type="primary" ghost  onClick={this.showModal_1} style={{ width:75, height: 30, fontSize: 11}}>
+                        기기 등록
                         </Button> </center>
                         <Modal
                             size="small"
@@ -703,8 +706,8 @@ class Apparatus extends Component {
                                 </Form.Item>
                                 <Form.Item>
                                     <center>
-                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 85, font: 0.5}}>
-                                            등록 하기
+                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, font: 0.5}}>
+                                        <center>등록 하기</center>
                                         </Button>
                                     </center>
                                 </Form.Item>
@@ -712,8 +715,8 @@ class Apparatus extends Component {
                         </Modal>
                         <p></p>
                         <center>
-                        <Button type="primary" ghost  onClick={this.showModal_0} style={{height: 30, width: 75, fontSize: 12}} > {/*기기 삭제 버튼*/}
-                            기기 삭제
+                        <Button type="primary" ghost  onClick={this.showModal_0} style={{height: 30, width: 75, fontSize: 11}} > {/*기기 삭제 버튼*/}
+                        기기 삭제
                         </Button>
                         </center>
                         <Modal
@@ -731,10 +734,10 @@ class Apparatus extends Component {
 
                         </Modal>
                     </Col>
-                    <Col span={16} >
+                    <Col span={17} style= {{ marginLeft : 16}}>
                         {/* 기기들 상세 창 */}
                         <Card>
-                            <Row span={3}>
+                            <Row span={1} >
                                 <center>
                                     <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
                                     {this.makeMonth()}월 {this.makeDate()}일
@@ -743,14 +746,15 @@ class Apparatus extends Component {
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table size='small' dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
+                                <Table size='small' indentSize = "5" tableLayout ="fixed" bordered="true" defaultExpandAllRows="true" dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
-                            <Row span={2}>
+                            <Row span={2} style= {{fontSize: 10}}>
                                 {(!this.checkReservationDate()) &&
                                     <div>
-                                            <Button onClick={this.showModal_2} >
+                                    <center>      
+                                    <Button onClick={this.showModal_2} >
                                                 예약 하기
-                                    </Button>
+                                    </Button></center>  
                                         <Modal
                                             size = "small"
                                             title=" Apparatus 예약 하기"

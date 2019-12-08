@@ -3,11 +3,11 @@ from bs4 import BeautifulSoup
 import re
 
 
-
 def search(chemi):
     raw = requests.get("https://en.wikipedia.org/wiki/"+chemi)
     html = BeautifulSoup(raw.text, "html.parser")
 
+    name = html.select_one("h1.firstHeading").text
     info = html.select("table.infobox.bordered tr td")
     cas_num = 0
     acidity = 0
@@ -184,7 +184,7 @@ def search(chemi):
     if flammability !=0:
         flammability = True
 
-    result = {'name':chemi, 'casNo':cas_num, 'formula':chemi_formula, 'status': constell, 'molecularWeight': moral_mass, 'density':density, 'meltingPoint': mp, 'boilingPoint': bp, 'ph': acidity,
+    result = {'name':name, 'casNo':cas_num, 'formula':chemi_formula, 'status': constell, 'molecularWeight': moral_mass, 'density':density, 'meltingPoint': mp, 'boilingPoint': bp, 'ph': acidity,
                   "explosive": explosive, 'flammability': flammability, 'combustibility': combustilbilty, 'photoReaction' : light_sensitive, 'deliquescent': deliquescent, 'efforescene':efforescene,
                   'alkaliMetal': alkali_metal, 'alkalineEarthMetal': alkaline_earth_metal, 'halogen': halogen }
 
