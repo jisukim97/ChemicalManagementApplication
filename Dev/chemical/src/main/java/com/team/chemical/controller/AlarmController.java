@@ -36,7 +36,8 @@ class AlarmForm {
 		this.alarmType = alarmType;
 		stock.setInventory(null);
 		this.stock = stock;
-		inventory.setStocks(null);
+		//inventory.getStocks().clear();
+		System.out.println("inventory : " + inventory.getId());
 		inventory.setLab(null);
 		this.inventory = inventory;
 		if (alarmType==1) {
@@ -49,7 +50,7 @@ class AlarmForm {
 		this.alarmType = alarmType;
 		stock.setInventory(null);
 		this.stock = stock;
-		inventory.setStocks(null);
+		//inventory.getStocks().clear();
 		inventory.setLab(null);
 		this.inventory = inventory;
 		this.left = after;
