@@ -64,7 +64,7 @@ class ApparatusReservation extends Component {
                     history.push('/mygroup')
                 }
                 else if ( !((startTime.substring(2,4) === "00") || (startTime.substring(2,4)==="30")) || !((endTime.substring(2,4) === "00") || (endTime.substring(2,4)==="30")) ) {
-                    message.error("예약 시간 끝자리를  00 또는 30 으로 맞춰주세요!")
+                    message.error("예약시간 끝자리를 00 또는 30으로 맞춰주세요!")
                 }
                 else if(duplicated) { message.error("예약 시간이 중복됩니다!")}
                 else {
