@@ -8,6 +8,8 @@ import LoginAndRegister from './components/LoginAndRegister';
 import Main from './components/Main';
 
 import './App.css';
+//import './App2.css';
+
 
 class App extends Component {
   

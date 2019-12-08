@@ -93,8 +93,8 @@ public class Chemical {
     /**
      * 연소성
      */
-    @Column
-    private boolean combustibility;
+    //@Column
+    //private boolean combustibility;
 
     /**
      * pH
@@ -151,7 +151,8 @@ public class Chemical {
     		isCrash = true;
     	}
     	
-    	if (this.ph>=0 && newChemical.ph>=0) {
+    	
+    	if (this.ph>0.0 && newChemical.ph>0.0) {
     		double first = 7.0-this.ph;
     		double second = 7.0-newChemical.ph;
     		if (first * second < 0.0) {

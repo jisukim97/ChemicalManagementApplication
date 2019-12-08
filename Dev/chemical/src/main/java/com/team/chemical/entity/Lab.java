@@ -136,13 +136,9 @@ public class Lab {
     			canSuggest = false;
     		}
     		
-    		//연소성
-    		if (chemical.isCombustibility() && !inventory.isExplosion()) {
-    			canSuggest = false;
-    		}
     		
     		//폭발
-    		if(chemical.isEfflorescence() && !inventory.isExplosion()) {
+    		if(chemical.isExplosive() && !inventory.isExplosion()) {
     			canSuggest = false;
     		}
     		

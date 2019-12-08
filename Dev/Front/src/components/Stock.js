@@ -34,7 +34,7 @@ class Stock extends Component {
             <span>
                 <center>
                     {/* 버튼 */}
-                    <Button Button shape="circle" icon="fire" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" />
+                    <Button Button icon="fire" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" />
                     {/* 뜨는 창 */}
                     <Modal
                         title={stock.nickname+" 약품 정보"}

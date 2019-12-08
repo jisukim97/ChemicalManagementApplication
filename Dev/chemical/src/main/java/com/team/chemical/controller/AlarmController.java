@@ -102,24 +102,42 @@ public class AlarmController {
 			if (user == null) {
 				throw new Exception("cannot find user");
 			}
-			//alarm들 리스트
 			List<AlarmForm> alarms = new LinkedList<>();
+
+			//alarm들 리스트
+			
+			
 			for (Stock stock : user.getDateAlarm()) {
 				try {
+					stock = stockRepository.findById(stock.getId()).get();
 					alarms.add(new AlarmForm(1, stock, stock.getInventory()));
+					//stockRepository.save(stock);
 				} catch (Exception e) {
+					System.out.println("유효기간 알람");
 					System.out.println("Error stock : " + stock.getId());
 					e.printStackTrace();
+				} finally {
+					System.out.println("유효기간 성공 : " + stock.getId());
 				}
 			}
+			
+			
+			user = userRepository.findById(userId).get();
 			for (Stock stock : user.getVolumeAlarm()) {
 				try {
+					stock = stockRepository.findById(stock.getId()).get();
 					alarms.add(new AlarmForm(2, stock, stock.getInventory()));
+					//stockRepository.save(stock);
 				} catch (Exception e) {
+					System.out.println("다쓴거 알람 ");
 					System.out.println("Error stock : " + stock.getId());
 					e.printStackTrace();
+				} finally {
+					System.out.println("다쓴거 성공 : " + stock.getId());
 				}
 			}
+	
+			user = userRepository.findById(userId).get();
 			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
 				// 몇달 지났는지? -> 이것도 left에 담아 보내줌

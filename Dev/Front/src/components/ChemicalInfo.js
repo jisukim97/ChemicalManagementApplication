@@ -49,7 +49,6 @@ class ChemicalInfo extends Component {
                             <Descriptions.Item label="flammability">{this.getBooleanToString(chemical.flammability)}</Descriptions.Item>
                             <Descriptions.Item label="ignitability">{this.getBooleanToString(chemical.ignitability)}</Descriptions.Item>
                             <Descriptions.Item label="explosive">{this.getBooleanToString(chemical.explosive)}</Descriptions.Item>
-                            <Descriptions.Item label="combustibility">{this.getBooleanToString(chemical.combustibility)}</Descriptions.Item>
                         </Descriptions>
                     </TabPane>
                 </Tabs>
