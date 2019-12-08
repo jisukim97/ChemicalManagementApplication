@@ -501,7 +501,7 @@ class Apparatus extends Component {
                         if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false; }
 
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
-                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
+                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button type="link" icon="close-square" id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > </Button>)
                         }
                         result[j]['id'] = list[i].id
                     }
@@ -663,7 +663,7 @@ class Apparatus extends Component {
         return (
             <div>
                 <br />
-                <center><Title style={{ marginBottom: 35, fontSize: 35, marginTop: 15 }}>Apparatus</Title></center>
+                <center><Title style={{ marginBottom: 35, fontSize: 29, marginTop: 15 }}>Apparatus</Title></center>
 
                 <Row >
                     <Col span={5} style={{ marginLeft: 1 }}>
@@ -769,6 +769,7 @@ class Apparatus extends Component {
                                             <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                             <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
+                                            <p> ---------------------------------------------------------</p>
                                             
                                         </Modal>
                                     </div>}
