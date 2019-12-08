@@ -93,7 +93,10 @@ class MyGroupInvite extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
-        <center><Title style={{ marginBottom: 30 }}><font size='6' font color='black'>멤버 초대</font></Title></center>
+        <center>
+          <Icon type="smile" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 33 }} />
+          <Title style={{ marginBottom: 30 }}><font size='6' font color='black'>멤버 초대</font></Title>
+        </center>
 
         <Form onSubmit={this.handleSubmit} className="form">
           {/* 이메일 폼*/}

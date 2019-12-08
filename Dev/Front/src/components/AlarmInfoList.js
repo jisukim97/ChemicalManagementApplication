@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List, Avatar } from 'antd'
 import AlarmInfo from './AlarmInfo1';
+import { serverUrl } from '../setting'
 
 class AlarmInfoList extends Component {
     static defaultProps = {

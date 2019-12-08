@@ -76,8 +76,7 @@ class MyGroupGenerate extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-      <center><font size='5' font color='green'>my Lab 생성</font></center>
-
+      <center><font size='5' font color='green'>my Lab 생성</font></center><br/>
       <Form onSubmit={this.handleSubmit} className="form">
 
       {/* 그룹 이름 */}
@@ -86,7 +85,7 @@ class MyGroupGenerate extends Component {
         rules: [{ required: true, message: '그룹 이름을 입력해 주세요!' }],
       })(
         <Input
-        //prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
+        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
         placeholder="my Lab Name"
         />,
       )}
@@ -130,7 +129,7 @@ class MyGroupGenerate extends Component {
           {/* 그룹 생성 버튼 */}
           <Form.Item>
           <Button type="primary" htmlType="submit" className="button">
-          그룹 생성하기
+          my Lab 생성하기
           </Button>
           </Form.Item>
 

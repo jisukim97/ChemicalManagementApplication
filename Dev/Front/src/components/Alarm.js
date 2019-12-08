@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Row, Col, Button, Card, List, Badge, Icon } from 'antd'
 import AlarmInfoList from './AlarmInfoList';
 import { getUser, getLab } from '../authentication';
+import { serverUrl } from '../setting'
 const { Title } = Typography;
 
 class Alarm extends Component {
@@ -55,13 +56,14 @@ class Alarm extends Component {
         ] 
         */
         
-        fetch('http://13.124.122.246:8080/alarm/' + getUser().id, {
+        fetch(serverUrl + '/alarm/' + getUser().id, {
             method: 'GET', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
                 console.log(33333333333)
+                console.log(response.alarms)
                 response.json().then(response => {
                     var list = response.alarms
                     var Qinformation = []
@@ -107,7 +109,7 @@ class Alarm extends Component {
                         information: Qinformation,
                         alarm1Count: Qinformation.filter(value => value.alarmType === 1).length,
                         alarm2Count: Qinformation.filter(value => value.alarmType === 2).length,
-                        alarm3Count: Qinformation.filter(value => value.alarmType === 3 && value.plag === 1).length
+                        alarm3Count: Qinformation.filter(value => value.alarmType === 3).length
 
                     })
                 })

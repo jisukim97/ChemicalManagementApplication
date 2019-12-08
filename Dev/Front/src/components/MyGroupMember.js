@@ -21,8 +21,8 @@ class MyGroupMember extends Component {
     return (
       <div>
       {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
-      <div style = {{marginLeft : 105}}><font size='5' font color='black'>{getLab().name}</font></div>
-      <center><Title style={{marginBottom : 35}}><font size='6' font color='black'>my Lab 멤버</font></Title></center>
+      <center><font size='5' font color='black'>my Lab 이름 : {getLab().name}</font></center>
+      <center><Title style={{marginBottom : 25}}><font size='5' font color='black'>멤버들</font></Title></center>
       <List
       grid={{ gutter: 16, column: 3 }}
       dataSource={this.props.members}
