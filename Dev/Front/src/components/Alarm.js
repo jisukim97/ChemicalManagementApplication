@@ -172,9 +172,8 @@ class Alarm extends Component {
 
         return (
             <div>
-                <div style={{ paddingTop: 20 }}>
-
                     <MenuTitle title="Alarm" />
+                    <div style={{ paddingTop: 20 }}>
 
                     <Row style={{ marginBottom: 30 }}>
                         <Col span={8}><center>

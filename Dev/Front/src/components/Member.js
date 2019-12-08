@@ -16,7 +16,7 @@ class Member extends Component {
         return (
             <span>
                 <center>
-                    <Icon type="smile" theme="twoTone" twoToneColor="#4B589F" style={{fontSize : 35}} />
+                    <Icon type="smile" theme="twoTone" twoToneColor="#5BC7AE" style={{fontSize : 35}} />
                 </center>
                 <center>
                 <font size='2.5' font color='black'>{this.props.members.name}</font>

@@ -132,10 +132,15 @@ public class Alarm {
 				continue;
 			for(Inventory inventory : user.getMyLab().getInventories()){
 				for (Stock stock : inventory.getStocks()) {
+					boolean isExist = false;
 					for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
 						if (illnessAlarm.getStock().getId() == stock.getId()) {
-							continue;
+							isExist = true;
+							break;
 						}
+					}
+					if (isExist) {
+						continue;
 					}
 					IllnessAlarm alarm = new IllnessAlarm();
 					alarm.setStock(stock);
