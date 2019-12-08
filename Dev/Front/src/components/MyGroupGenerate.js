@@ -50,7 +50,6 @@ class MyGroupGenerate extends Component {
         })
       } else {
         //비밀번호 틀렸을 경우
-        message.warning('두 비밀번호가 같은지 확인해 주세요!');
       }
     });
   };
@@ -76,9 +75,8 @@ class MyGroupGenerate extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div style={{ margin: '10px 0' }}>
-      <center><Title style={{marginBottom : 50}}>my Lab 생성</Title></center>
-
+      <div>
+      <center><font size='5' font color='green'>my Lab 생성</font></center><br/>
       <Form onSubmit={this.handleSubmit} className="form">
 
       {/* 그룹 이름 */}
@@ -87,8 +85,8 @@ class MyGroupGenerate extends Component {
         rules: [{ required: true, message: '그룹 이름을 입력해 주세요!' }],
       })(
         <Input
-        //prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        placeholder="Group Name"
+        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+        placeholder="my Lab Name"
         />,
       )}
       </Form.Item>
@@ -107,7 +105,7 @@ class MyGroupGenerate extends Component {
         ],
       })(<Input.Password
         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-        placeholder="Group Password" />)}
+        placeholder="my Lab Password" />)}
         </Form.Item>
 
         {/* 비밀번호2 */}
@@ -124,14 +122,14 @@ class MyGroupGenerate extends Component {
           ],
         })(<Input.Password
           prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          placeholder="Confirm Group Password"
+          placeholder="Confirm my Lab Password"
           onBlur={this.handleConfirmBlur} />)}
           </Form.Item>
 
           {/* 그룹 생성 버튼 */}
           <Form.Item>
           <Button type="primary" htmlType="submit" className="button">
-          그룹 생성하기
+          my Lab 생성하기
           </Button>
           </Form.Item>
 

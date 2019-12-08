@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Col, Button, } from 'antd';
+import { Col, Button, message } from 'antd';
 import { Modal } from 'antd';
 import { getUser, getLab } from '../authentication';
-
+import StockInfoAlarm from './StockInfoAlarm.js'
+import { serverUrl } from '../setting'
 
 class AlarmInfo extends Component {
 
@@ -43,47 +44,29 @@ class AlarmInfo extends Component {
   }
 
   deleteFetch = () => {
-    fetch('http://13.124.122.246:8080/alarm/' + getUser().id +"/"+ this.props.info.alarmType + "/" + this.props.info.id,  {
+    fetch(serverUrl + '/alarm/' + getUser().id +'/'+ this.props.info.alarmType + '/' + this.props.info.id,  {
       method: 'DELETE', //'GET', 'POST', 'DELETE' 등등
       headers: { 'Content-Type': 'application/json' } //안고쳐도 됨
     }).then(response => {
       if (response.status === 200) {
         //이건 정상적으로 된 경우
-        return response.json()
       } else {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
     })
   }
+  
 
   getMessage = () => {
     const { info, onRemove } = this.props;
     if (info.alarmType === 1) {
-      return (
-
-        <div style={{ fontSize: 18 }}>
-          <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>
-          의 유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
-          <Button icon="delete" onClick={this.handleRemove}></Button>
-          
-          <Modal
-            title="약품 정보"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            {/* 정보 출력  */}
-          </Modal>
-        </div>
-      )
-    }
-    else if (info.alarmType === 2) {
-      if (this.props.info.volume === 0) {
+      if (this.props.info.date > 0) {
         return (
 
-          <div style={{ fontSize: 18 }}>
-            <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>의 양이 얼마남지 않았습니다.
-                <Button icon="delete" onClick={this.handleRemove}></Button>
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br />유효기간이 <b>{this.props.info.date}</b>일 남았습니다.
+          <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
 
             <Modal
               title="약품 정보"
@@ -92,6 +75,74 @@ class AlarmInfo extends Component {
               onCancel={this.handleCancel}
             >
               {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
+            </Modal>
+          </div>
+        )
+      }
+      else if (this.props.info.date === 0){
+        return (
+
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br />유효기간이 <b>오늘</b>까지 입니다.
+          <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
+
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
+            </Modal>
+          </div>
+        )
+      }
+      else {
+        return (
+
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br />유효기간이 <b>지났습니다.</b>
+            <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
+
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
+            </Modal>
+          </div>
+        )
+      }
+    }
+    else if (info.alarmType === 2) {
+      if (this.props.info.volume !== 0) {
+        return (
+
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br/>장소 : <b>{this.props.info.place}</b>
+            <br/>양이 얼마 남지 않았습니다.
+            <span style={{marginLeft : 10}}>  <Button icon="close" onClick={this.handleRemove}></Button></span>
+
+            <Modal
+              title="약품 정보"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
             </Modal>
           </div>
         )
@@ -99,9 +150,11 @@ class AlarmInfo extends Component {
       else{
         return (
 
-          <div style={{ fontSize: 18 }}>
-            <b>{this.props.info.place}</b>에 있는 <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>이 전부 소진되었습니다.
-                <Button icon="delete" onClick={this.handleRemove}></Button>
+          <div style={{ fontSize: 16 }}>
+            <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+            <br/>장소 : <b>{this.props.info.place}</b>
+            <br/>전부 소진되었습니다.
+            <span style={{marginLeft : 10}}>   <Button icon="close" onClick={this.handleRemove}></Button></span>
 
             <Modal
               title="약품 정보"
@@ -110,33 +163,38 @@ class AlarmInfo extends Component {
               onCancel={this.handleCancel}
             >
               {/* 정보 출력  */}
+              <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+                changeInventory={this.changeInventory} />
             </Modal>
           </div>
         )
       }
     }
     else {
-      if (this.props.info.plag === 1) {
-        return (
+     
+      return (
 
-          <div style={{ fontSize: 18 }}>
-            <Button type="link" onClick={this.showModal} style={{ fontSize: '20px' }}><b>{this.props.info.name}</b></Button>를 사용한지 <b>{this.props.info.period}</b>이 지났습니다. <b>{this.props.info.disease}</b>의 위험이 있습니다.
-              <Button icon="delete" onClick={this.handleRemove}></Button>
+        <div style={{ fontSize: 16 }}>
+          <Button type="link" onClick={this.showModal} style={{ fontSize: '18px' }}><b>{this.props.info.name}</b></Button>
+          <br /> 사용한지 <b>{this.props.info.period}</b>개월이 지났습니다.
+            <br /> 특수 건강진단을 받아야 합니다.
+            <span style={{ marginLeft: 10 }}><Button icon="close" onClick={this.handleRemove}></Button></span>
 
-            <Modal
-              title="약품 정보"
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              {/* 정보 출력  */}
-            </Modal>
+          <Modal
+            title="약품 정보"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            {/* 정보 출력  */}
+            <StockInfoAlarm stock={this.props.info.stockInfo} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
+              changeInventory={this.changeInventory} />
+          </Modal>
 
-          </div>
-        )
-      }
-     }
+        </div>
+      )
     }
+  }
 
   
 
