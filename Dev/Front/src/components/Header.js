@@ -39,7 +39,7 @@ class Header extends Component {
         return (
             <div style={{
                 height: this.props.height, display: 'block', background: '#4B589F', textAlign: 'left',
-                 display: 'table', width: this.props.width, padding: 10, paddingLeft: 20
+                 display: 'table', width: this.props.width, padding: 10, paddingLeft: 20, borderColor : '#4B589F'
             }}>
                 <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
                     {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
@@ -48,7 +48,7 @@ class Header extends Component {
                     </div>
 
                     {/* 로그인된 사용자 */}
-                    <div style={{display: 'inline', textAlign : 'middle', marginLeft : 20}}>
+                    <div style={{display: 'inline', textAlign : 'middle', marginLeft : 20, color : 'white'}}>
                         {getUser().name}님 환영합니다!
                     </div>
 

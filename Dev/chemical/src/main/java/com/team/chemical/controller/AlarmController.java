@@ -80,11 +80,11 @@ public class AlarmController {
 		 */
 		illnessCheck = new HashMap<String, int[]>();
 		illnessCheck.put("dimethylacetamide", new int[] {1, 6} );
+		illnessCheck.put("dimethylformamide", new int[] {1, 6} );
 		illnessCheck.put("benzene", new int[] {2, 6} );
-		illnessCheck.put("tetrachloroethane", new int[] {3, 6} );
+		illnessCheck.put("1,1,2,2-tetrachloroethane", new int[] {3, 6} );
 		illnessCheck.put("carbon tetrachloride", new int[] {3, 6} );
 		illnessCheck.put("acrylonitrile", new int[] {3, 6} );
-		illnessCheck.put("polyvinyl chloride", new int[] {3, 6} );
 		illnessCheck.put("silicon dioxide", new int[] {12, 12} );
 	}
 
@@ -146,7 +146,7 @@ public class AlarmController {
 				String chemName = illnessAlarm.getStock().getChemical().getName().toLowerCase();
 				if (illnessCheck.containsKey(chemName)) {
 					int illnessMonth = illnessCheck.get(chemName)[illnessAlarm.isAlreadyChecked() ? 1 : 0];
-					if (illnessMonth < after) {
+					if (illnessMonth <= after) {
 						try {
 							alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory(), after));
 							System.out.println("질병 성공 : " + illnessAlarm.getId());
