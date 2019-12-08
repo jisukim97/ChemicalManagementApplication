@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -73,12 +74,12 @@ public class Inventory {
     /**
      * 보관함에 저장 되어 있는 약품들(재고들)
      */
-	@OneToMany(mappedBy = "inventory")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "inventory")
 	@JsonManagedReference("inventoryStock")
     private Set<Stock> stocks = new HashSet<>();
 
 	
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lab_id")
     @JsonBackReference("labInventory")
     private Lab lab;

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -67,14 +68,14 @@ public class Stock {
     /**
      * 화학약품 (특성)
      */
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="chemical_id")
     private Chemical chemical;
 
     /**
      * 저장된 보관장소
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id")
     @JsonBackReference("inventoryStock")
     private Inventory inventory;

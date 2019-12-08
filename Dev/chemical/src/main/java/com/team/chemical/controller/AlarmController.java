@@ -185,6 +185,16 @@ public class AlarmController {
 			return null;
 		}
 	}
+	
+	public void AlarmScheduling() {
+		try {
+			alarm.makeDateAlarm();
+			alarm.makeVolumeAlarm();
+			alarm.makeIllnessAlarm();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/*
 	 * 알람 지우기
