@@ -11,7 +11,7 @@ class MenuTitle extends Component {
     render() {
         return (
             <div style={{ height: 100, background: '#4B589F' }}>
-                <center><br /><Title style={{ marginBottom: 35, fontSize: 29, color: 'white' }}>{this.props.title}</Title></center>
+                <center><br /><Title style={{ marginBottom: 35, fontSize: 33, color: 'white' , fontFamily: 'helvetica' }}>{this.props.title}</Title></center>
             </div>
         )
     }

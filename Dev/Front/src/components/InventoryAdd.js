@@ -98,7 +98,7 @@ class InventoryAdd extends Component {
 
         return (
             <span>
-                <Button type="primary" onClick={this.showModal} size="small" icon="plus" shape="circle"/>
+                <Button type="primary" shape="round" onClick={this.showModal} style={{fontWeight:"bold"}} size="small" icon="plus" />
                 <Modal
                     title="보관 장소 추가"
                     visible={this.state.visible}

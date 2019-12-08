@@ -310,7 +310,7 @@ class ChemicalAdd extends Component {
             <span>
                 <center>
                     {/* 버튼 */}
-                    <Button Button shape="round" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" > <Icon type="plus"/> </Button>
+                    <Button type="primary" shape="round" onClick={this.showModal} style={{ fontSize: 13, fontWeight: 'bold' }} size="large" > 약품 추가 </Button>
                     {/* 뜨는 창 */}
                     <Modal
                         title="약품 추가"
@@ -404,9 +404,10 @@ class ChemicalAdd extends Component {
 
                     </Modal>
                 </center>
-                <center>
-                    약품 추가하기
-                </center>
+                {/* <center>
+                    <span style={{fontSize: 23}}></span>
+                    약품 추가
+                </center> */}
             </span>
         );
     }

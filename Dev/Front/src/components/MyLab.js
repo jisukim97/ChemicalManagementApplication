@@ -332,7 +332,7 @@ class MyLab extends Component {
                     <List
                         grid={{ gutter: 16, column: 3 }}
                         dataSource={this.state.inventories.filter(inventory => inventory.id === this.state.inventory)[0].stocks}
-                        renderItem={stock => (
+                        renderItem={stock => ( 
                             <List.Item>
                                 <Stock stock={stock} changeVolume={this.changeVolume} deleteStock={this.deleteStock}
                                     changeInventory={this.changeInventory} /> {/* Chemical 컴포넌트에 stock을 전해줌*/}
@@ -351,9 +351,13 @@ class MyLab extends Component {
 
                 {
                     !this.state.isInventoryExist  &&
+                    
                     <div>
-                        아무것도 없음!
+                        <center>
+                            <br></br>
+                        <b>등록된 장소가 하나도 없습니다! </b> 
                         <InventoryAdd addInventory={this.addInventory} />
+                        </center>
                     </div>
                 }
 
