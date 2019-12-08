@@ -5,6 +5,7 @@ from msds import search as sch
 app = Flask(__name__)
 @app.route("/search/<chemical>")
 def search(chemical):
+    chemical = chemical.replace("_"," ")
     result = sch(chemical)
     return jsonify(result)
 
@@ -15,3 +16,4 @@ def crawl():
 
 if __name__ == "__main__":
     app.run()
+

@@ -117,8 +117,26 @@ class ChemicalAdd extends Component {
                 suggest : response.suggest,
                 notSuggest : response.notSuggest
             })
+            if (response.suggest.length === 0){
+                message.warning('추천 장소가 없습니다. 기존 장소를 선택하거나 새로 장소를 추가하여 등록해주세요!')
+            }
         })
 
+    }
+
+    resetState = () => {
+        this.setState({
+                visible: false,
+                chemical: {},
+                nickname: "default",
+                suggest: [],
+                notSuggest: [],
+                selectedInventory: null,
+                number:  0,
+                unit: 'g',
+                expire : '',
+                nicknameCheck : true
+        })
     }
 
     selectInventory = (inventoryId) => {
@@ -143,6 +161,7 @@ class ChemicalAdd extends Component {
                 if (this.state.suggest[i].id === inventoryId){
                     finish = true;
                     this.handleCancel()
+                    this.resetState()
                     this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname, this.state.suggest[i].name)
                 }
             }
@@ -150,8 +169,8 @@ class ChemicalAdd extends Component {
                 for (var i=0; i<this.state.notSuggest.length; i++){
                     if (this.state.notSuggest[i].id === inventoryId){
                         this.handleCancel()
+                        this.resetState()
                         this.props.addChemical(this.state.chemical, inventoryId, gram, this.state.expire, this.state.nickname, this.state.notSuggest[i].name)
-
                     }
                 }
             }

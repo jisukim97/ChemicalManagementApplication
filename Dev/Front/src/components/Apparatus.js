@@ -35,12 +35,12 @@ class Apparatus extends Component {
                     title: 'User',
                     dataIndex: 'user',
                     key: 'user',
-                },
-                {
-                    title: 'Button',
-                    dataIndex: 'deleteButton',
+                },{
+                    title:'Delete Button',
+                    dataIndex: "deleteButton",
                     key: 'deleteButton'
                 }
+               
             ],
             menu: apparatusId, // 처음들어오면 menu가 0임
             apparatusList: [],
@@ -75,6 +75,11 @@ class Apparatus extends Component {
                 apparatusList: newList
             }, () => {
                     var apparatusId = 0
+                    var thisApparatus = {}
+                    thisApparatus = this.state.apparatusList[0]
+                    console.log(123)
+                    console.log(this.state.apparatusList[0])
+                    console.log(thisApparatus)
                     if (this.state.apparatusList.length > 0) {
                         var today = this.state.todayDate;
                         var yy = today.getFullYear();
@@ -86,10 +91,11 @@ class Apparatus extends Component {
                         var todayInfo = yy + mm + dd;
                         var url = 'schedule/' + this.state.apparatusList[0].id + '/' + todayInfo
                         console.log(url)
-                        //console.log(this.state.apparatus[0].id)
-                        apparatusId = this.state.apparatus[0].id
+                        console.log(thisApparatus.id)
+                        apparatusId = thisApparatus.id
                     }
                     else { var url = 'apparatus/' + getUser().id }
+
                     fetch('http://13.124.122.246:8080/' + url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
@@ -182,19 +188,22 @@ handleSubmit = e => {
                     return response.json()
                 } else {
                     console.log('?')
-                    message.warning('기기 이름이 중복되었습니다.');
+                    message.warning('기기 이름이 중복되었습니다!');
                 }
             }).then(response => {
                     console.log('newAPp')
                     console.log(response)
                     var newList = this.state.apparatusList
-                    newList.push(response.apparatus)
+                    if( response!== undefined) {
+                        newList.push(response.apparatus)
+                    }
                     this.setState({
                         apparatusList: newList,
                     })
+                
             }) }
             catch (e) { 
-                message.warning('가입된 lab이 없습니다.')
+                message.warning('가입된 lab이 없습니다!')
                 history.push('/mygroup')
             }
     }})
@@ -255,7 +264,7 @@ shouldComponentUpdate(props) {
 
 //현재 페이지 내에서 파라미터만 변경되었을 경우
 componentWillReceiveProps(newProps) {
-    var today = this.state.todayDate;
+    var today = new Date();
     var yy = today.getFullYear();
     yy += ''
     yy = yy.substring(2, 4);
@@ -263,10 +272,12 @@ componentWillReceiveProps(newProps) {
     var dd = today.getDate()
     if (dd < 10) { dd = '0' + dd }
     var todayInfo = yy + mm + dd;
+    console.log(4567)
+    console.log(todayInfo)
     if (this.props.match.params !== newProps.match.params) {
         const { apparatusId } = this.props.match.params;
-
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + todayInfo, {
+        console.log(apparatusId)
+        fetch('http://13.124.122.246:8080/schedule/' + apparatusId + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -276,7 +287,7 @@ componentWillReceiveProps(newProps) {
                 // 오류 난 경우 처리 
             }
         }).then(response => {
-            var newList = []
+            var newList = []    
             if (response == undefined) {
                 this.makeDataSource([])
             }
@@ -284,7 +295,6 @@ componentWillReceiveProps(newProps) {
                 this.makeDataSource(response.schedules)
                 newList = response.schedules
             }
-
             this.setState({
                 menu: apparatusId,
                 realReservationList: newList
@@ -349,7 +359,7 @@ goToLeft = () => {
 
         fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            headers: { 'Content-Type': 'application/json' }, 
         }).then(response => {
             if (response.status === 200) {
                 return response.json()
@@ -421,6 +431,7 @@ goToLeft = () => {
         var newList = list;
         var result = []
         var startHour, startMinute, endHour, endMinute, reserver;
+        var now = new Date();
         for (var h = 8, m = true; h <= 22 && m <= 30; h++) {
             var checker = 0;
 
@@ -466,9 +477,15 @@ goToLeft = () => {
                         checker2 = false; //checker2 OFF
                     }
                     if (checker2) {
+                        var checker3 = true;
+                        var minute = m? 0:30 ;
                         result[j]['user'] = reserver
-                        if (reserver === getUser().name) {
-                            result[j]['deleteButton'] = ((!this.checkReservtionDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
+                        // 오늘의 지난시간 버튼 안생김
+                        if (h < this.state.todayDate.getHours() && (this.state.todayDate.getMonth()+1) == (now.getMonth()+1) && (this.state.todayDate.getDate()) == now.getDate()) { checker3 = false }
+                        if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false ;}
+                        
+                        if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
+                            result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
                         }
                         result[j]['id'] = list[i].id
                     }
@@ -570,7 +587,7 @@ goToLeft = () => {
 
 
     //하고자 하는 예약 or 삭제하고자 하는 예약이 옛날 건지 확인 
-    checkReservtionDate = () => {
+    checkReservationDate = () => {
         var realToday = new Date();
         var nowMonth = realToday.getMonth() + 1
         var nowDate = realToday.getDate();
@@ -587,7 +604,7 @@ goToLeft = () => {
     clickApparatus = (event) => {
         const { param } = event.target.dataset;
 
-        var today = new Date(); //새로운 기기 누르면 어쨋거나 '오늘'기준으로 데이터 보여주기
+        var today = this.state.todayDate;
         var yy = today.getFullYear();
         yy += ''
         yy = yy.substring(2, 4);
@@ -596,6 +613,8 @@ goToLeft = () => {
         if (dd < 10) { dd = '0' + dd }
         var todayInfo = yy + mm + dd;
         console.log('apparatus id: ', param)
+        console.log(todayInfo)
+
         fetch('http://13.124.122.246:8080/schedule/' + param + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
@@ -631,14 +650,14 @@ goToLeft = () => {
 
                 <Row >
                     <Col span={6} style={{ margin: 10 }}>
-                        {/* 기기들 목록 */} 현재 기기: {this.getApparNameNow()}
+                        {/* 기기들 목록 */} {/*현재 기기: {this.getApparNameNow()}*/}
                         <p></p>
                         <List
                             grid={{ gutter: 16, column: 1 }}
                             dataSource={this.state.apparatusList}
                             renderItem={item => (
                                 <List.Item>
-                                    <Button type="primary" id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
                                 </List.Item>
                             )}
                         />
@@ -680,7 +699,8 @@ goToLeft = () => {
                             onCancel={this.handleCancel_0}
                         >
                             <p> ---------- 해당 기기를 삭제하시겠습니까? ---------</p>
-                            <p>선택한 기기: {this.getApparNameNow()} </p>
+                            <p></p>
+                            <center><p>선택한 기기: {this.getApparNameNow()} </p></center>
                             <p></p>
                             <p></p>
 
@@ -701,7 +721,7 @@ goToLeft = () => {
                                 <Table size='small' dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
                             <Row span={2}>
-                                {(!this.checkReservtionDate()) &&
+                                {(!this.checkReservationDate()) &&
                                     <div>
                                         <center>
                                             <Button onClick={this.showModal_2} >
@@ -726,7 +746,8 @@ goToLeft = () => {
                             이렇게 두개를 잘 구분해서 써야 함!!
                             원래처럼 () 써버리면 무한루프
                             */}
-                                            <ApparatusReservation apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
+                                            {/*예약 폼은 따로 파일 뺌*/}
+                                            <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
 
                                             <center><p> 주의 사항 </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>

@@ -99,11 +99,11 @@ class MyLab extends Component {
                     if (stock.remainingVolume === 0.0){
                         //다씀
                         message.warning('약품을 전부 사용했습니다!')
-                        this.makeVolumeAlarm(stockId)
+                        //this.makeVolumeAlarm(stockId)
                     } else if (stock.remainingVolume / stock.volume <= 0.2){
                         //쪼금남음
                         message.warning('약품이 얼마 남지 않았습니다!')
-                        this.makeVolumeAlarm(stockId)
+                        //this.makeVolumeAlarm(stockId)
                     } else {
                         message.success('성공적으로 반영 되었습니다')
                     }
@@ -111,6 +111,7 @@ class MyLab extends Component {
                 })
             } else {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
+                this.getInventories()
             }
         })
     }
@@ -139,7 +140,7 @@ class MyLab extends Component {
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
-                message.success('성공적으로 페기 되었습니다!')
+                message.success('성공적으로 폐기 되었습니다!')
                 this.setState({
                     inventories : [],
                     isInventoryExist : false
@@ -208,6 +209,8 @@ class MyLab extends Component {
                 }
             }
             this.getInventories()
+            //window.location.reload();
+
         })
         
     }
@@ -294,7 +297,9 @@ class MyLab extends Component {
             <div>
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
                 <br />
+
                 <center><Title style={{ marginBottom: 50 }}>My Lab</Title></center>
+
                 {
                     this.state.isInventoryExist && 
                     <div>
