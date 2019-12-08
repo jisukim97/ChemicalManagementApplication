@@ -60,7 +60,7 @@ class MyGroupWithdraw extends Component {
     //const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
-      <center><Title style={{marginBottom : 30}}><font size='6' font color='black'>my Lab 탈퇴</font></Title></center>
+      <center><Title style={{marginBottom : 30}}><font size='5' font color='black'>my Lab 탈퇴</font></Title></center>
 
       <font size='4' font color='green'>현재 속한 my Lab 이름 :  
       </font><font size='3' font color='black'> {getLab().name} </font>
@@ -74,7 +74,7 @@ class MyGroupWithdraw extends Component {
       <Button type="primary" onClick={this.showModal}>
       탈퇴하기
       </Button>
-      <Icon type="rocket" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 30 }} onClick={this.showModal} />
+      
       <Modal
       title="탈퇴하기"
       visible={this.state.visible}

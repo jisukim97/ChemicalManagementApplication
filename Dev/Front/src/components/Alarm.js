@@ -72,7 +72,7 @@ class Alarm extends Component {
                             var a = {
                                 alarmType: list[i].alarmType,
                                 id: list[i].stock.id,
-                                name: list[i].stock.chemical.name,
+                                name: list[i].stock.nickname,
                                 date: list[i].left,
                                 stockInfo: list[i].stock
                             }
@@ -82,7 +82,7 @@ class Alarm extends Component {
                             var a = {
                                 alarmType: list[i].alarmType,
                                 id: list[i].stock.id,
-                                name: list[i].stock.chemical.name,
+                                name: list[i].stock.nickname,
                                 place: list[i].inventory.name,
                                 volume: list[i].stock.remainingVolume,
                                 stockInfo: list[i].stock
@@ -93,7 +93,7 @@ class Alarm extends Component {
                             var a = {
                                 alarmType: list[i].alarmType,
                                 id: list[i].stock.id,
-                                name: list[i].stock.chemical.name,
+                                name: list[i].stock.nickname,
                                 period: list[i].left,
                                 stockInfo: list[i].stock
                             }
