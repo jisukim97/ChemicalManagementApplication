@@ -138,7 +138,7 @@ public class Lab {
     		
     		
     		//폭발
-    		if(chemical.isEfflorescence() && !inventory.isExplosion()) {
+    		if(chemical.isExplosive() && !inventory.isExplosion()) {
     			canSuggest = false;
     		}
     		
