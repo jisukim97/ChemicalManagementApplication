@@ -44,12 +44,12 @@ class Header extends Component {
                 <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
                     {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
                     <div style={{display: 'inline', textAlign: 'left' }}>
-                        <b style={{ fontSize: 24 }}><Link to='/mylab' id='color'>SYLVY</Link></b>
+                        <b style={{ fontSize: 20, fontFamily: 'Comic Sans MS', textShadow:' 1px 1px 1px darkgray' }}><Link to='/mylab' id='color'>SYLVY</Link></b>
                     </div>
 
                     {/* 로그인된 사용자 */}
                     <div style={{display: 'inline', textAlign : 'middle', marginLeft : 20, color : 'white'}}>
-                        {getUser().name}님 환영합니다!
+                        " {getUser().name}님 환영합니다! "
                     </div>
 
                     {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}
