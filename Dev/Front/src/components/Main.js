@@ -36,7 +36,7 @@ class Main extends Component {
     render() {
 
         const header = 60;
-        const menubar = 80;
+        const menubar = 85;
         const body = this.state.height - header - menubar
 
         const heights = {
@@ -51,7 +51,7 @@ class Main extends Component {
                 <Header height={heights.header} width={this.state.width} />
 
                 {/* 바디 background : 'rgb(35, 41, 48)' */}
-                <div style={{ overflowX: 'auto', height: heights.body, padding: 10, background : 'white' }}>
+                <div style={{ overflowX: 'auto', height: heights.body,  background : 'white', paddingTop : 10, paddingBottom : 10 }}>
                     <Switch>
                         <Route path='/mylab' component={MyLab} />
                         <Route path='/apparatus/:apparatusId' component={Apparatus} />

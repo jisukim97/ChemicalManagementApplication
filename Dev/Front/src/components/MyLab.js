@@ -311,7 +311,7 @@ class MyLab extends Component {
                 {/* 약품 목록에서 각각 하나의 원소에 대한 Chemical 클래스 */}
                 <br />
 
-                <center><Title style={{ marginBottom: 50 }}>My Lab</Title></center>
+                <center><Title style={{ marginBottom: 35, fontSize : 29 }}>My Lab</Title></center>
 
                 {
                     this.state.isInventoryExist && 

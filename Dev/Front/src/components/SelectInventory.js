@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Select, Button, Modal, Popconfirm, message } from 'antd';
+import { Select, Button, Modal, Popconfirm, message, Row, Col } from 'antd';
 import { getUser, getLab } from '../authentication';
 import { serverUrl } from '../setting'
 
@@ -12,13 +12,13 @@ const { Option } = Select;
 class SelectInventory extends Component {
 
     //또 selectInventory라는 함수를 props로 받음
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
-            selectedInventory : '장소를 선택해 주세요',
-            crash : false,
-            crashWith : {}
+            selectedInventory: '장소를 선택해 주세요',
+            crash: false,
+            crashWith: {}
         }
 
         /*
@@ -87,32 +87,32 @@ class SelectInventory extends Component {
                             boilingPoint : 30.0
                         }
     */
- 
+
 
     //select 바꼈을 때
     handleChange = (value) => {
         console.log(value)
         this.setState({
-            selectedInventory : value
+            selectedInventory: value
         }, () => {
-            if (value !=='장소를 선택해 주세요'){
+            if (value !== '장소를 선택해 주세요') {
                 const url = serverUrl + '/chemical/' + getUser().id + '/' + this.props.chemical.id + '/' + this.state.selectedInventory
                 fetch(url, { // uri 넣어주기
                     method: 'GET', //'GET', 'POST', 'DELETE' 등등
                     headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
                 }).then(response => {
-                    if( response.status === 200){
+                    if (response.status === 200) {
                         //이건 정상적으로 된 경우
-                            return response.json()
+                        return response.json()
                     } else {
                         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
                     }
                 }).then(response => {
-                    if (response.crash){
+                    if (response.crash) {
                         console.log("crash!")
                         this.setState({
-                            crash : true,
-                            crashWith : response.crashWith
+                            crash: true,
+                            crashWith: response.crashWith
                         })
                         //안되는 경우
                         /*
@@ -125,18 +125,18 @@ class SelectInventory extends Component {
                             onCancel() { },
                         });
                         */
-        
+
                     } else {
                         console.log("not crash!")
                         //되는 경우
                         //this.props.selectInventory(this.state.selectedInventory)
                         this.setState({
-                            crash : false
+                            crash: false
                         })
-        
+
                     }
                 })
-        
+
             }
         })
     }
@@ -144,39 +144,50 @@ class SelectInventory extends Component {
     confirm = () => {
         this.props.selectInventory(this.state.selectedInventory)
     }
-    
+
     cancle = () => {
 
     }
-    
+
 
     render() {
         return (
-            <Fragment>
-                <Select defaultValue="장소를 선택해 주세요" style={{  }} onChange={this.handleChange}>
-                    {
-                        this.props.suggest.map(inventory => {
-                            return <Option value={inventory.id}>{inventory.name} (추천)</Option>
-                        })
-                    }
-                    {
-                        this.props.notSuggest.map(inventory => {
-                            return <Option value={inventory.id}>{inventory.name}</Option>
-                        })
-                    }
-                </Select>
 
-                <Popconfirm
-                    title={this.state.crash===true ? "해당 약품은 " +this.state.crashWith.nickname + "/" + this.state.crashWith.chemical.name+"과 상호작용이 있습니다. 괜찮습니까?" 
-                    : "해당 약품을 추가하시겠습니까?"}
-                    onConfirm={this.confirm}
-                    onCancel={this.cancel}
-                    okText="Yes"
-                    cancelText="No"
-                >
-                    <Button > 선택완료 </Button>
-                </Popconfirm>
-            </Fragment>
+            <Row>
+                <Col span={16} >
+                    <center>
+                        <Select defaultValue="장소를 선택해 주세요" style={{ width : '100%'}} onChange={this.handleChange}>
+                            {
+                                this.props.suggest.map(inventory => {
+                                    return <Option value={inventory.id}>{inventory.name} (추천)</Option>
+                                })
+                            }
+                            {
+                                this.props.notSuggest.map(inventory => {
+                                    return <Option value={inventory.id}>{inventory.name}</Option>
+                                })
+                            }
+                        </Select>
+                    </center>
+                </Col>
+                <Col span={8} >
+                    <center>
+                        <Popconfirm
+                            title={this.state.crash === true ? "해당 약품은 " + this.state.crashWith.nickname + "/" + this.state.crashWith.chemical.name + "과 상호작용이 있습니다. 괜찮습니까?"
+                                : "해당 약품을 추가하시겠습니까?"}
+                            onConfirm={this.confirm}
+                            onCancel={this.cancel}
+                            okText="Yes"
+                            cancelText="No"
+                            style ={{width : '100%'}}
+                        >
+                            <Button > 선택완료 </Button>
+                        </Popconfirm>
+
+                    </center>
+                </Col>
+            </Row>
+
         )
     }
 }
