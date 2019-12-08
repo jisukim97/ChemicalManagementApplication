@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { serverUrl } from '../setting'
 import { Typography, Icon, Row, Col, Button, Modal, Divider, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
 import { Link } from "react-router-dom";
 import moment from 'moment';
@@ -68,7 +69,7 @@ class ApparatusReservation extends Component {
                 }
                 else if(duplicated) { message.error("예약 시간이 중복됩니다!")}
                 else {
-                    fetch('http://13.124.122.246:8080/schedule/' + getUser().id + '/' + this.props.apparatusId + '/' + newdayInfo + "/" + startTime + "/" + endTime, {
+                    fetch(serverUrl +'/schedule/' + getUser().id + '/' + this.props.apparatusId + '/' + newdayInfo + "/" + startTime + "/" + endTime, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(values)
@@ -97,26 +98,26 @@ class ApparatusReservation extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit2} className="form">
+            <Form onSubmit={this.handleSubmit2} className="form"  grid={{ gutter: 1, column: 2}}>
                 <Form.Item>
                     {getFieldDecorator('start', {
                         rules: [{ required: true, message: '예약 시작 시간을 입력하세요. ' }],
                     })(
-                        <Input placeholder="ex: 1000 " />
+                        <Input style = {{width:100, height:30 }} placeholder="ex: 1000 " />
                         //<center><TimePicker defaultValue={moment('12:00', this.state.format)} format={this.state.format} /></center>
                     )}
-                </Form.Item>
+                </Form.Item> 
                 <Form.Item>
                     {getFieldDecorator('end', {
                         rules: [{ required: true, message: '예약 끝 시간을 입력하세요. ' }],
                     })(
-                        <Input placeholder="ex: 1200" />
+                        <Input style = {{width:100, height:30 }} placeholder="ex: 1200" />
                         //<center><TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.format} /></center>    
                     )}
                 </Form.Item>
                 <Form.Item>
                     <center>
-                        <Button type="primary" htmlType="submit" className="button">
+                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, fontSize: 12}}>
                             예약 하기
                     </Button>
                     </center>
