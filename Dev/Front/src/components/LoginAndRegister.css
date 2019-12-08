@@ -13,6 +13,8 @@
     font-size: 45pt;
     font-weight: 100;
     text-align: center;
+    font-family: 'Comic Sans Ms';
+    text-shadow: 2px 2px 2px darkgray;
 }
 
 .form {
