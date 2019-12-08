@@ -32,25 +32,25 @@ class AlarmForm {
 	Stock stock;
 	Inventory inventory;
 	long left;
-	AlarmForm(int alarmType, Stock stock, Inventory inventory){
+	AlarmForm(int alarmType, Stock stock, Inventory inventory) throws Exception {
 		this.alarmType = alarmType;
 		stock.setInventory(null);
 		this.stock = stock;
-		//inventory.getStocks().clear();
-		System.out.println("inventory : " + inventory.getId());
+		inventory.setStocks(null);
 		inventory.setLab(null);
 		this.inventory = inventory;
 		if (alarmType==1) {
 			LocalDate today = LocalDate.now();
 			stock.getExpireDate();
 			left = ChronoUnit.DAYS.between(today, stock.getExpireDate());
-		} 
+		}
+
 	}
-	AlarmForm(int alarmType, Stock stock, Inventory inventory, long after){
+	AlarmForm(int alarmType, Stock stock, Inventory inventory, long after) throws Exception{
 		this.alarmType = alarmType;
 		stock.setInventory(null);
 		this.stock = stock;
-		//inventory.getStocks().clear();
+		inventory.setStocks(null);
 		inventory.setLab(null);
 		this.inventory = inventory;
 		this.left = after;
@@ -59,18 +59,18 @@ class AlarmForm {
 
 @RestController
 public class AlarmController {
-	
+
 	@Autowired
 	StockRepository stockRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	Alarm alarm;
-	
+
 	private Map<String, int[]> illnessCheck;
-	
+
 	AlarmController(){
 		/*
 		 * illnessCheck
@@ -87,7 +87,7 @@ public class AlarmController {
 		illnessCheck.put("polyvinyl chloride", new int[] {3, 6} );
 		illnessCheck.put("silicon dioxide", new int[] {12, 12} );
 	}
-	
+
 	/**
 	 * 유저의 전체 알람 리스트 받아오기
 	 * 유효기간알람:1, 재고소진알람:2, 질병알람:3
@@ -105,10 +105,20 @@ public class AlarmController {
 			//alarm들 리스트
 			List<AlarmForm> alarms = new LinkedList<>();
 			for (Stock stock : user.getDateAlarm()) {
-				alarms.add(new AlarmForm(1, stock, stock.getInventory()));
+				try {
+					alarms.add(new AlarmForm(1, stock, stock.getInventory()));
+				} catch (Exception e) {
+					System.out.println("Error stock : " + stock.getId());
+					e.printStackTrace();
+				}
 			}
 			for (Stock stock : user.getVolumeAlarm()) {
-				alarms.add(new AlarmForm(2, stock, stock.getInventory()));
+				try {
+					alarms.add(new AlarmForm(2, stock, stock.getInventory()));
+				} catch (Exception e) {
+					System.out.println("Error stock : " + stock.getId());
+					e.printStackTrace();
+				}
 			}
 			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
@@ -118,9 +128,9 @@ public class AlarmController {
 				String chemName = illnessAlarm.getStock().getChemical().getName().toLowerCase();
 				//System.out.println(chemName);
 				if (illnessCheck.containsKey(chemName)) {
-					
+
 					int illnessMonth = illnessCheck.get(chemName)[illnessAlarm.isAlreadyChecked() ? 1 : 0];
-					
+
 					//System.out.println("after : " + after + " / illnessMonth : " + illnessMonth);
 					if (illnessMonth < after) {
 						alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory(), after));
@@ -137,7 +147,7 @@ public class AlarmController {
 		}
 	}
 
-	
+
 	/*
 	 * 알람 만들기 테스트
 	 */
@@ -154,7 +164,7 @@ public class AlarmController {
 			return null;
 		}
 	}
-	
+
 	/*
 	 * 알람 지우기
 	 */
@@ -186,7 +196,7 @@ public class AlarmController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * userId에게 stockId의 volumeAlarm 발생시킴
 	 * @param userId
@@ -208,5 +218,5 @@ public class AlarmController {
 			return null;
 		}
 	}
-	
+
 }
