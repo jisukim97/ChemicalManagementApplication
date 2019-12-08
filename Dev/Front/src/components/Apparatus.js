@@ -764,21 +764,12 @@ class Apparatus extends Component {
                                             <p><Icon type="clock-circle"  style={{size: 4}}/> <font style={{fontWeight: "bold"}}> 예약할 날짜: {this.state.todayDate.getMonth()+1} 월  {this.state.todayDate.getDate()} 일 </font></p>
                                             <p><Icon type="clock-circle"  style={{size: 4}}/>  <font style={{fontWeight: "bold"}}>예약할 시간: </font> </p>
 
-                                            {/*</Modal><Form onSubmit={this.handleSubmit2()} className="form">
-                            원래 이렇게 돼있었는데 
-                            1. 함수를 파라미터로 전달해줄때는 () 없음
-                            2. 함수를 호출할때는 () 있음
-                            이렇게 두개를 잘 구분해서 써야 함!!
-                            원래처럼 () 써버리면 무한루프
-                            */}
-                                            {/*예약 폼은 따로 파일 뺌*/}
                                             <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
-
-                                            <div style = {{border:1}}>
+                                            <p> ---------------------------------------------------------</p>
                                             <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                             <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
-                                            </div>
+                                            
                                         </Modal>
                                     </div>}
                                 {/* <Divider type="vertical" />

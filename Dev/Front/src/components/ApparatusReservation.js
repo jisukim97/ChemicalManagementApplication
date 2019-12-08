@@ -102,7 +102,8 @@ class ApparatusReservation extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit2} className="form" >
-                <center>                From
+                <center>                
+                    From
                         <Form.Item >
                             {getFieldDecorator('start', {
                                 rules: [{ required: true, message: '시작 시간 입력 필요! ' }],
