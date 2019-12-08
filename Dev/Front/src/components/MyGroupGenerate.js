@@ -128,9 +128,11 @@ class MyGroupGenerate extends Component {
 
           {/* 그룹 생성 버튼 */}
           <Form.Item>
-          <Button type="primary" htmlType="submit" className="button">
-          my Lab 생성하기
+            <center>
+          <Button type="primary" htmlType="submit" className="button" style={{width: 80}}>
+          생성하기
           </Button>
+          </center>
           </Form.Item>
 
           </Form>

@@ -9,7 +9,7 @@ class LoginAndRegister extends Component {
 
     render() {
         return (
-            <div>
+            <div style= {{marginTop: 150}}>
                 <div className='login' >
                     <h1 id='loginHeadline'>SYLVY</h1>
                     <div style={{ margin: '10px 0' }}>
