@@ -190,6 +190,7 @@ class Apparatus extends Component {
             console.log(err)
             if (!err) {
                 console.log(values)
+                console.log(getLab().id)
                 try {
                     fetch(serverUrl+'/apparatus/' + getLab().id, {
                         method: 'POST',
@@ -748,7 +749,7 @@ class Apparatus extends Component {
                                 {(!this.checkReservationDate()) &&
                                     <div>
                                     <center>      
-                                    <Button onClick={this.showModal_2} >
+                                    <Button onClick={this.showModal_2} style={{fontSize: 12}}>
                                                 예약 하기
                                     </Button></center>  
                                         <Modal
@@ -773,9 +774,11 @@ class Apparatus extends Component {
                                             {/*예약 폼은 따로 파일 뺌*/}
                                             <ApparatusReservation reservationList={this.state.realReservationList} apparatusId={this.state.menu} todayDate={this.state.todayDate} plusReservation={this.plusReservation} />
 
+                                            <div style = {{border:1}}>
                                             <center><p> <Icon type="alert" theme = "filled" sytle={{size: 5}} />  주의 사항  <Icon theme="filled" type="alert" sytle={{size: 5}} /> </p></center>
                                             <center><p> 1. 예약은 오전8시부터 밤 10시까지 가능합니다. </p></center>
                                             <center><p>            2. 예약은 삼십분 단위로만 가능합니다.        </p> </center>
+                                            </div>
                                         </Modal>
                                     </div>}
                                 {/* <Divider type="vertical" />

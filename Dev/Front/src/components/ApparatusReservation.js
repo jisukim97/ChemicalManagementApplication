@@ -59,9 +59,11 @@ class ApparatusReservation extends Component {
                 if (startTime.substring(0, 2) < now.getHours() && mm == (now.getMonth() + 1) && dd == now.getDate()) { past = true; }
                 if (startTime.substring(0, 2) == now.getHours() && startTime.substring(2, 4) < now.getMinutes() && mm == (now.getMonth() + 1) && dd == now.getDate()) { past = true }
 
+                console.log(getLab())
+
                 if (startTime >= endTime) { message.error("끝 시간이 시작 시간보다 빠릅니다!") }
                 else if (past) { message.error("지난 시간은 예약할 수 없습니다!") }
-                else if (getLab() === null) {
+                else if (getLab() === undefined) {
                     message.error("가입된 lab이 없습니다!")
                     history.push('/mygroup')
                 }
@@ -99,9 +101,9 @@ class ApparatusReservation extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit2} className="form" layout="vertical">
-                From
-                        <Form.Item>
+            <Form onSubmit={this.handleSubmit2} className="form" >
+                <center>                From
+                        <Form.Item >
                             {getFieldDecorator('start', {
                                 rules: [{ required: true, message: '시작 시간 입력 필요! ' }],
                             })(
@@ -110,7 +112,7 @@ class ApparatusReservation extends Component {
                             )}
                         </Form.Item>
                    To
-                        <Form.Item>
+                        <Form.Item >
 
                             {getFieldDecorator('end', {
                                 rules: [{ required: true, message: '끝 시간 입력 필요! ' }],
@@ -118,13 +120,15 @@ class ApparatusReservation extends Component {
                                 <Input style={{ width: 90, height: 30 }} placeholder="ex: 1200" />
                                 //<center><TimePicker defaultValue={moment('14:00', this.state.format)} format={this.state.format} /></center>    
                             )}
-                        </Form.Item>
-                    <Form.Item>
+                        </Form.Item></center>
 
+                    <Form.Item>
+                        
+                    
                         <center>
-                            <Button type="primary" htmlType="submit" className="button" style={{ height: 35, width: 80, fontSize: 12 }}>
+                            <Button type="primary" htmlType="submit" className="button" style={{ height: 30, width: 130, fontSize: 12 }}>
                                 예약 하기
-                    </Button>
+                            </Button>
                         </center>
                     </Form.Item>
               
