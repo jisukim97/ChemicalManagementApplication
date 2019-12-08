@@ -89,13 +89,14 @@ class MyGroupInvite extends Component {
     )
   }
 
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
         <center>
-          <Icon type="smile" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 33 }} />
-          <Title style={{ marginBottom: 30 }}><font size='6' font color='black'>멤버 초대</font></Title>
+          <Icon type="user-add"   style={{ fontSize: 33 }} />
+          <Title style={{ marginBottom: 30 }}><font size='4' font color='black'>멤버 초대  </font></Title>
         </center>
 
         <Form onSubmit={this.handleSubmit} className="form">
@@ -112,9 +113,11 @@ class MyGroupInvite extends Component {
           </Form.Item>
           <Form.Item>
             {/*<Link to='/login/forgot' className="login-form-forgot">Forgot password</Link>*/}
-            <Button type="primary" htmlType="submit" className="button">
-              초대
+            <center>
+            <Button type="primary" htmlType="submit" className="button" style={{width: 80}}>
+              초대하기
             </Button>
+            </center>
             
           </Form.Item>
         </Form>

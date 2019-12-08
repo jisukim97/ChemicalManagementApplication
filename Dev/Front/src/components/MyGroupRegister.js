@@ -60,7 +60,7 @@ class MyGroupRegister extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="form">
-        <center><font size='5' font color='green'>my Lab 가입 신청</font></center><br/>
+        <center><font size='4' font color='green'>my Lab 가입 신청</font></center><br/>
         {/* 이름 */}
         <Form.Item> 
           {getFieldDecorator('groupName', {
