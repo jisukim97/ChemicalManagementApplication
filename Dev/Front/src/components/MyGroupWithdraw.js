@@ -74,7 +74,7 @@ class MyGroupWithdraw extends Component {
       <Button type="primary" onClick={this.showModal}>
       탈퇴하기
       </Button>
-      <Icon type="rocket" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 33 }} onClick={this.showModal} />
+      <Icon type="rocket" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 30 }} onClick={this.showModal} />
       <Modal
       title="탈퇴하기"
       visible={this.state.visible}
