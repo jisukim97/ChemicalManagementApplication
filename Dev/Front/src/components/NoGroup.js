@@ -13,9 +13,11 @@ class MyGroupWithdraw extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div style={{ margin: '10px' }}>
-      <br /><font size='4' font color='green'>현재 속한 Lab이 없습니다!</font>
+      <div>
+        <font size='3' font color='green'>현재 속해있는 my Lab이 없습니다!</font>
+      
       </div>
+
     );
   }
 }

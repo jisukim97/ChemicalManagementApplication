@@ -48,12 +48,12 @@ class Header extends Component {
                     </div>
 
                     {/* 로그인된 사용자 */}
-                    <div style={{display: 'inline', textAlign : 'middle' }}>
+                    <div style={{display: 'inline', textAlign : 'middle', marginLeft : 20}}>
                         {getUser().name}님 환영합니다!
                     </div>
 
                     {/* 로그인 정보 + 프로필 변경 + 로그아웃 버튼 */}
-                    <div style={{display: 'inline', float : 'right', margihTop: 30 }}>
+                    <div style={{display: 'inline', float : 'right', margihTop: 30, marginRight : 10 }}>
                         {/* 로그아웃 버튼 */}
                         <Button type="danger" icon="poweroff" onClick={this.logOut} shape="circle" />
                     </div>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Typography, Row, Col, Button, Card, List } from 'antd'
+import { Typography, Row, Col, Button, Card, List, Badge, Icon } from 'antd'
 import AlarmInfoList from './AlarmInfoList';
 import { getUser, getLab } from '../authentication';
+import { serverUrl } from '../setting'
 const { Title } = Typography;
 
 class Alarm extends Component {
 
-    /** state 그냥 초기화를 여기서 시켜줬습니다..**/
     state = {
         type : 1,
         information : [],
@@ -56,13 +56,14 @@ class Alarm extends Component {
         ] 
         */
         
-        fetch('http://13.124.122.246:8080/alarm/' + getUser().id, {
+        fetch(serverUrl + '/alarm/' + getUser().id, {
             method: 'GET', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
             if (response.status === 200) {
                 //이건 정상적으로 된 경우
                 console.log(33333333333)
+                console.log(response.alarms)
                 response.json().then(response => {
                     var list = response.alarms
                     var Qinformation = []
@@ -72,7 +73,8 @@ class Alarm extends Component {
                                 alarmType: list[i].alarmType,
                                 id: list[i].stock.id,
                                 name: list[i].stock.chemical.name,
-                                date: list[i].left
+                                date: list[i].left,
+                                stockInfo: list[i].stock
                             }
                             Qinformation.push(a)
                         }
@@ -82,29 +84,20 @@ class Alarm extends Component {
                                 id: list[i].stock.id,
                                 name: list[i].stock.chemical.name,
                                 place: list[i].inventory.name,
-                                volume: list[i].stock.remainingVolume
+                                volume: list[i].stock.remainingVolume,
+                                stockInfo: list[i].stock
                             }
                             Qinformation.push(a)
                         }
                         else {
-                            if(list[i].stock.chemical.illness === null){
-                                var a = {
-                                    plag : 0,
-                                    alarmType: list[i].alarmType,
-                                    id: list[i].stock.id,
-                                    name: list[i].stock.chemical.name,
-                                }
+                            var a = {
+                                alarmType: list[i].alarmType,
+                                id: list[i].stock.id,
+                                name: list[i].stock.chemical.name,
+                                period: list[i].left,
+                                stockInfo: list[i].stock
                             }
-                            else {
-                                var a = {
-                                    plag : 1,
-                                    alarmType: list[i].alarmType,
-                                    id: list[i].stock.id,
-                                    name: list[i].stock.chemical.name,
-                                    period: list[i].stock.chemical.illness.period,
-                                    disease: list[i].stock.chemical.illness.name
-                                }
-                            }
+
                             Qinformation.push(a)
                         }
                     }
@@ -116,7 +109,7 @@ class Alarm extends Component {
                         information: Qinformation,
                         alarm1Count: Qinformation.filter(value => value.alarmType === 1).length,
                         alarm2Count: Qinformation.filter(value => value.alarmType === 2).length,
-                        alarm3Count: Qinformation.filter(value => value.alarmType === 3 && value.plag === 1).length
+                        alarm3Count: Qinformation.filter(value => value.alarmType === 3).length
 
                     })
                 })
@@ -141,7 +134,7 @@ class Alarm extends Component {
         else if (alarmType===3){
             type3Count -= 1;
         }
-        const new_information = information.filter(info => info.id !==id )
+        const new_information = information.filter(info => !((info.id===id)&&(info.alarmType===alarmType) ))
         this.setState({
             information : new_information,
             alarm1Count : type1Count,
@@ -182,18 +175,30 @@ class Alarm extends Component {
                 
                 <Row style={{marginBottom : 30}}>
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm1Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeOne} style={{ fontSize: '25px' }} size="large"/><br/>
-                        유효기간 {this.state.alarm1Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'>유효기간</font>
+                        </div> 
                     </center></Col>
 
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm2Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeTwo} style={{ fontSize: '25px' }} size="large"/><br/>
-                        재고소진 {this.state.alarm2Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'>재고소진</font>
+                        </div> 
                     </center></Col>
 
                     <Col span={8}><center>
+                        <Badge count={this.state.alarm3Count}>
                         <Button Button shape="circle" icon="bell" onClick={this.makeTypeThree} style={{ fontSize: '25px' }} size="large"/><br/>
-                        의심질병 {this.state.alarm3Count}
+                        </Badge>
+                        <div>
+                        <font size='3' font color='green'> 의심질병</font>
+                        </div> 
                     </center></Col>
                 </Row>
 

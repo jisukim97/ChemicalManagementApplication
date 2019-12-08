@@ -44,40 +44,37 @@ class MyGroupInvite extends Component {
     fetch(serverUrl + '/member/' + email, {
       method: 'GET', //'GET', 'POST', 'DELETE' 등등
       headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-  }).then(response => {
+    }).then(response => {
       if (response.status === 200) {
         //이건 정상적으로 된 경우
-        console.log(0)
-        console.log(response)
-        return response.json()
+
+        response.json().then(response => {
+          console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
+          var a = response.member
+          var userId = a.id
+          var labId = getLab().id
+
+          fetch(serverUrl + '/lab/' + labId + '/' + userId, {
+            method: 'PUT', //'GET', 'POST', 'DELETE' 등등
+            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+          }).then(response => {
+            if (response.status === 200) {
+              //이건 정상적으로 된 경우
+              message.success('성공적으로 초대되었습니다!');
+            } else {
+              console.log('fetch error')
+              message.warning('해당 멤버는 이미 속해있는 Lab이 있습니다!');
+            }
+          }).then(response => {
+
+          })
+
+        })
       } else {
         console.log('fetch error')
-        message.warning('해당 이메일을 가진 맴버가 존재하지 않습니다!');
+        message.warning('해당 이메일을 가진 멤버가 존재하지 않습니다!');
       }
-    }).then(response => {
-
-      console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-      var a = response.member
-      var userId = a.id
-      var labId = getLab().id
-
-      fetch(serverUrl + '/lab/' + labId + '/' + userId, {
-        method: 'PUT', //'GET', 'POST', 'DELETE' 등등
-        headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-      }).then(response => {
-        if (response.status === 200) {
-          //이건 정상적으로 된 경우
-          message.success('성공적으로 초대되었습니다!');
-          return response.json()
-        } else {
-          console.log('fetch error')
-          message.warning('해당 맴버는 이미 속해있는 Lab이 있습니다!');
-        }
-      }).then(response => {
-
-      })
-
-    })
+    }).then(response => { })
   }
 
   handleSubmit = e => {
@@ -96,7 +93,10 @@ class MyGroupInvite extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div style={{ margin: '10px 0' }}>
-        <center><Title style={{ marginBottom: 50 }}>my Lab 멤버 초대</Title></center>
+        <center>
+          <Icon type="smile" theme="twoTone" twoToneColor="#52c41a" style={{ fontSize: 33 }} />
+          <Title style={{ marginBottom: 30 }}><font size='6' font color='black'>멤버 초대</font></Title>
+        </center>
 
         <Form onSubmit={this.handleSubmit} className="form">
           {/* 이메일 폼*/}

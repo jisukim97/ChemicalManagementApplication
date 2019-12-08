@@ -41,33 +41,28 @@ class MyGroup extends Component {
     }).then(response => {
       if (response.status === 200) {
         //이건 정상적으로 된 경우
-        console.log(0)
-        console.log(response)
-        return response.json()
+        response.json().then(response => {
+          console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
+          var get = response.lab
+          var members = []
+          for (var i = 0; i < get.members.length; i++) {
+            var a = {
+              id: get.members[i].id,
+              name: get.members[i].name
+            }
+            members.push(a)
+          }
+
+          this.setState({
+            members: members
+
+          })
+
+        })
       } else {
         //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
       }
-    }).then(response => {
-      //여기서 response로 온 값들을 state로 저장 하던가 해서 쓰면 됨
-      //여기서 response라는걸 제대로 쓸 수 있음
-
-      console.log(response) // 이걸로 개발자모드에서 어떠한 응답이 왔는지 확인 가능
-      var get = response.lab
-      var members = []
-      for (var i = 0; i < get.members.length; i++) {
-        var a = {
-          id: get.members[i].id,
-          name: get.members[i].name
-        }
-        members.push(a)
-      }
-
-      this.setState({
-        members: members
-
-      })
-      //이렇게 응답받은 실제 결과를 status로 저장해 줄 수 있음
-    })
+    }).then(response => { })
   }
 
 //그룹 생성하고 나서 정보 새로고침 해주
@@ -100,7 +95,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 1
     })
-    message.warning('Lab에 이미 가입이 되어있습니다!')
+    message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
@@ -120,7 +115,7 @@ class MyGroup extends Component {
     this.setState( {
       menu : 3
     })
-    message.warning('Lab에 이미 가입이 되어있습니다!')
+    message.warning('이미 가입된 my Lab이 있습니다!')
     this.getGroupMembers()
   }
 
@@ -191,7 +186,7 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
@@ -200,7 +195,7 @@ class MyGroup extends Component {
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick} >my Lab 가입 신청</Button></center></Col>
                 <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
               </Row>
 
@@ -219,7 +214,7 @@ class MyGroup extends Component {
           return (
             <div>
               <br />
-              <center><Title style={{ marginBottom: 50 }}>MyGroup</Title></center>
+              <center><Title style={{ marginBottom: 50 }}>my Lab</Title></center>
 
               {/* 버튼 4개 */}
               <Row style={{ margin: 20 }}>
@@ -228,7 +223,7 @@ class MyGroup extends Component {
               </Row>
 
               <Row style={{ margin: 20 }}>
-                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >Lab 가입 신청</Button></center></Col>
+                <Col span={12}><center><Button type="primary" onClick={this.thirdButtonClick2} >my Lab 가입 신청</Button></center></Col>
                 <Col span={12}><center><Button type="primary" onClick={this.fourthButtonClick} >my Lab 탈퇴</Button></center></Col>
               </Row>
 
