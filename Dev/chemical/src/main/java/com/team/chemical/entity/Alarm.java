@@ -2,7 +2,6 @@ package com.team.chemical.entity;
 
 import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -75,6 +74,7 @@ public class Alarm {
 	 */
 	public void makeVolumeAlarm() {
 		//전체 lab의 stock을 대상으로
+		/*
 		Iterator<Stock> wholeStock = stockRepository.findAll().iterator();
 		Stock stock;
 		//볼륨 알람
@@ -85,14 +85,36 @@ public class Alarm {
 				//이거에 대한 걸 모든 유저에 추가
 				Set<User> members = stock.getInventory().getLab().getMembers();
 				for (User member : members) {
-					if (member.getVolumeAlarm().contains(stock)) {
-						member.getVolumeAlarm().add(stock);
-						userRepository.save(member);
+					if (!member.getVolumeAlarm().contains(stock)) {
+						User findedMember = userRepository.findById(member.getId()).get();
+						findedMember.getVolumeAlarm().add(stock);
+						userRepository.save(findedMember);
 					}
 				}
 			}
 		}
+		
+		*/
+		Iterator<User> users = userRepository.findAll().iterator();
+		User user;
+		while(users.hasNext()) {
+			user = users.next();
+			if (user.getMyLab() == null)
+				continue;
+			for (Inventory inventory : user.getMyLab().getInventories()) {
+				for (Stock stock : inventory.getStocks()) {
+					if (stock.getRemainingVolume()/stock.getVolume() <= 0.2) {
+						if (!user.getVolumeAlarm().contains(stock)) {
+							user.getVolumeAlarm().add(stock);
+							//user = userRepository.save(user);
+						}
+					}
+				}
+			}
+			userRepository.save(user);
+		}
 	}
+
 	
 	/**
 	 * 질병 알림

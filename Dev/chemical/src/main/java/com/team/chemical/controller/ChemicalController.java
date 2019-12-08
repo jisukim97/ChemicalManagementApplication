@@ -348,8 +348,11 @@ public class ChemicalController {
 				if (tempUser.getVolumeAlarm().contains(stock)) {
 					tempUser.getVolumeAlarm().remove(stock);
 				}
-				if (tempUser.getIllnessAlarm().contains(temp)) {
-					tempUser.getIllnessAlarm().remove(temp);
+				for (IllnessAlarm illnessAlarm : tempUser.getIllnessAlarm()) {
+					if (illnessAlarm.getStock().equals(stock)) {
+						tempUser.getIllnessAlarm().remove(illnessAlarm);
+						break;
+					}
 				}
 				userRepository.save(tempUser);
 			}

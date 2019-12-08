@@ -11,9 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -73,25 +72,22 @@ public class User {
     /**
      * 
      */
-    @OneToMany
+    @ManyToMany
     @JoinTable(name="user_stock_date",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
-    @OrderColumn(name = "list_idx")
     private Set<Stock> dateAlarm = new HashSet<>();
     
-    @OneToMany
+    @ManyToMany
     @JoinTable(name="user_stock_volume",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
-    @OrderColumn(name = "list_idx2")
     private Set<Stock> volumeAlarm = new HashSet<>();
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name="user_illnessalarm",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="illnessalarm_id"))
-    @OrderColumn(name = "list_idx3")
     private Set<IllnessAlarm> illnessAlarm = new HashSet<>();
    
     
