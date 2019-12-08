@@ -457,8 +457,8 @@ class Apparatus extends Component {
                 if (h < 10) { hh = "0" + h } else { hh = "" + h }
                 var time = hh + ":" + mm
                 oneBlock['time'] = time;
-                oneBlock['user'] = ''
-                oneBlock['deleteButton'] = (<span></span>)
+                oneBlock['user'] = (<font color="white">none</font>)
+                oneBlock['deleteButton'] =  (<font color="white">none</font>)
                 oneBlock['id'] = 0
 
                 result.push(oneBlock)
@@ -502,13 +502,13 @@ class Apparatus extends Component {
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
                             result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
                         }
-                        else { result[j]['deleteButton']= <td><font color="white">none</font></td>  }
+                        // else { result[j]['deleteButton']= <td><font>none</font></td>  }
                         result[j]['id'] = list[i].id
                     }
-                    else {
-                        result[j]['user']= <td><font color="white">none</font></td>
-                        result[j]['deleteButton']= <td><font color="white">none</font></td>
-                    }
+                    // else {
+                    //     result[j]['user']= <td><font >none</font></td>
+                    //     result[j]['deleteButton']= <td><font >none</font></td>
+                    // }
                     checker++; j++
                     m = (!m)
                 }
