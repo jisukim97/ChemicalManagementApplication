@@ -37,7 +37,7 @@ class ChemicalInfo extends Component {
                     <TabPane tab="특성 2" key="2">
                         <Descriptions bordered="true" size="small">
                             <Descriptions.Item label="mp/bp">{chemical.meltingPoint} / {chemical.boilingPoint}</Descriptions.Item>
-                            <Descriptions.Item label="pH">{chemical.pH}</Descriptions.Item>
+                            <Descriptions.Item label="pH">{chemical.ph}</Descriptions.Item>
                             <Descriptions.Item label="density">{chemical.density}</Descriptions.Item>
                             <Descriptions.Item label="deliquescent">{this.getBooleanToString(chemical.deliquescent)}</Descriptions.Item>
                             <Descriptions.Item label="efflorescence">{this.getBooleanToString(chemical.efflorescence)}</Descriptions.Item>

@@ -34,13 +34,25 @@ class AlarmForm {
 	long left;
 	AlarmForm(int alarmType, Stock stock, Inventory inventory){
 		this.alarmType = alarmType;
+		stock.setInventory(null);
 		this.stock = stock;
+		inventory.setStocks(null);
+		inventory.setLab(null);
 		this.inventory = inventory;
 		if (alarmType==1) {
 			LocalDate today = LocalDate.now();
 			stock.getExpireDate();
 			left = ChronoUnit.DAYS.between(today, stock.getExpireDate());
-		}
+		} 
+	}
+	AlarmForm(int alarmType, Stock stock, Inventory inventory, long after){
+		this.alarmType = alarmType;
+		stock.setInventory(null);
+		this.stock = stock;
+		inventory.setStocks(null);
+		inventory.setLab(null);
+		this.inventory = inventory;
+		this.left = after;
 	}
 }
 
@@ -66,13 +78,13 @@ public class AlarmController {
 		 * }
 		 */
 		illnessCheck = new HashMap<String, int[]>();
-		illnessCheck.put("Dimethylacetamide", new int[] {1, 6} );
-		illnessCheck.put("Benzene", new int[] {2, 6} );
-		illnessCheck.put("Tetrachloroethane", new int[] {3, 6} );
-		illnessCheck.put("Carbon tetrachloride", new int[] {3, 6} );
-		illnessCheck.put("Acrylonitrile", new int[] {3, 6} );
-		illnessCheck.put("Polyvinyl chloride", new int[] {3, 6} );
-		illnessCheck.put("Silicon dioxide", new int[] {12, 12} );
+		illnessCheck.put("dimethylacetamide", new int[] {1, 6} );
+		illnessCheck.put("benzene", new int[] {2, 6} );
+		illnessCheck.put("tetrachloroethane", new int[] {3, 6} );
+		illnessCheck.put("carbon tetrachloride", new int[] {3, 6} );
+		illnessCheck.put("acrylonitrile", new int[] {3, 6} );
+		illnessCheck.put("polyvinyl chloride", new int[] {3, 6} );
+		illnessCheck.put("silicon dioxide", new int[] {12, 12} );
 	}
 	
 	/**
@@ -99,12 +111,18 @@ public class AlarmController {
 			}
 			//모든 illnessalaarm(모든 stock이 들어 있음)
 			for (IllnessAlarm illnessAlarm : user.getIllnessAlarm()) {
-				// 몇달 지났는지?
+				// 몇달 지났는지? -> 이것도 left에 담아 보내줌
+				//System.out.println("getDeleteDate : " + illnessAlarm.getDeleteDate() + " / today : " + today);
 				long after = ChronoUnit.MONTHS.between(illnessAlarm.getDeleteDate(), today);
-				if (illnessCheck.containsKey(illnessAlarm.getStock().getChemical().getName())) {
-					int illnessMonth = illnessCheck.get(illnessAlarm.getStock().getChemical().getName())[illnessAlarm.isAlreadyChecked() ? 1 : 0];
-					if (illnessMonth > after) {
-						alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory()));
+				String chemName = illnessAlarm.getStock().getChemical().getName().toLowerCase();
+				//System.out.println(chemName);
+				if (illnessCheck.containsKey(chemName)) {
+					
+					int illnessMonth = illnessCheck.get(chemName)[illnessAlarm.isAlreadyChecked() ? 1 : 0];
+					
+					//System.out.println("after : " + after + " / illnessMonth : " + illnessMonth);
+					if (illnessMonth < after) {
+						alarms.add(new AlarmForm(3, illnessAlarm.getStock(), illnessAlarm.getStock().getInventory(), after));
 					}
 				}
 			}

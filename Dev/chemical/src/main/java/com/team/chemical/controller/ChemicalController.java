@@ -194,7 +194,9 @@ public class ChemicalController {
 				}
 				stock.setNickname(chemical.getName()+ "_" + count);
 			}
-			stock.setPutDate(LocalDate.now());
+			
+			//stock.setPutDate(LocalDate.now());
+			stock.setPutDate(LocalDate.now().minusYears(1l));
 			stock.setExpireDate(expireDate);
 			stock.setChemical(chemical);
 			stock.setRemainingVolume(stock.getVolume());

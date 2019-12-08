@@ -84,14 +84,14 @@ public class User {
     @JoinTable(name="user_stock_volume",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="stock_id"))
-    @OrderColumn(name = "list_idx")
+    @OrderColumn(name = "list_idx2")
     private Set<Stock> volumeAlarm = new HashSet<>();
 
     @OneToMany
     @JoinTable(name="user_illnessalarm",
     		joinColumns=@JoinColumn(name="user_id"),
     		inverseJoinColumns=@JoinColumn(name="illnessalarm_id"))
-    @OrderColumn(name = "list_idx")
+    @OrderColumn(name = "list_idx3")
     private Set<IllnessAlarm> illnessAlarm = new HashSet<>();
    
     

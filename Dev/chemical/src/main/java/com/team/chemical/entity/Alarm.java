@@ -23,10 +23,11 @@ public class Alarm {
 	 */
 	public void makeDateAlarm() {
 		//전체 lab의 stock을 대상으로
-		Iterator<Stock> wholeStock = stockRepository.findAll().iterator();
-		Stock stock;
+		//Iterator<Stock> wholeStock = stockRepository.findAll().iterator();
+		//Stock stock;
 		LocalDate today = LocalDate.now();
 		
+		/*
 		//유효기간알람
 		while(wholeStock.hasNext()) {
 			//stock은 모든 stock들 다
@@ -36,12 +37,31 @@ public class Alarm {
 				//이거에 대한 걸 모든 유저에 추가
 				Set<User> members = stock.getInventory().getLab().getMembers();
 				for (User member : members) {
-					if (!member.getDateAlarm().contains(stock)) {
-						member.getDateAlarm().add(stock);
-						userRepository.save(member);
+					member.getDateAlarm().add(stock);
+					userRepository.save(member);
+				}
+			}
+		}
+		
+		*/
+		
+		Iterator<User> users = userRepository.findAll().iterator();
+		User user;
+		while(users.hasNext()) {
+			user = users.next();
+			if (user.getMyLab() == null)
+				continue;
+			for (Inventory inventory : user.getMyLab().getInventories()) {
+				for (Stock stock : inventory.getStocks()) {
+					if (stock.getExpireDate().plusWeeks(2).isEqual(today) || today.plusWeeks(2).isAfter(stock.getExpireDate())) {
+						if (user.getDateAlarm().contains(stock)) {
+							user.getDateAlarm().add(stock);
+							//user = userRepository.save(user);
+						}
 					}
 				}
 			}
+			userRepository.save(user);
 		}
 	}
 	
@@ -56,13 +76,14 @@ public class Alarm {
 		while(wholeStock.hasNext()) {
 			//stock은 모든 stock들 다
 			stock = wholeStock.next();
-			//만약 유효기간 지난거면 (2주 이하로 남아있으면)
 			if (stock.getRemainingVolume()/stock.getVolume() <= 0.2) {
 				//이거에 대한 걸 모든 유저에 추가
 				Set<User> members = stock.getInventory().getLab().getMembers();
 				for (User member : members) {
-					member.getVolumeAlarm().add(stock);
-					userRepository.save(member);
+					if (member.getVolumeAlarm().contains(stock)) {
+						member.getVolumeAlarm().add(stock);
+						userRepository.save(member);
+					}
 				}
 			}
 		}
