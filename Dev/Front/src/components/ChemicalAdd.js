@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Input, Form, Select, message, InputNumber, Row, Col } from 'antd';
+import { Modal, Button, Input, Form, Select, message, InputNumber, Row, Col, Icon } from 'antd';
 
 import ChemicalInfo from './ChemicalInfo';
 import SelectInventory from './SelectInventory';
@@ -310,7 +310,7 @@ class ChemicalAdd extends Component {
             <span>
                 <center>
                     {/* 버튼 */}
-                    <Button Button shape="circle" icon="fire" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" />
+                    <Button Button shape="round" onClick={this.showModal} style={{ fontSize: '25px' }} size="large" > <Icon type="plus"/> </Button>
                     {/* 뜨는 창 */}
                     <Modal
                         title="약품 추가"
