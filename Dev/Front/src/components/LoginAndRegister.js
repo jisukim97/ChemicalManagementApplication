@@ -11,7 +11,7 @@ class LoginAndRegister extends Component {
         return (
             <div style= {{marginTop: 150}}>
                 <div className='login' >
-                    <h1 id='loginHeadline'>SYLVY</h1>
+                    <h1 id='loginHeadline' style={{color : '#5BC7AE'}}>SYLVY</h1>
                     <div style={{ margin: '10px 0' }}>
                         <Switch >
                             <Route path='/login' exact component={Login} />
