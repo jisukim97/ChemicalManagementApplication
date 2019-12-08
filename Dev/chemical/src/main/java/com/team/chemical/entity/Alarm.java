@@ -54,9 +54,14 @@ public class Alarm {
 			for (Inventory inventory : user.getMyLab().getInventories()) {
 				for (Stock stock : inventory.getStocks()) {
 					if (stock.getExpireDate().plusWeeks(2).isEqual(today) || today.plusWeeks(2).isAfter(stock.getExpireDate())) {
-						if (user.getDateAlarm().contains(stock)) {
+						if (!user.getDateAlarm().contains(stock)) {
 							user.getDateAlarm().add(stock);
 							//user = userRepository.save(user);
+						}
+						//만약 유효기간 지난거면 안됨
+						if (stock.getExpireDate().isAfter(today)) {
+							stock.setRemainingVolume(0.0f);
+							stockRepository.save(stock);
 						}
 					}
 				}

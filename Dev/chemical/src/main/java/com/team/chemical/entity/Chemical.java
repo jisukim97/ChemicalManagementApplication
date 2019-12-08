@@ -93,8 +93,8 @@ public class Chemical {
     /**
      * 연소성
      */
-    @Column
-    private boolean combustibility;
+    //@Column
+    //private boolean combustibility;
 
     /**
      * pH

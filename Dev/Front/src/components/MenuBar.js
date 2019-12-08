@@ -10,9 +10,11 @@ class MenuBar extends Component {
                 <Row>
                     <Col span={6}>
                         <Link to="/mylab">
-                            <center>
-                                <Icon type="home" theme="filled" style={{ fontSize: '32px' }} /><br />
-                                My Lab
+                            <center >
+                                <span style={{ color: 'white' }}>
+                                    <Icon type="experiment" theme="filled" style={{ fontSize: '32px' }} /><br />
+                                    Chemicals
+                                </span>
                             </center>
                         </Link>
                     </Col>
@@ -20,28 +22,36 @@ class MenuBar extends Component {
                     <Col span={6}>
                         <Link to="/apparatus/0">
                             <center>
-                                <Icon type="experiment" theme="filled" style={{ fontSize: '32px' }} /><br />
-                                Apparatus
+                                <span style={{ color: 'white' }}>
+                                    <Icon type="hdd" theme="filled" style={{ fontSize: '32px' }} /><br />
+                                    Apparatus
+                                    </span>
                             </center>
-                        </Link>                    
+                        </Link>
                     </Col>
 
                     <Col span={6}>
                         <Link to="/alarm">
                             <center>
-                                <Icon type="bell" theme="filled" style={{ fontSize: '32px' }} /><br />
-                                Alarm
+                                <span style={{ color: 'white' }}>
+                                    <Icon type="bell" theme="filled" style={{ fontSize: '32px' }} /><br />
+                                    Alarm
+                                    </span>
                             </center>
-                        </Link>                    
+
+                        </Link>
                     </Col>
 
                     <Col span={6}>
                         <Link to="/mygroup">
                             <center>
-                                <Icon type="team" style={{ fontSize: '32px' }} /><br />
-                                My Group
+                                <span style={{ color: 'white' }}>
+                                    <Icon type="team" style={{ fontSize: '32px' }} /><br />
+                                    my Lab
+                                    </span>
                             </center>
-                        </Link>                    
+
+                        </Link>
                     </Col>
 
                 </Row>

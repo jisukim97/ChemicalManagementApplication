@@ -36,7 +36,7 @@ class Main extends Component {
     render() {
 
         const header = 60;
-        const menubar = 70;
+        const menubar = 80;
         const body = this.state.height - header - menubar
 
         const heights = {
@@ -50,8 +50,8 @@ class Main extends Component {
                 {/* 헤더 */}
                 <Header height={heights.header} width={this.state.width} />
 
-                {/* 바디 */}
-                <div style={{ overflowX: 'auto', height: heights.body, padding: 10 }}>
+                {/* 바디 background : 'rgb(35, 41, 48)' */}
+                <div style={{ overflowX: 'auto', height: heights.body, padding: 10, background : 'white' }}>
                     <Switch>
                         <Route path='/mylab' component={MyLab} />
                         <Route path='/apparatus/:apparatusId' component={Apparatus} />
@@ -61,7 +61,7 @@ class Main extends Component {
                 </div>
 
                 {/* 메뉴바 */}
-                <div style={{ marginTop: 10 }}>
+                <div style={{borderTop : 'solid 15px', borderBottom : 'solid 15px',borderColor : 'rgb(35, 41, 48)', background: 'rgb(35, 41, 48)'}}>
                     <MenuBar />
                 </div>
             </div>

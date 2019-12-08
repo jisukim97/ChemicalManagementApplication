@@ -38,8 +38,8 @@ class Header extends Component {
 
         return (
             <div style={{
-                height: this.props.height, display: 'block', background: '#2DB400', textAlign: 'left',
-                color: 'white', display: 'table', width: this.props.width, padding: 10, paddingLeft: 20
+                height: this.props.height, display: 'block', background: 'rgb(35, 41, 48)', textAlign: 'left',
+                 display: 'table', width: this.props.width, padding: 10, paddingLeft: 20
             }}>
                 <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
                     {/* 로고 텍스트 ( 클릭하면 메인으로 이동) */}
