@@ -20,10 +20,10 @@ def search(chemi):
 
     explosive = False #폭발성
     flammability = False #인화성
-    combustilbilty = False  # 연소성
+    ignitability = False  # 연소성
     light_sensitive = False #빛반응성
     deliquescent = False #조해성
-    efforescene = False  #풍해성
+    efflorescence = False  #풍해성
     alkali_metal = False # 알칼리 메탈
     alkaline_earth_metal = False #알칼리안 어스 메탈
     halogen = False #할로겐
@@ -86,15 +86,18 @@ def search(chemi):
                     explosive = True
                 if "02" in one.attrs['title']:
                     flammability = True
+                if "03" in one.attrs['title']:
+                    ignitability = True
+
 
     content = html.select("div#mw-normal-catlinks a")
     for x in range(len(content)):
-        if 'Light sensitive' in content[x].text:
+        if 'Light-sensitive' in content[x].text:
             light_sensitive = True
         if 'Deliquescent' in content[x].text:
             deliquescent = True
-        if 'Efforescene' in content[x].text:
-            efforescene = True
+        if 'Efflorescence' in content[x].text:
+            efflorescence = True
         if 'Halogens' in content[x].text: #할로겐
             halogen = True
 
@@ -165,6 +168,8 @@ def search(chemi):
                     explosive = True
                 if "GHS02" in one:
                     flammability = True
+                if 'GHS03' in one:
+                    ignitability = True
 
     mp = float(mp)
     bp = float(bp)
@@ -182,7 +187,7 @@ def search(chemi):
         flammability = True
 
     result = {'name':name, 'casNo':cas_num, 'formula':chemi_formula, 'status': constell, 'molecularWeight': moral_mass, 'density':density, 'meltingPoint': mp, 'boilingPoint': bp, 'ph': acidity,
-                  "explosive": explosive, 'flammability': flammability, 'photoReaction' : light_sensitive, 'deliquescent': deliquescent, 'efforescene':efforescene,
+                  "explosive": explosive, 'flammability': flammability, 'ignitability': ignitability, 'photoReaction' : light_sensitive, 'deliquescent': deliquescent, 'efflorescence':efflorescence,
                   'alkaliMetal': alkali_metal, 'alkalineEarthMetal': alkaline_earth_metal, 'halogen': halogen }
 
     return result
