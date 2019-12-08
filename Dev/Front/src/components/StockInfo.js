@@ -170,7 +170,7 @@ class StockInfo extends Component {
                     <Descriptions bordered="true" size="small" >
                         <Descriptions.Item label="약품 등록일">{this.getDateToString(stock.putDate)}</Descriptions.Item>
                         <Descriptions.Item label="약품 유효기간">{this.getDateToString(stock.expireDate)}</Descriptions.Item>
-                        <Descriptions.Item label="사용 후 남은 양">{stock.remainingVolume}/{stock.volume}</Descriptions.Item>
+                        <Descriptions.Item label="사용 후 남은 양">{stock.remainingVolume}/{stock.volume} ({Math.floor((stock.remainingVolume/stock.volume)*100*100)/100}%)</Descriptions.Item>
                     </Descriptions>
                 </div>
                 {/* 버튼들 */}

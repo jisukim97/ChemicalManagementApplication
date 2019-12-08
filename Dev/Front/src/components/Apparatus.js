@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Typography, Icon, Row, Col, Button, Modal, Divider, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
+import { Typography, Icon, Row, Col, Button, Modal, Empty, Table, Card, List, Input, Form, TimePicker, message } from 'antd'
 import { history } from '../History';
 import { Link } from "react-router-dom";
+import { serverUrl } from '../setting'
 
 import { getUser, getLab } from '../authentication';
 import moment from 'moment';
@@ -30,17 +31,29 @@ class Apparatus extends Component {
                     title: 'Time',
                     dataIndex: 'time',
                     key: 'time',
+                    align: 'center',
+                    ellipsis: true,
+                    width: "5",
+
                 },
                 {
                     title: 'User',
                     dataIndex: 'user',
                     key: 'user',
-                },{
-                    title:'Delete Button',
+                    align: 'center',
+                    ellipsis: true,
+                    width: "23",
+                }, 
+                {
+                    title: 'delete',
                     dataIndex: "deleteButton",
-                    key: 'deleteButton'
+                    key: 'deleteButton',
+                    align: 'center',
+                    ellipsis: true,
+                    width: "7",
+                    
                 }
-               
+
             ],
             menu: apparatusId, // 처음들어오면 menu가 0임
             apparatusList: [],
@@ -57,7 +70,7 @@ class Apparatus extends Component {
     // 그래서 그냥 state에다 변수이름과 타입정도만 미리 다 알려주고 난 후에 fetch된 실제 결과를 setState 해주기
     // 그런데 constructor에서는 setState 할 수 없으니까 componentDidMount를 써줌
     componentDidMount() {
-        fetch('http://13.124.122.246:8080/apparatus/' + getUser().id, {
+        fetch(serverUrl+ '/apparatus/' + getUser().id, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }).then(response => {
@@ -74,29 +87,29 @@ class Apparatus extends Component {
             this.setState({
                 apparatusList: newList
             }, () => {
-                    var apparatusId = 0
-                    var thisApparatus = {}
-                    thisApparatus = this.state.apparatusList[0]
-                    console.log(123)
-                    console.log(this.state.apparatusList[0])
-                    console.log(thisApparatus)
-                    if (this.state.apparatusList.length > 0) {
-                        var today = this.state.todayDate;
-                        var yy = today.getFullYear();
-                        yy += ''
-                        yy = yy.substring(2, 4);
-                        var mm = today.getMonth() + 1
-                        var dd = today.getDate()
-                        if (dd < 10) { dd = '0' + dd }
-                        var todayInfo = yy + mm + dd;
-                        var url = 'schedule/' + this.state.apparatusList[0].id + '/' + todayInfo
-                        console.log(url)
-                        console.log(thisApparatus.id)
-                        apparatusId = thisApparatus.id
-                    }
-                    else { var url = 'apparatus/' + getUser().id }
+                var apparatusId = 0
+                var thisApparatus = {}
+                thisApparatus = this.state.apparatusList[0]
+                console.log(123)
+                console.log(this.state.apparatusList[0])
+                console.log(thisApparatus)
+                if (this.state.apparatusList.length > 0) {
+                    var today = this.state.todayDate;
+                    var yy = today.getFullYear();
+                    yy += ''
+                    yy = yy.substring(2, 4);
+                    var mm = today.getMonth() + 1
+                    var dd = today.getDate()
+                    if (dd < 10) { dd = '0' + dd }
+                    var todayInfo = yy + mm + dd;
+                    var url = 'schedule/' + this.state.apparatusList[0].id + '/' + todayInfo
+                    console.log(url)
+                    console.log(thisApparatus.id)
+                    apparatusId = thisApparatus.id
+                }
+                else { var url = 'apparatus/' + getUser().id }
 
-                    fetch('http://13.124.122.246:8080/' + url, {
+                fetch(serverUrl+'/'+ url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
                 }).then(response => {
@@ -126,158 +139,204 @@ class Apparatus extends Component {
         )
     }
 
-//'기기 삭제'버튼에 대한 메소드
-showModal_0 = () => {
-    console.log(this.state.visible_0)
-    this.setState({
-        visible_0: true
-    })
-}
-handleOk_0 = e => {
-    console.log(e);
-    this.handleRemove_2();
-    this.setState({
-        visible_0: false,
-    })
-}
-handleCancel_0 = e => {
-    console.log(e);
-    this.setState({
-        visible_0: false,
-    })
-}
+    //'기기 삭제'버튼에 대한 메소드
+    showModal_0 = () => {
+        console.log(this.state.visible_0)
+        this.setState({
+            visible_0: true
+        })
+    }
+    handleOk_0 = e => {
+        console.log(e);
+        this.handleRemove_2();
+        this.setState({
+            visible_0: false,
+        })
+    }
+    handleCancel_0 = e => {
+        console.log(e);
+        this.setState({
+            visible_0: false,
+        })
+    }
 
-//'기기 등록하기' 버튼 메소드
-showModal_1 = () => {
-    console.log(this.state.visible_1)
-    this.setState({
-        visible_1: true,
-    })
+    //'기기 등록하기' 버튼 메소드
+    showModal_1 = () => {
+        console.log(this.state.visible_1)
+        this.setState({
+            visible_1: true,
+        })
 
-}
-handleOk_1 = e => {
-    console.log(e); 
-    this.setState({
-        visible_1: false,
-    })
-}
-handleCancel_1 = e => {
-    console.log(e);
-    this.setState({
-        visible_1: false,
-    })
-}
+    }
+    handleOk_1 = e => {
+        console.log(e);
+        this.setState({
+            visible_1: false,
+        })
+    }
+    handleCancel_1 = e => {
+        console.log(e);
+        this.setState({
+            visible_1: false,
+        })
+    }
 
-//'등록하기'버튼 입력받기?
-handleSubmit = e => {
-    console.log(1)
-    console.log(e)
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-        console.log(err)
-        if (!err) {
-            console.log(values)
-            try {
-            fetch('http://13.124.122.246:8080/apparatus/' + getLab().id, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(values)
+    //'등록하기'버튼 입력받기?
+    handleSubmit = e => {
+        console.log(1)
+        console.log(e)
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            console.log(err)
+            if (!err) {
+                console.log(values)
+                try {
+                    fetch(serverUrl+'/apparatus/' + getLab().id, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(values)
+                    }).then(response => {
+                        if (response.status === 200) {
+                            console.log('no problem')
+                            return response.json()
+                        } else {
+                            console.log('?')
+                            message.warning('기기 이름이 중복되었습니다!');
+                        }
+                    }).then(response => {
+                        console.log('newAPp')
+                        console.log(response)
+                        var newList = this.state.apparatusList
+                        if (response !== undefined) {
+                            newList.push(response.apparatus)
+                        }
+                        this.setState({
+                            apparatusList: newList,
+                        })
+
+                    })
+                }
+                catch (e) {
+                    message.warning('가입된 lab이 없습니다!')
+                    history.push('/mygroup')
+                }
+            }
+        })
+        this.handleOk_1()
+    };
+
+    //기기예약 버튼 이후 예약 리스트 업데이트
+    plusReservation = (list) => {
+        this.setState({
+            realReservationList: list
+        })
+        this.makeDataSource(list)
+        this.handleOk_2()
+    }
+
+    //'예약하기'버튼에 대한 메소드
+    showModal_2 = () => {
+        console.log(this.state.visible_2)
+        this.setState({
+            visible_2: true
+        })
+    }
+    handleOk_2 = e => {
+        console.log(e);
+        this.setState({
+            visible_2: false,
+        })
+    }
+    handleCancel_2 = e => {
+        console.log(e);
+        this.setState({
+            visible_2: false,
+        })
+    }
+    //'본인 예약 삭제'버튼에 대한 메소드
+    showModal_3 = () => {
+        console.log(this.state.visible_3)
+        this.setState({
+            visible_3: true
+        })
+    }
+    handleOk_3 = e => {
+        console.log(e);
+        this.handleRemove();
+        this.setState({
+            visible_3: false,
+        })
+    }
+    handleCancel_3 = e => {
+        console.log(e);
+        this.setState({
+            visible_3: false,
+        })
+    }
+    shouldComponentUpdate(props) {
+        return true
+    }
+
+    //현재 페이지 내에서 파라미터만 변경되었을 경우
+    componentWillReceiveProps(newProps) {
+        var today = new Date();
+        var yy = today.getFullYear();
+        yy += ''
+        yy = yy.substring(2, 4);
+        var mm = today.getMonth() + 1
+        var dd = today.getDate()
+        if (dd < 10) { dd = '0' + dd }
+        var todayInfo = yy + mm + dd;
+        console.log(4567)
+        console.log(todayInfo)
+        if (this.props.match.params !== newProps.match.params) {
+            const { apparatusId } = this.props.match.params;
+            console.log(apparatusId)
+            fetch(serverUrl+'/schedule/' + apparatusId + '/' + todayInfo, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
             }).then(response => {
                 if (response.status === 200) {
-                    console.log('no problem')
                     return response.json()
                 } else {
-                    console.log('?')
-                    message.warning('기기 이름이 중복되었습니다!');
+                    // 오류 난 경우 처리
                 }
             }).then(response => {
-                    console.log('newAPp')
-                    console.log(response)
-                    var newList = this.state.apparatusList
-                    if( response!== undefined) {
-                        newList.push(response.apparatus)
-                    }
-                    this.setState({
-                        apparatusList: newList,
-                    })
-                
-            }) }
-            catch (e) { 
-                message.warning('가입된 lab이 없습니다!')
-                history.push('/mygroup')
-            }
-    }})
-    this.handleOk_1() 
-};
+                var newList = []
+                if (response == undefined) {
+                    this.makeDataSource([])
+                }
+                else {
+                    this.makeDataSource(response.schedules)
+                    newList = response.schedules
+                }
+                this.setState({
+                    menu: apparatusId,
+                    realReservationList: newList
+                })
 
-//기기예약 버튼 이후 예약 리스트 업데이트
-plusReservation = (list) => {
-    this.setState({
-        realReservationList: list
-    })
-    this.makeDataSource(list)
-    this.handleOk_2()
-}
+            })
+        }
+    }
 
-//'예약하기'버튼에 대한 메소드
-showModal_2 = () => {
-    console.log(this.state.visible_2)
-    this.setState({
-        visible_2: true
-    })
-}
-handleOk_2 = e => {
-    console.log(e);
-    this.setState({
-        visible_2: false,
-    })
-}
-handleCancel_2 = e => {
-    console.log(e);
-    this.setState({
-        visible_2: false,
-    })
-}
-//'본인 예약 삭제'버튼에 대한 메소드
-showModal_3 = () => {
-    console.log(this.state.visible_3)
-    this.setState({
-        visible_3: true
-    })
-}
-handleOk_3 = e => {
-    console.log(e);
-    this.handleRemove();
-    this.setState({
-        visible_3: false,
-    })
-}
-handleCancel_3 = e => {
-    console.log(e);
-    this.setState({
-        visible_3: false,
-    })
-}
-shouldComponentUpdate(props) {
-    return true
-}
+    getUrl = (id) => {
+        const url = '/apparatus/' + id;
+        return (url)
+    }
 
-//현재 페이지 내에서 파라미터만 변경되었을 경우
-componentWillReceiveProps(newProps) {
-    var today = new Date();
-    var yy = today.getFullYear();
-    yy += ''
-    yy = yy.substring(2, 4);
-    var mm = today.getMonth() + 1
-    var dd = today.getDate()
-    if (dd < 10) { dd = '0' + dd }
-    var todayInfo = yy + mm + dd;
-    console.log(4567)
-    console.log(todayInfo)
-    if (this.props.match.params !== newProps.match.params) {
-        const { apparatusId } = this.props.match.params;
-        console.log(apparatusId)
-        fetch('http://13.124.122.246:8080/schedule/' + apparatusId + '/' + todayInfo, {
+    //날짜 왼쪽으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
+    goToLeft = () => {
+        var newday = this.state.todayDate;
+        newday.setDate(newday.getDate() - 1);
+        var yy = newday.getFullYear();
+        yy += ''
+        yy = yy.substring(2, 4);
+        var mm = newday.getMonth() + 1
+        var dd = newday.getDate()
+        if (dd < 10) { dd = '0' + dd }
+        var newdayInfo = yy + mm + dd;
+
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -287,63 +346,19 @@ componentWillReceiveProps(newProps) {
                 // 오류 난 경우 처리 
             }
         }).then(response => {
-            var newList = []    
+            var newList = []
             if (response == undefined) {
-                this.makeDataSource([])
+                this.makeDataSource([]);
             }
             else {
-                this.makeDataSource(response.schedules)
+                this.makeDataSource(response.schedules);
                 newList = response.schedules
             }
             this.setState({
-                menu: apparatusId,
-                realReservationList: newList
+                todayDate: newday,
+                realReservationList: newList,
             })
-
         })
-    }
-}
-
-getUrl = (id) => {
-    const url = '/apparatus/' + id;
-    return (url)
-}
-
-//날짜 왼쪽으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
-goToLeft = () => {
-    var newday = this.state.todayDate;
-    newday.setDate(newday.getDate() - 1);
-    var yy = newday.getFullYear();
-    yy += ''
-    yy = yy.substring(2, 4);
-    var mm = newday.getMonth() + 1
-    var dd = newday.getDate()
-    if (dd < 10) { dd = '0' + dd }
-    var newdayInfo = yy + mm + dd;
-
-    fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-    }).then(response => {
-        if (response.status === 200) {
-            return response.json()
-        } else {
-            // 오류 난 경우 처리 
-        }
-    }).then(response => {
-        var newList = []
-        if (response == undefined) {
-            this.makeDataSource([]);
-        }
-        else {
-            this.makeDataSource(response.schedules);
-            newList = response.schedules
-        }
-        this.setState({
-            todayDate: newday,
-            realReservationList: newList,
-        })
-    })
     }
     //날짜 오른쪽 으로 이동하면 해당 날짜에 해당하는 새로운 표출할 예약 필터링
     goToRight = () => {
@@ -357,9 +372,9 @@ goToLeft = () => {
         if (dd < 10) { dd = '0' + dd }
         var newdayInfo = yy + mm + dd;
 
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + newdayInfo, {
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + newdayInfo, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }, 
+            headers: { 'Content-Type': 'application/json' },
         }).then(response => {
             if (response.status === 200) {
                 return response.json()
@@ -407,7 +422,7 @@ goToLeft = () => {
                 newList[i].deleteButton = ''
             }
         }
-        fetch('http://13.124.122.246:8080/schedule/' + this.state.menu + '/' + param, {
+        fetch(serverUrl+'/schedule/' + this.state.menu + '/' + param, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -478,16 +493,21 @@ goToLeft = () => {
                     }
                     if (checker2) {
                         var checker3 = true;
-                        var minute = m? 0:30 ;
+                        var minute = m ? 0 : 30;
                         result[j]['user'] = reserver
                         // 오늘의 지난시간 버튼 안생김
-                        if (h < this.state.todayDate.getHours() && (this.state.todayDate.getMonth()+1) == (now.getMonth()+1) && (this.state.todayDate.getDate()) == now.getDate()) { checker3 = false }
-                        if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false ;}
-                        
+                        if (h < this.state.todayDate.getHours() && (this.state.todayDate.getMonth() + 1) == (now.getMonth() + 1) && (this.state.todayDate.getDate()) == now.getDate()) { checker3 = false }
+                        if (h == this.state.todayDate.getHours() && minute < this.state.todayDate.getMinutes()) { checker3 = false; }
+
                         if (checker3 && (reserver === getUser().name)) { // 지난 날짜 버튼 안생김
                             result[j]['deleteButton'] = ((!this.checkReservationDate()) && <Button id='deleteButton' data-param={list[i].id} onClick={this.deleteReservation} > X </Button>)
                         }
+                        else { result[j]['deleteButton']= <td><font color="white">none</font></td>  }
                         result[j]['id'] = list[i].id
+                    }
+                    else {
+                        result[j]['user']= <td><font color="white">none</font></td>
+                        result[j]['deleteButton']= <td><font color="white">none</font></td>
                     }
                     checker++; j++
                     m = (!m)
@@ -549,25 +569,26 @@ goToLeft = () => {
     handleRemove_2 = () => {
         var newList = [];
         newList = this.state.apparatusList.filter(one => one.id != this.state.menu);
-        if(getLab() == null) {
+        if (getLab() == null) {
             message.error('가입된 lab이 없습니다.')
             history.push('/mygroup')
         }
         else {
-        fetch('http://13.124.122.246:8080/apparatus/' + getLab().id + '/' + this.state.menu, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
-        }).then(response => {
-            if (response === 200) {
-                return response.json()
-            } else {
-                // 오류 난 경우 처리 
-            }
-        }).then(response => {
-            this.setState({
-                apparatusList: newList,
+            fetch(serverUrl+'/apparatus/' + getLab().id + '/' + this.state.menu, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
+            }).then(response => {
+                if (response === 200) {
+                    return response.json()
+                } else {
+                    // 오류 난 경우 처리 
+                }
+            }).then(response => {
+                this.setState({
+                    apparatusList: newList,
+                })
             })
-        }) }
+        }
     }
 
     // 현재 날짜의 현재 기기 예약 중 내 예약이 있는지 없는지 -> my 예약 삭제하기 버튼을 표출할지 안할지 정하기 위함
@@ -615,7 +636,7 @@ goToLeft = () => {
         console.log('apparatus id: ', param)
         console.log(todayInfo)
 
-        fetch('http://13.124.122.246:8080/schedule/' + param + '/' + todayInfo, {
+        fetch(serverUrl+'/schedule/' + param + '/' + todayInfo, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
         }).then(response => {
@@ -646,26 +667,27 @@ goToLeft = () => {
         return (
             <div>
                 <br />
-                <center><Title style={{ marginBottom: 35 }}>Apparatus</Title></center>
+                <center><Title style={{ marginBottom: 35, fontSize: 35, marginTop: 15 }}>Apparatus</Title></center>
 
                 <Row >
-                    <Col span={6} style={{ margin: 10 }}>
-                        {/* 기기들 목록 */} {/*현재 기기: {this.getApparNameNow()}*/}
-                        <p></p>
+                    <Col span={5} style={{ marginLeft: 1 }}>
                         <List
-                            grid={{ gutter: 16, column: 1 }}
+                            size ="small"
+                            grid={{ gutter: 16, column: 1}}
                             dataSource={this.state.apparatusList}
                             renderItem={item => (
                                 <List.Item>
-                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
+                                    <Button type={(item.id == this.state.menu) ? "primary" : "default"} style={{height: 27, width: 80, fontSize: 12}}id='appartus' data-param={item.id} onClick={this.clickApparatus} >{item.name}</Button>
                                 </List.Item>
                             )}
                         />
-
-                        <Button onClick={this.showModal_1} active>
-                            기기 등록
-                    </Button>
+                        <center>
+                        <br></br>
+                        <Button type="primary" ghost  onClick={this.showModal_1} style={{ width:75, height: 30, fontSize: 11}}>
+                        기기 등록
+                        </Button> </center>
                         <Modal
+                            size="small"
                             title="new Apparatus 등록 하기"
                             visible={this.state.visible_1}
 
@@ -675,61 +697,67 @@ goToLeft = () => {
                         >
                             <Form onSubmit={this.handleSubmit} className="form">
                                 <Form.Item>
-                                    {getFieldDecorator('name', {
-                                        rules: [{ required: true, message: '등록할 기기 이름을 입력하세요. ' }],
-                                    })(
-                                        <Input placeholder="new apparatue name?" />
-                                    )}
+                                    <center>
+                                        {getFieldDecorator('name', {
+                                            rules: [{ required: true, message: '등록할 기기 이름을 입력하세요. ' }],
+                                        })(
+                                            <Input placeholder="new apparatue name?" style={{width: 200}} />
+                                        )}
+                                    </center>
                                 </Form.Item>
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit" className="button">
-                                        등록 하기
-                                </Button>
+                                    <center>
+                                        <Button type="primary" htmlType="submit" className="button" style={{height: 35, width: 80, fontSize: 12}}>
+                                        <center>등록 하기</center>
+                                        </Button>
+                                    </center>
                                 </Form.Item>
                             </Form>
                         </Modal>
                         <p></p>
-                        <Button onClick={this.showModal_0} > {/*기기 삭제 버튼*/}
-                            기기 삭제
-                    </Button>
+                        <center>
+                        <Button type="primary" ghost  onClick={this.showModal_0} style={{height: 30, width: 75, fontSize: 11}} > {/*기기 삭제 버튼*/}
+                        기기 삭제
+                        </Button>
+                        </center>
                         <Modal
+                            size="small"
                             title="Apparatus 삭제 하기"
                             visible={this.state.visible_0}
                             onOk={this.handleOk_0}
                             onCancel={this.handleCancel_0}
                         >
-                            <p> ---------- 해당 기기를 삭제하시겠습니까? ---------</p>
-                            <p></p>
-                            <center><p>선택한 기기: {this.getApparNameNow()} </p></center>
+                            <p> <center> 해당 기기를 삭제하시겠습니까? </center> </p>
+                            <p></p> <p></p>
+                            <center><p>* 선택한 기기: {this.getApparNameNow()} </p></center>
                             <p></p>
                             <p></p>
 
                         </Modal>
                     </Col>
-                    <Col span={16} >
+                    <Col span={17} style= {{ marginLeft : 16}}>
                         {/* 기기들 상세 창 */}
                         <Card>
-                            <Row span={3}>
+                            <Row span={1} >
                                 <center>
                                     <Button type="link" onClick={this.goToLeft}><Icon type="arrow-left" /></Button>
                                     {this.makeMonth()}월 {this.makeDate()}일
-                                <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
+                                    <Button type="link" onClick={this.goToRight}><Icon type="arrow-right" /></Button>
                                 </center>
                             </Row>
                             <Row span={18}>
                                 {/*시간과 예약현황을 표로 나타내기*/}
-                                <Table size='small' dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
+                                <Table width = "100" size='small' tableLayout ="fixed"  locale={{emptyText:'   '}} dataSource={this.state.reservationDataSource} columns={this.state.columns} scroll={{ y: 240 }} pagination={{ pageSize: 50 }} />
                             </Row>
-                            <Row span={2}>
+                            <Row span={2} style= {{fontSize: 10}}>
                                 {(!this.checkReservationDate()) &&
                                     <div>
-                                        <center>
-                                            <Button onClick={this.showModal_2} >
+                                    <center>      
+                                    <Button onClick={this.showModal_2} >
                                                 예약 하기
-                                    </Button>
-                                        </center>
-
+                                    </Button></center>  
                                         <Modal
+                                            size = "small"
                                             title=" Apparatus 예약 하기"
                                             visible={this.state.visible_2}
                                             onOk={this.handleOk_2}

@@ -37,10 +37,13 @@ public class Msds {
     /**
      * @param chemicalName
      */
-    public Chemical searchChemical(String chemicalName) {
+    public Chemical searchChemical(String chemicalName) throws Exception{
         // TODO 
     	String url = crawlingUrl + chemicalName;
 		Chemical chemical = getRestTemplate().getForObject(url, Chemical.class);
+		if (chemical.getDensity() == 0.0) {
+			throw new Exception("cannot find chemicals from msds");
+		}
 		return chemical;
     }
 

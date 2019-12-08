@@ -84,6 +84,10 @@ class MyLab extends Component {
         //여기서 fetch 해준다
         //volume 바꿔주는걸로
         const url = serverUrl + '/chemical/' + getUser().id + '/' + stockId 
+        
+        console.log('before precision : ' + change)
+        change = Math.floor(change*100)/100
+        console.log('after precision ')
         fetch(url, { // uri 넣어주기
             method: 'PUT', //'GET', 'POST', 'DELETE' 등등
             headers: { 'Content-Type': 'application/json' }, //안고쳐도 됨
@@ -176,6 +180,9 @@ class MyLab extends Component {
 
     //추가 해주기
     addChemical = (chemical, inventoryId, put, expire, nickname, inventoryName) => {
+        if (nickname === "" || nickname === " ") {
+            nickname = "default";
+        }
         //chemical을 inventoryId에 추가
         //각각 validation check해 준 뒤에 추가
         console.log("추가")
@@ -200,16 +207,22 @@ class MyLab extends Component {
                 //이건 오류난 경우 -> 여기서 뭐뭐를 처리해 준다
             }
         }).then(response => {
-            var stocks = response.stocks
-            for (var i=0; i<stocks.length; i++){
-                if( stocks[i].chemical.id === chemical.id){
-                    const successMessage = '' + chemical.name +  ' / ' + stocks[i].nickname + '이 ' + inventoryName + '에 추가되었습니다!'
-                    message.success(successMessage)
-                    break;
+            try {
+                var stocks = response.stocks
+                for (var i=0; i<stocks.length; i++){
+                    if( stocks[i].chemical.id === chemical.id){
+                        const successMessage = '' + chemical.name +  ' / ' + stocks[i].nickname + '이 ' + inventoryName + '에 추가되었습니다!'
+                        message.success(successMessage)
+                        break;
+                    }
                 }
+                this.getInventories()
+                //window.location.reload();    
             }
-            this.getInventories()
-            //window.location.reload();
+            catch (e){
+                console.log(e)
+                message.error('오류가 발생했습니다. 새로고침 후 다시 진행 해 주세요')
+            }
 
         })
         
