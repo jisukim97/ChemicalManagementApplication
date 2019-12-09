@@ -46,5 +46,12 @@ phthon3 flasktest.py
 * my Lab 멤버 관리 : 팀원들을 초대 혹은 lab에 가입 해서 약품 재고 상황을 공유 가능
 
 ## Screenshots
+* <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/chemicals.png?raw=true' height=300>
+* <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/chemicals2.png?raw=true' height=300>
+
+* <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/apparatus.png?raw=true' height=300>
+* <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/alarm.png?raw=true' height=300>
+* <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/myLab.png?raw=true' height=300>
 
 ## Demo video
+* <a href='https://github.com/yeongmo-j/ChemicalManagementApplication/tree/master/Document/4_수정중/동영상'> Click! </a>
