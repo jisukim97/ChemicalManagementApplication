@@ -54,4 +54,4 @@ phthon3 flasktest.py
 * <img src='https://github.com/yeongmo-j/ChemicalManagementApplication/blob/master/Document/4_수정중/GUI/photo/myLab.png?raw=true' height=300>
 
 ## Demo video
-* <a href='https://github.com/yeongmo-j/ChemicalManagementApplication/tree/master/Document/4_수정중/동영상'> Click! </a>
+* <a href='https://github.com/yeongmo-j/ChemicalManagementApplication/tree/master/최종산출물/5_Implementation%20Model'> Click! </a>
